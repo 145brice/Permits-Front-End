@@ -1,0 +1,448 @@
+╔══════════════════════════════════════════════════════════════════╗
+║                       SYSTEM FLOW DIAGRAM                         ║
+║              How Everything Works Together                        ║
+╚══════════════════════════════════════════════════════════════════╝
+
+
+═══════════════════════════════════════════════════════════════════
+USER SUBSCRIPTION FLOW
+═══════════════════════════════════════════════════════════════════
+
+    [User]
+      │
+      │ visits website
+      ▼
+  ┌──────────────────┐
+  │  Netlify         │
+  │  index.html      │  ◄── Clean landing page
+  │  (Frontend)      │      4 city buttons
+  └────────┬─────────┘
+           │
+           │ clicks "Nashville" button
+           │
+           ▼
+  ┌──────────────────┐
+  │  JavaScript      │
+  │  fetch()         │  ◄── Calls backend API
+  └────────┬─────────┘
+           │
+           │ POST /create-checkout-session
+           │ { city: "nashville", price_id: "price_..." }
+           │
+           ▼
+  ┌──────────────────┐
+  │  Railway         │
+  │  app.py          │  ◄── Flask backend
+  │  (Backend)       │
+  └────────┬─────────┘
+           │
+           │ creates Stripe session
+           │
+           ▼
+  ┌──────────────────┐
+  │  Stripe          │
+  │  Checkout        │  ◄── Payment page
+  └────────┬─────────┘
+           │
+           │ user enters card: 4242 4242 4242 4242
+           │ user clicks "Subscribe"
+           │
+           ▼
+  ┌──────────────────┐
+  │  Stripe          │
+  │  Processing      │  ◄── Charges $47.00
+  └────────┬─────────┘
+           │
+           ├───────────────────────────┐
+           │                           │
+           │ SUCCESS                   │ WEBHOOK
+           │                           │
+           ▼                           ▼
+  ┌──────────────────┐      ┌──────────────────┐
+  │  success.html    │      │  Railway         │
+  │  (Thank you!)    │      │  /webhook        │
+  └──────────────────┘      └────────┬─────────┘
+                                     │
+                                     │ checkout.session.completed
+                                     │
+                                     ▼
+                            ┌──────────────────┐
+                            │  Firebase        │
+                            │  Firestore       │  ◄── Saves subscriber
+                            └──────────────────┘      { email, city, active: true }
+
+
+═══════════════════════════════════════════════════════════════════
+DAILY EMAIL FLOW (8 AM CENTRAL)
+═══════════════════════════════════════════════════════════════════
+
+  ┌──────────────────┐
+  │  APScheduler     │
+  │  (cron)          │  ◄── Runs at 8:00 AM Central
+  └────────┬─────────┘
+           │
+           │ triggers send_daily_leads()
+           │
+           ▼
+  ┌──────────────────┐
+  │  Firebase        │
+  │  Firestore       │  ◄── Query: where active == true
+  └────────┬─────────┘
+           │
+           │ returns all active subscribers
+           │ [{ email: "...", city: "Nashville", active: true }, ...]
+           │
+           ▼
+  ┌──────────────────┐
+  │  Group by City   │  ◄── Python logic in app.py
+  └────────┬─────────┘
+           │
+           │ Nashville: [email1, email2]
+           │ Chattanooga: [email3]
+           │ Austin: [email4, email5, email6]
+           │ San Antonio: [email7]
+           │
+           ▼
+  ┌──────────────────┐
+  │  Generate Leads  │  ◄── get_mock_leads(city)
+  │  (Mock Data)     │      Replace with real data source
+  └────────┬─────────┘
+           │
+           │ For each city:
+           │   - Company names
+           │   - Contact info  
+           │   - Project details
+           │
+           ▼
+  ┌──────────────────┐
+  │  SendGrid        │
+  │  Email API       │  ◄── Send HTML emails
+  └────────┬─────────┘
+           │
+           ├──────────────────────────────┐
+           │                              │
+           │ SUBSCRIBER EMAILS            │ OWNER EMAIL
+           │                              │
+           ▼                              ▼
+  ┌──────────────────┐          ┌──────────────────┐
+  │  email1@...      │          │  owner@email.com │
+  │  email2@...      │          │                  │
+  │  email3@...      │          │  + CSV attachment│
+  │  etc...          │          │    (all subs)    │
+  └──────────────────┘          └──────────────────┘
+      │                                 │
+      │ HTML table                      │ Master report
+      │ with leads                      │ + subscriber list
+      │                                 │
+      ▼                                 ▼
+  [Subscriber]                      [You]
+  Opens email                       Opens email
+  Sees leads                        Sees who's active
+  Contacts leads                    Tracks business
+
+
+═══════════════════════════════════════════════════════════════════
+CANCELLATION FLOW
+═══════════════════════════════════════════════════════════════════
+
+    [User]
+      │
+      │ opens Stripe receipt email
+      │ clicks "Manage subscription"
+      │
+      ▼
+  ┌──────────────────┐
+  │  Stripe          │
+  │  Customer Portal │  ◄── Stripe-hosted page
+  └────────┬─────────┘
+           │
+           │ user clicks "Cancel subscription"
+           │
+           ▼
+  ┌──────────────────┐
+  │  Stripe          │
+  │  Cancels Sub     │  ◄── Subscription ends
+  └────────┬─────────┘
+           │
+           │ WEBHOOK: customer.subscription.deleted
+           │
+           ▼
+  ┌──────────────────┐
+  │  Railway         │
+  │  /webhook        │  ◄── Receives event
+  └────────┬─────────┘
+           │
+           │ updates database
+           │
+           ▼
+  ┌──────────────────┐
+  │  Firebase        │
+  │  Firestore       │  ◄── Sets active: false
+  └──────────────────┘
+           │
+           │ Result: User stops receiving emails
+           │
+           ▼
+    [No more emails]
+
+
+═══════════════════════════════════════════════════════════════════
+FAILED PAYMENT FLOW
+═══════════════════════════════════════════════════════════════════
+
+  ┌──────────────────┐
+  │  Stripe          │
+  │  Monthly Charge  │  ◄── Attempts to charge $47
+  └────────┬─────────┘
+           │
+           │ card declined / expired / insufficient funds
+           │
+           ▼
+  ┌──────────────────┐
+  │  Stripe          │
+  │  Payment Failed  │  ◄── Charge unsuccessful
+  └────────┬─────────┘
+           │
+           │ WEBHOOK: invoice.payment_failed
+           │
+           ▼
+  ┌──────────────────┐
+  │  Railway         │
+  │  /webhook        │  ◄── Receives event
+  └────────┬─────────┘
+           │
+           │ updates database
+           │
+           ▼
+  ┌──────────────────┐
+  │  Firebase        │
+  │  Firestore       │  ◄── Sets active: false
+  └──────────────────┘
+           │
+           │ Result: User stops receiving emails
+           │ Stripe sends them a "payment failed" email
+           │
+           ▼
+    [No more emails until they update card]
+
+
+═══════════════════════════════════════════════════════════════════
+DATA FLOW SUMMARY
+═══════════════════════════════════════════════════════════════════
+
+                    ┌─────────────────┐
+                    │     Netlify     │
+                    │   (Frontend)    │
+                    │  Static HTML    │
+                    └────────┬────────┘
+                             │
+                    User clicks button
+                             │
+                             ▼
+    ┌────────────────────────────────────────────┐
+    │              Railway (Backend)              │
+    │  ┌──────────────────────────────────────┐  │
+    │  │          Flask App (app.py)          │  │
+    │  │                                      │  │
+    │  │  ┌─────────────┐  ┌──────────────┐  │  │
+    │  │  │  Endpoints  │  │  Cron Jobs   │  │  │
+    │  │  ├─────────────┤  ├──────────────┤  │  │
+    │  │  │ /checkout   │  │ Daily 8 AM   │  │  │
+    │  │  │ /webhook    │  │ send_leads() │  │  │
+    │  │  │ /health     │  └──────┬───────┘  │  │
+    │  │  └──────┬──────┘         │          │  │
+    │  └─────────┼────────────────┼──────────┘  │
+    └────────────┼────────────────┼─────────────┘
+                 │                │
+                 │                │
+        ┌────────┼────────────────┼────────┐
+        │        │                │        │
+        ▼        ▼                ▼        ▼
+   ┌────────┐ ┌────────┐   ┌────────┐ ┌────────┐
+   │ Stripe │ │Firebase│   │SendGrid│ │ Logs   │
+   │Payments│ │Database│   │ Email  │ │Railway │
+   └────────┘ └────────┘   └────────┘ └────────┘
+
+
+═══════════════════════════════════════════════════════════════════
+COMPONENT INTERACTION MAP
+═══════════════════════════════════════════════════════════════════
+
+  Netlify (Frontend)
+    ├─► Railway (Backend API) ............... creates checkout
+    │
+    └─► Stripe (Checkout) ................... payment page
+
+  Railway (Backend)
+    ├─► Stripe (API) ........................ creates sessions
+    ├─► Firebase (Firestore) ................ saves/queries subscribers
+    └─► SendGrid (Email API) ................ sends daily emails
+
+  Stripe (Webhooks)
+    └─► Railway (Webhook Endpoint) .......... notifies of events
+
+  Firebase (Database)
+    └─► Railway (Queries) ................... returns active subscribers
+
+  APScheduler (Cron)
+    └─► Railway (Trigger) ................... runs daily at 8 AM
+
+
+═══════════════════════════════════════════════════════════════════
+DATABASE SCHEMA
+═══════════════════════════════════════════════════════════════════
+
+  Firebase Firestore Collection: "subscribers"
+  
+  Document ID: (Stripe customer_id)
+  
+  Fields:
+    ┌─────────────────────────────────────────┐
+    │ email:              string              │
+    │ city:               string              │
+    │ stripe_customer_id: string              │
+    │ subscription_id:    string              │
+    │ active:             boolean             │ ◄── Controls emails
+    │ created_at:         timestamp           │
+    │ payment_failed_at:  timestamp (opt)     │
+    │ cancelled_at:       timestamp (opt)     │
+    └─────────────────────────────────────────┘
+  
+  Example Document:
+    {
+      "email": "john@example.com",
+      "city": "Nashville",
+      "stripe_customer_id": "cus_123abc",
+      "subscription_id": "sub_456def",
+      "active": true,
+      "created_at": "2024-01-15T10:30:00Z"
+    }
+
+
+═══════════════════════════════════════════════════════════════════
+EMAIL TEMPLATES
+═══════════════════════════════════════════════════════════════════
+
+  Subscriber Daily Email:
+  ┌──────────────────────────────────────────┐
+  │ Subject: Your Daily Nashville Contractor │
+  │          Leads - 01/15/2024              │
+  │                                          │
+  │ [HTML Table]                             │
+  │ ┌────────────┬────────┬──────────────┐   │
+  │ │ Company    │ Phone  │ Project Type │   │
+  │ ├────────────┼────────┼──────────────┤   │
+  │ │ ABC Const  │ 555... │ Residential  │   │
+  │ │ XYZ Build  │ 555... │ Commercial   │   │
+  │ └────────────┴────────┴──────────────┘   │
+  │                                          │
+  │ [Cancel link in footer]                  │
+  └──────────────────────────────────────────┘
+
+  Owner Daily Report:
+  ┌──────────────────────────────────────────┐
+  │ Subject: Daily Subscriber Report         │
+  │          01/15/2024                      │
+  │                                          │
+  │ Total Active: 47                         │
+  │                                          │
+  │ Breakdown:                               │
+  │ • Nashville: 12                          │
+  │ • Chattanooga: 8                         │
+  │ • Austin: 15                             │
+  │ • San Antonio: 12                        │
+  │                                          │
+  │ [CSV Attachment]                         │
+  │ subscribers_20240115.csv                 │
+  └──────────────────────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════
+DEPLOYMENT ARCHITECTURE
+═══════════════════════════════════════════════════════════════════
+
+                      INTERNET
+                         │
+          ┌──────────────┼──────────────┐
+          │              │              │
+          ▼              ▼              ▼
+    [User Browser]  [Stripe]      [SendGrid]
+          │              │              │
+          │              │              │
+          ▼              ▼              ▼
+  ┌───────────────────────────────────────┐
+  │         NETLIFY (CDN)                 │
+  │  ┌─────────────────────────────────┐  │
+  │  │  index.html + success.html      │  │
+  │  │  (Static files, globally cached)│  │
+  │  └─────────────────────────────────┘  │
+  └────────────────┬──────────────────────┘
+                   │
+                   │ API calls
+                   │
+                   ▼
+  ┌───────────────────────────────────────┐
+  │        RAILWAY (Container)            │
+  │  ┌─────────────────────────────────┐  │
+  │  │  Flask + Gunicorn              │  │
+  │  │  - Stripe webhook endpoint      │  │
+  │  │  - Checkout session creator     │  │
+  │  │  - APScheduler (8 AM cron)      │  │
+  │  └────────────┬────────────────────┘  │
+  └───────────────┼───────────────────────┘
+                  │
+      ┌───────────┼───────────┐
+      │           │           │
+      ▼           ▼           ▼
+  ┌────────┐ ┌────────┐ ┌────────┐
+  │ Stripe │ │Firebase│ │SendGrid│
+  │  API   │ │Firestore│ │  API   │
+  └────────┘ └────────┘ └────────┘
+
+
+═══════════════════════════════════════════════════════════════════
+MONITORING & OBSERVABILITY
+═══════════════════════════════════════════════════════════════════
+
+  What to Monitor:
+  
+  ┌─────────────────────────────────────────┐
+  │ Railway Logs                            │
+  │  • Check daily at 8 AM                  │
+  │  • Look for "Daily lead distribution    │
+  │    completed successfully"              │
+  │  • Watch for Python errors              │
+  └─────────────────────────────────────────┘
+  
+  ┌─────────────────────────────────────────┐
+  │ Stripe Webhook Dashboard                │
+  │  • All events should show "Success"     │
+  │  • Failed webhooks = missed updates     │
+  │  • Retry automatically, but investigate │
+  └─────────────────────────────────────────┘
+  
+  ┌─────────────────────────────────────────┐
+  │ SendGrid Activity Feed                  │
+  │  • Check delivery rate                  │
+  │  • Watch for bounces                    │
+  │  • Clean list if bounce rate > 5%       │
+  └─────────────────────────────────────────┘
+  
+  ┌─────────────────────────────────────────┐
+  │ Firebase Console                        │
+  │  • Monitor read/write counts            │
+  │  • Free tier = 50K reads/day            │
+  │  • Your usage = <100 reads/day          │
+  └─────────────────────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════
+
+This diagram shows the complete system flow from user click to 
+daily email delivery. All pieces work together automatically with
+minimal configuration required.
+
+For deployment steps, see QUICK_START.md
+For detailed documentation, see README.md
+
+═══════════════════════════════════════════════════════════════════

@@ -1,0 +1,271 @@
+CONTRACTOR LEADS SAAS - PROJECT STRUCTURE
+=========================================
+
+contractor-leads-saas/
+├── frontend/                      # Static website (Netlify)
+│   ├── index.html                # Landing page with 4 city buttons
+│   └── success.html              # Post-checkout success page
+│
+├── backend/                       # Flask API (Railway)
+│   ├── app.py                    # Main Flask app with webhook + cron
+│   ├── requirements.txt          # Python dependencies
+│   ├── railway.json              # Railway deployment config
+│   └── .env.example              # Environment variables template
+│
+├── docs/                          # Documentation
+│   ├── README.md                 # Comprehensive setup guide
+│   ├── QUICK_START.md            # 30-minute deployment guide
+│   ├── DEPLOYMENT_CHECKLIST.md   # Step-by-step checklist
+│   └── API_REFERENCE.md          # API endpoint documentation
+│
+├── .gitignore                     # Git ignore rules
+├── netlify.toml                   # Netlify configuration
+└── setup.sh                       # Local development setup script
+
+KEY FILES EXPLAINED
+===================
+
+frontend/index.html
+-------------------
+- Clean landing page with gradient background
+- Four city buttons (Nashville, Chattanooga, Austin, San Antonio)
+- Each button triggers Stripe Checkout for $47/month
+- No user accounts, no login, just payment
+- Must update: STRIPE_PRICE_IDS and BACKEND_URL before deploy
+
+frontend/success.html
+--------------------
+- Simple success page after checkout
+- Explains when emails will arrive (8 AM daily)
+- Link back to home
+- No functionality, just confirmation
+
+backend/app.py
+--------------
+Main endpoints:
+  /create-checkout-session - Creates Stripe payment session
+  /webhook                 - Handles Stripe events (payment, cancel)
+  /health                  - Health check
+  /manual-send             - Manual email trigger (testing only)
+
+Cron job:
+  - Runs daily at 8 AM Central
+  - Pulls all active subscribers from Firestore
+  - Groups by city
+  - Emails each subscriber their city's leads
+  - Emails owner master CSV
+
+backend/requirements.txt
+-----------------------
+Core dependencies:
+  - Flask (web framework)
+  - stripe (payment processing)
+  - firebase-admin (database)
+  - sendgrid (email delivery)
+  - APScheduler (cron jobs)
+
+DEPLOYMENT FLOW
+===============
+
+1. Setup Services (15 min)
+   - Create 4 Stripe products ($47/month each)
+   - Setup Firebase project + Firestore
+   - Create SendGrid account + verify sender
+
+2. Deploy Backend (5 min)
+   - Push code to GitHub
+   - Deploy to Railway
+   - Add all environment variables
+   - Setup Stripe webhook
+
+3. Deploy Frontend (5 min)
+   - Update price IDs and backend URL
+   - Drag/drop to Netlify
+   - Update Railway with frontend URL
+
+4. Test (5 min)
+   - Complete test checkout
+   - Verify Firestore entry
+   - Test manual email send
+
+HOW IT WORKS
+============
+
+User Journey:
+1. User visits site → clicks city button
+2. Redirects to Stripe Checkout
+3. Pays $47/month with credit card
+4. Stripe webhook fires → saves to Firebase (active: true)
+5. User redirects to success page
+6. Next day at 8 AM → receives first daily email
+7. Every morning at 8 AM → new leads email
+
+Cancellation:
+1. User clicks "manage subscription" in Stripe receipt
+2. Cancels subscription
+3. Webhook fires → sets active: false in Firebase
+4. No more emails (automatic)
+
+Owner Experience:
+- Every morning at 8 AM → receives master CSV
+- CSV contains: all active subscribers, their city, email
+- No customer support needed (Stripe handles billing)
+- Just send leads every day
+
+ENVIRONMENT VARIABLES
+=====================
+
+Required for Railway:
+  STRIPE_SECRET_KEY          (from Stripe dashboard)
+  STRIPE_WEBHOOK_SECRET      (from Stripe webhook setup)
+  FRONTEND_URL               (your Netlify URL)
+  FIREBASE_PROJECT_ID        (from Firebase JSON)
+  FIREBASE_PRIVATE_KEY_ID    (from Firebase JSON)
+  FIREBASE_PRIVATE_KEY       (from Firebase JSON, with \n)
+  FIREBASE_CLIENT_EMAIL      (from Firebase JSON)
+  FIREBASE_CLIENT_ID         (from Firebase JSON)
+  FIREBASE_CERT_URL          (from Firebase JSON)
+  SENDGRID_API_KEY          (from SendGrid dashboard)
+  FROM_EMAIL                 (verified in SendGrid)
+  OWNER_EMAIL                (your email for daily reports)
+  ADMIN_SECRET               (for manual testing)
+  PORT                       (5000)
+
+TECH STACK
+==========
+
+Frontend:
+  - Pure HTML/CSS/JavaScript (no framework)
+  - Hosted on Netlify (free tier)
+  - No build process needed
+
+Backend:
+  - Flask (Python web framework)
+  - Gunicorn (production server)
+  - Hosted on Railway (free tier works)
+
+Database:
+  - Firebase Firestore (NoSQL)
+  - Free tier: 50K reads/day, 20K writes/day
+  - More than enough for this use case
+
+Email:
+  - SendGrid (transactional email)
+  - Free tier: 100 emails/day
+  - Pro tip: Upgrade to $15/month for 40K emails
+
+Payments:
+  - Stripe (payment processing)
+  - 2.9% + $0.30 per transaction
+  - Built-in subscription management
+
+COSTS
+=====
+
+Development (All Free):
+  - Netlify: Free forever
+  - Railway: Free tier with 512MB RAM
+  - Firebase: Free tier (plenty for this)
+  - SendGrid: 100 emails/day free
+  - Stripe: Test mode is free
+
+Production (Minimal):
+  - Netlify: Free forever
+  - Railway: $5/month (if free tier runs out)
+  - Firebase: Free tier (unlikely to exceed)
+  - SendGrid: $15/month (for 40K emails/month)
+  - Stripe: 2.9% + $0.30 per transaction
+
+Example Revenue:
+  - 100 subscribers × $47/month = $4,700/month
+  - Costs: ~$20/month (Railway + SendGrid)
+  - Net: ~$4,680/month
+
+MAINTENANCE
+===========
+
+Daily (Automatic):
+  - 8 AM Central: Cron sends all emails
+  - Check your email for master CSV
+  - Spot check a few subscribers got their emails
+
+Weekly:
+  - Check Railway logs for errors
+  - Review Stripe dashboard for failed payments
+  - Check SendGrid for bounced emails
+
+Monthly:
+  - Review subscriber count growth
+  - Check Firebase usage (should be minimal)
+  - Update lead sources if needed
+
+Never:
+  - No customer support (Stripe handles everything)
+  - No password resets (no accounts!)
+  - No billing issues (Stripe customer portal)
+
+SCALING
+=======
+
+This setup handles:
+  - 1,000+ subscribers easily
+  - 100K+ emails/month (with SendGrid upgrade)
+  - Railway scales automatically
+  - Firebase scales automatically
+
+If you grow past this:
+  - Upgrade Railway to Pro ($20/month)
+  - Upgrade SendGrid ($20-60/month)
+  - Firebase will still be free
+
+SECURITY
+========
+
+✅ Webhook signature verification (Stripe)
+✅ HTTPS everywhere (Railway + Netlify)
+✅ Environment variables (never in code)
+✅ No user accounts (no passwords to steal)
+✅ Stripe handles PCI compliance
+✅ Firebase security rules (production mode)
+
+SUPPORT
+=======
+
+No Documentation Needed:
+  - Users manage everything through Stripe
+  - Receipts contain all links (manage, cancel)
+  - No "forgot password" (no passwords!)
+  - No account issues (no accounts!)
+
+Your Only Job:
+  - Send quality leads every morning
+  - That's literally it
+
+MONITORING
+==========
+
+What to Watch:
+  - Railway logs at 8 AM (did cron run?)
+  - SendGrid activity (emails delivered?)
+  - Stripe webhooks (all succeeded?)
+  - Firebase writes (under quota?)
+
+Red Flags:
+  - No email at 8 AM (check Railway logs)
+  - Webhook failures (check Stripe dashboard)
+  - High bounce rate (clean your lead list)
+  - Database quota exceeded (upgrade Firebase)
+
+NEXT STEPS
+==========
+
+1. Read QUICK_START.md (30-minute deployment)
+2. Follow DEPLOYMENT_CHECKLIST.md (step by step)
+3. Test with test card (4242 4242 4242 4242)
+4. Verify emails work
+5. Switch to live mode
+6. Start marketing!
+
+PROFIT 🚀
+
+Questions? Check API_REFERENCE.md or README.md

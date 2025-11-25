@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contractor Leads - Daily Fresh Leads</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+        
+        .header h1 {
+            font-size: 48px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 20px;
+            opacity: 0.95;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .city-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        
+        .city-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.25);
+        }
+        
+        .city-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+        
+        .price {
+            font-size: 42px;
+            font-weight: 800;
+            color: #667eea;
+            margin: 20px 0;
+        }
+        
+        .price span {
+            font-size: 18px;
+            font-weight: 500;
+            color: #718096;
+        }
+        
+        .features {
+            list-style: none;
+            margin: 20px 0;
+            color: #4a5568;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+        
+        .features li {
+            margin: 8px 0;
+        }
+        
+        .features li:before {
+            content: "✓ ";
+            color: #48bb78;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        
+        .cta-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+        }
+        
+        .cta-button:hover {
+            background: #5a67d8;
+        }
+        
+        .footer {
+            text-align: center;
+            color: white;
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 32px;
+            }
+            
+            .header p {
+                font-size: 16px;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Daily Contractor Leads</h1>
+            <p>Fresh, verified leads delivered every morning at 8 AM</p>
+        </div>
+        
+        <div class="grid">
+            <div class="city-card" onclick="subscribe('nashville')">
+                <div class="city-name">Nashville</div>
+                <div class="price">$47<span>/month</span></div>
+                <ul class="features">
+                    <li>Daily lead list</li>
+                    <li>Email delivery 8 AM CT</li>
+                    <li>Cancel anytime</li>
+                </ul>
+                <button class="cta-button">Subscribe Now</button>
+            </div>
+            
+            <div class="city-card" onclick="subscribe('chattanooga')">
+                <div class="city-name">Chattanooga</div>
+                <div class="price">$47<span>/month</span></div>
+                <ul class="features">
+                    <li>Daily lead list</li>
+                    <li>Email delivery 8 AM CT</li>
+                    <li>Cancel anytime</li>
+                </ul>
+                <button class="cta-button">Subscribe Now</button>
+            </div>
+            
+            <div class="city-card" onclick="subscribe('austin')">
+                <div class="city-name">Austin</div>
+                <div class="price">$47<span>/month</span></div>
+                <ul class="features">
+                    <li>Daily lead list</li>
+                    <li>Email delivery 8 AM CT</li>
+                    <li>Cancel anytime</li>
+                </ul>
+                <button class="cta-button">Subscribe Now</button>
+            </div>
+            
+            <div class="city-card" onclick="subscribe('san-antonio')">
+                <div class="city-name">San Antonio</div>
+                <div class="price">$47<span>/month</span></div>
+                <ul class="features">
+                    <li>Daily lead list</li>
+                    <li>Email delivery 8 AM CT</li>
+                    <li>Cancel anytime</li>
+                </ul>
+                <button class="cta-button">Subscribe Now</button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Powered by Stripe • Cancel anytime from your receipt</p>
+        </div>
+    </div>
+    
+    <script>
+        // Replace these with your actual Stripe test price IDs
+        const STRIPE_PRICE_IDS = {
+            'nashville': 'price_NASHVILLE_TEST_ID',
+            'chattanooga': 'price_CHATTANOOGA_TEST_ID',
+            'austin': 'price_AUSTIN_TEST_ID',
+            'san-antonio': 'price_SANANTONIO_TEST_ID'
+        };
+        
+        // Your backend URL (Railway/Render deployment)
+        const BACKEND_URL = 'https://your-app.railway.app';
+        
+        async function subscribe(city) {
+            try {
+                const response = await fetch(`${BACKEND_URL}/create-checkout-session`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        city: city,
+                        price_id: STRIPE_PRICE_IDS[city]
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    alert('Error creating checkout session. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error connecting to server. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>

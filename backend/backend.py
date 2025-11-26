@@ -21,7 +21,7 @@ STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', 'sk_test_...')
 STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET', 'whsec_...')
 RESEND_API_KEY = os.getenv('RESEND_API_KEY', 're_...')
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY', 'SG....')
-OWNER_EMAIL = os.getenv('OWNER_EMAIL', 'your@email.com')
+OWNER_EMAIL = os.getenv('OWNER_EMAIL', '145brice@gmail.com')
 FROM_EMAIL = os.getenv('FROM_EMAIL', 'leads@yourdomain.com')
 ADMIN_SECRET = os.getenv('ADMIN_SECRET', 'admin123')
 
@@ -87,6 +87,12 @@ def run_scraper(city):
             )
     else:
         print(f'No scraper for {city}')
+
+def manual_scrape():
+    """Run all scrapers once manually"""
+    for city in CITIES:
+        run_scraper(city)
+    print("Manual scrape completed. Check leads/ folder for today's data.")
 
 # === 3. DAILY EMAIL ===
 @app.route('/daily')

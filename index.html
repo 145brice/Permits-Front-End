@@ -196,43 +196,67 @@
             font-size: 16px;
         }
         
-        /* Cities Section - Main CTA */
+        /* Cities Section - Excel-like Table */
         .cities {
             padding: 80px 20px;
             background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
         }
         
-        .state-section {
+        .cities-table {
             max-width: 1200px;
-            margin: 0 auto 60px;
-        }
-        
-        .state-section h3 {
-            font-size: 28px;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        
-        .cities-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-        }
-        
-        .city-card {
+            margin: 0 auto;
             background: white;
-            border: 2px solid #e2e8f0;
             border-radius: 16px;
-            padding: 40px 30px;
-            text-align: center;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            border: 2px solid #e2e8f0;
+        }
+        
+        .cities-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .cities-table th {
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            color: white;
+            padding: 20px;
+            text-align: left;
+            font-size: 24px;
+            font-weight: 700;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .cities-table td {
+            padding: 30px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: top;
+        }
+        
+        .state-name {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 20px;
+        }
+        
+        .cities-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .city-item {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
             transition: all 0.3s;
             position: relative;
             overflow: hidden;
         }
         
-        .city-card::before {
+        .city-item::before {
             content: '';
             position: absolute;
             top: 0;
@@ -244,32 +268,32 @@
             transition: transform 0.3s;
         }
         
-        .city-card:hover {
+        .city-item:hover {
             border-color: #2563eb;
-            box-shadow: 0 10px 40px rgba(37, 99, 235, 0.15);
-            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(37, 99, 235, 0.15);
+            transform: translateY(-3px);
         }
         
-        .city-card:hover::before {
+        .city-item:hover::before {
             transform: scaleX(1);
         }
         
         .city-name {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 700;
             color: #1e293b;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         
         .city-price {
-            font-size: 48px;
+            font-size: 36px;
             font-weight: 800;
             color: #2563eb;
-            margin: 20px 0 10px;
+            margin: 15px 0 8px;
         }
         
         .city-price span {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 500;
             color: #64748b;
         }
@@ -277,17 +301,17 @@
         .city-subtext {
             font-size: 14px;
             color: #64748b;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
         
         .city-btn {
             background: #2563eb;
             color: white;
-            padding: 16px 32px;
+            padding: 14px 28px;
             font-size: 16px;
             font-weight: 700;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
             width: 100%;
             transition: all 0.3s;
@@ -392,8 +416,28 @@
                 font-size: 32px;
             }
             
-            .cities-grid {
-                grid-template-columns: 1fr;
+            .cities-table {
+                overflow-x: auto;
+            }
+            
+            .cities-table table {
+                min-width: 600px;
+            }
+            
+            .cities-list {
+                gap: 15px;
+            }
+            
+            .city-item {
+                padding: 20px;
+            }
+            
+            .city-name {
+                font-size: 20px;
+            }
+            
+            .city-price {
+                font-size: 28px;
             }
         }
     </style>
@@ -476,77 +520,95 @@
                 <p>Start receiving fresh leads tomorrow morning</p>
             </div>
             
-            <!-- Tennessee -->
-            <div class="state-section">
-                <h3>Tennessee</h3>
-                <div class="cities-grid">
-                    <div class="city-card">
-                        <div class="city-name">Nashville</div>
-                        <div class="city-price">$47<span>/mo</span></div>
-                        <p class="city-subtext">Daily building permits • 8 AM delivery</p>
-                        <a href="https://buy.stripe.com/dRm28t7Lqbyz1HIdPp63K0r" class="city-btn">Subscribe to Nashville</a>
-                    </div>
-                    
-                    <div class="city-card">
-                        <div class="city-name">Chattanooga</div>
-                        <div class="city-price">$47<span>/mo</span></div>
-                        <p class="city-subtext">Daily building permits • 8 AM delivery</p>
-                        <a href="https://buy.stripe.com/28E6oJ7Lq4678669z963K0s" class="city-btn">Subscribe to Chattanooga</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Texas -->
-            <div class="state-section">
-                <h3>Texas</h3>
-                <div class="cities-grid">
-                    <div class="city-card">
-                        <div class="city-name">Austin</div>
-                        <div class="city-price">$47<span>/mo</span></div>
-                        <p class="city-subtext">Daily building permits • 8 AM delivery</p>
-                        <a href="https://buy.stripe.com/4gMfZjfdSbyzbiih1B63K0t" class="city-btn">Subscribe to Austin</a>
-                    </div>
-                    
-                    <div class="city-card">
-                        <div class="city-name">San Antonio</div>
-                        <div class="city-price">$47<span>/mo</span></div>
-                        <p class="city-subtext">Daily building permits • 8 AM delivery</p>
-                        <a href="https://buy.stripe.com/3cI9AV8Pubyzeuu5iT63K0u" class="city-btn">Subscribe to San Antonio</a>
-                    </div>
-                    
-                    <div class="city-card">
-                        <div class="city-name">Houston</div>
-                        <div class="city-price">$47<span>/mo</span></div>
-                        <p class="city-subtext">Daily building permits • 8 AM delivery</p>
-                        <a href="https://buy.stripe.com/[HOUSTON_LINK_HERE]" class="city-btn">Subscribe to Houston</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- North Carolina -->
-            <div class="state-section">
-                <h3>North Carolina</h3>
-                <div class="cities-grid">
-                    <div class="city-card">
-                        <div class="city-name">Charlotte</div>
-                        <div class="city-price">$47<span>/mo</span></div>
-                        <p class="city-subtext">Daily building permits • 8 AM delivery</p>
-                        <a href="https://buy.stripe.com/[CHARLOTTE_LINK_HERE]" class="city-btn">Subscribe to Charlotte</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Arizona -->
-            <div class="state-section">
-                <h3>Arizona</h3>
-                <div class="cities-grid">
-                    <div class="city-card">
-                        <div class="city-name">Phoenix</div>
-                        <div class="city-price">$47<span>/mo</span></div>
-                        <p class="city-subtext">Daily building permits • 8 AM delivery</p>
-                        <a href="https://buy.stripe.com/[PHOENIX_LINK_HERE]" class="city-btn">Subscribe to Phoenix</a>
-                    </div>
-                </div>
+            <div class="cities-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>State</th>
+                            <th>Cities Available</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="state-name">Tennessee</div>
+                            </td>
+                            <td>
+                                <div class="cities-list">
+                                    <div class="city-item">
+                                        <div class="city-name">Nashville</div>
+                                        <div class="city-price">$47<span>/mo</span></div>
+                                        <p class="city-subtext">Daily building permits • 8 AM delivery</p>
+                                        <a href="https://buy.stripe.com/dRm28t7Lqbyz1HIdPp63K0r" class="city-btn">Subscribe to Nashville</a>
+                                    </div>
+                                    <div class="city-item">
+                                        <div class="city-name">Chattanooga</div>
+                                        <div class="city-price">$47<span>/mo</span></div>
+                                        <p class="city-subtext">Daily building permits • 8 AM delivery</p>
+                                        <a href="https://buy.stripe.com/28E6oJ7Lq4678669z963K0s" class="city-btn">Subscribe to Chattanooga</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="state-name">Texas</div>
+                            </td>
+                            <td>
+                                <div class="cities-list">
+                                    <div class="city-item">
+                                        <div class="city-name">Austin</div>
+                                        <div class="city-price">$47<span>/mo</span></div>
+                                        <p class="city-subtext">Daily building permits • 8 AM delivery</p>
+                                        <a href="https://buy.stripe.com/4gMfZjfdSbyzbiih1B63K0t" class="city-btn">Subscribe to Austin</a>
+                                    </div>
+                                    <div class="city-item">
+                                        <div class="city-name">San Antonio</div>
+                                        <div class="city-price">$47<span>/mo</span></div>
+                                        <p class="city-subtext">Daily building permits • 8 AM delivery</p>
+                                        <a href="https://buy.stripe.com/3cI9AV8Pubyzeuu5iT63K0u" class="city-btn">Subscribe to San Antonio</a>
+                                    </div>
+                                    <div class="city-item">
+                                        <div class="city-name">Houston</div>
+                                        <div class="city-price">$47<span>/mo</span></div>
+                                        <p class="city-subtext">Daily building permits • 8 AM delivery</p>
+                                        <a href="https://buy.stripe.com/[HOUSTON_LINK_HERE]" class="city-btn">Subscribe to Houston</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="state-name">North Carolina</div>
+                            </td>
+                            <td>
+                                <div class="cities-list">
+                                    <div class="city-item">
+                                        <div class="city-name">Charlotte</div>
+                                        <div class="city-price">$47<span>/mo</span></div>
+                                        <p class="city-subtext">Daily building permits • 8 AM delivery</p>
+                                        <a href="https://buy.stripe.com/[CHARLOTTE_LINK_HERE]" class="city-btn">Subscribe to Charlotte</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="state-name">Arizona</div>
+                            </td>
+                            <td>
+                                <div class="cities-list">
+                                    <div class="city-item">
+                                        <div class="city-name">Phoenix</div>
+                                        <div class="city-price">$47<span>/mo</span></div>
+                                        <p class="city-subtext">Daily building permits • 8 AM delivery</p>
+                                        <a href="https://buy.stripe.com/[PHOENIX_LINK_HERE]" class="city-btn">Subscribe to Phoenix</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

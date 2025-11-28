@@ -14,9 +14,14 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail, Email, To, Content
 import firebase_admin
 from firebase_admin import credentials, firestore
+import warnings
+
+# Suppress warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 # === SETUP ===
-app = Flask(__name__, static_folder='../frontend')  # Adjust path to frontend
+app = Flask(__name__, static_folder='../')  # Frontend files are in root
 
 # Environment variables - set these in .env or terminal
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', 'sk_test_...')
@@ -32,12 +37,12 @@ stripe.api_key = STRIPE_SECRET_KEY
 resend.api_key = RESEND_API_KEY
 
 # Firebase setup
-cred = credentials.Certificate('serviceAccountKey.json')
+cred = credentials.Certificate(os.path.join(os.path.dirname(__file__), 'serviceAccountKey.json'))
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 # Cities list - add new ones here
-CITIES = ['nashville', 'chattanooga', 'austin', 'sanantonio']  # expand forever
+CITIES = ['nashville', 'chattanooga', 'austin', 'sanantonio', 'houston', 'charlotte']  # expand forever
 
 # Create folders
 os.makedirs('cities', exist_ok=True)

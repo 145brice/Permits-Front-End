@@ -88,6 +88,24 @@
             box-shadow: 0 15px 40px rgba(0,0,0,0.3);
         }
         
+        .login-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+        
+        .login-link:hover {
+            color: white;
+            background: rgba(255,255,255,0.2);
+        }
+        
         /* Trust Badge */
         .trust-badge {
             margin-top: 30px;
@@ -514,6 +532,7 @@
 <body>
     <!-- Hero Section -->
     <div class="hero">
+        <a href="/login" class="login-link">Login to Dashboard</a>
         <div class="container">
             <h1>Fresh Contractor Leads<br>Every Day at 8 AM</h1>
             <p class="subtitle">Building permits delivered to your inbox.<br>No cold calling. Just qualified leads ready to hire.</p>

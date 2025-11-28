@@ -118,7 +118,7 @@ def send_daily():
     for city in CITIES:
         # Find yesterday's CSV
         yesterday = (datetime.date.today() - datetime.timedelta(days=1)).isoformat()
-        csv_path = f'leads/{city}/{yesterday}.csv'
+        csv_path = f'leads/{city}/{yesterday}_{city}.csv'
         if os.path.exists(csv_path):
             # Get subscribers from Firestore
             subscribers_ref = db.collection('subscribers').where('city', '==', city)

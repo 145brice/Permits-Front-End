@@ -38,7 +38,7 @@ def scrape_permits():
 
 def save_to_csv(permits):
     date_str = datetime.date.today().isoformat()
-    filename = f'leads/{city}/{date_str}.csv'
+    filename = f'leads/{city}/{date_str}_{city}.csv'
     os.makedirs(f'leads/{city}', exist_ok=True)
     
     with open(filename, 'w', newline='') as f:

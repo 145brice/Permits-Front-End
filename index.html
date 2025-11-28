@@ -196,7 +196,67 @@
             font-size: 16px;
         }
         
-        /* Cities Section - Excel-like Table */
+        /* Sample Lead Section */
+        .sample-lead {
+            padding: 80px 20px;
+            background: white;
+        }
+        
+        .sample-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        
+        .sample-header {
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .sample-header h2 {
+            font-size: 28px;
+            font-weight: 800;
+            margin: 0;
+        }
+        
+        .sample-email {
+            padding: 30px;
+            font-family: 'Courier New', monospace;
+            background: white;
+            line-height: 1.6;
+        }
+        
+        .email-subject {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #1e293b;
+        }
+        
+        .email-content {
+            font-size: 14px;
+            color: #374151;
+        }
+        
+        .blurred {
+            filter: blur(3px);
+            user-select: none;
+        }
+        
+        .sample-note {
+            text-align: center;
+            padding: 20px;
+            background: #f1f5f9;
+            border-top: 1px solid #e2e8f0;
+            font-size: 14px;
+            color: #64748b;
+        }
         .cities {
             padding: 80px 20px;
             background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
@@ -220,37 +280,37 @@
         .cities-table th {
             background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
             color: white;
-            padding: 20px;
+            padding: 12px 15px;
             text-align: left;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 700;
             border-bottom: 2px solid #e2e8f0;
         }
         
         .cities-table td {
-            padding: 30px 20px;
+            padding: 15px;
             border-bottom: 1px solid #e2e8f0;
             vertical-align: top;
         }
         
         .state-name {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 800;
             color: #1e293b;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
         
         .cities-list {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 10px;
         }
         
         .city-item {
             background: #f8fafc;
             border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 25px;
+            border-radius: 8px;
+            padding: 15px;
             transition: all 0.3s;
             position: relative;
             overflow: hidden;
@@ -262,7 +322,7 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
+            height: 3px;
             background: linear-gradient(90deg, #2563eb, #7c3aed);
             transform: scaleX(0);
             transition: transform 0.3s;
@@ -270,8 +330,8 @@
         
         .city-item:hover {
             border-color: #2563eb;
-            box-shadow: 0 8px 30px rgba(37, 99, 235, 0.15);
-            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(37, 99, 235, 0.15);
+            transform: translateY(-2px);
         }
         
         .city-item:hover::before {
@@ -279,39 +339,39 @@
         }
         
         .city-name {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 700;
             color: #1e293b;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
         
         .city-price {
-            font-size: 36px;
+            font-size: 28px;
             font-weight: 800;
             color: #2563eb;
-            margin: 15px 0 8px;
+            margin: 10px 0 6px;
         }
         
         .city-price span {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 500;
             color: #64748b;
         }
         
         .city-subtext {
-            font-size: 14px;
+            font-size: 12px;
             color: #64748b;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
         }
         
         .city-btn {
             background: #2563eb;
             color: white;
-            padding: 14px 28px;
-            font-size: 16px;
+            padding: 10px 20px;
+            font-size: 14px;
             font-weight: 700;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
             width: 100%;
             transition: all 0.3s;
@@ -439,6 +499,15 @@
             .city-price {
                 font-size: 28px;
             }
+            
+            .sample-email {
+                padding: 20px;
+                font-size: 13px;
+            }
+            
+            .sample-header h2 {
+                font-size: 24px;
+            }
         }
     </style>
 </head>
@@ -508,6 +577,32 @@
                     <h3>3X Your Business</h3>
                     <p>Contractors increase jobs by 300% with consistent, automated lead delivery.</p>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sample Lead Demo -->
+    <div class="sample-lead">
+        <div class="sample-container">
+            <div class="sample-header">
+                <h2>Here's Exactly What You'll Get</h2>
+            </div>
+            <div class="sample-email">
+                <div class="email-subject">Subject: New Building Permit - Nashville, TN</div>
+                <div class="email-content">
+                    <p><strong>Owner Name:</strong> Sarah Johnson</p>
+                    <p><strong>Address:</strong> <span class="blurred">1234 Elm Street, Nashville, TN 37203</span></p>
+                    <p><strong>Permit Type:</strong> Residential Kitchen Remodel</p>
+                    <p><strong>Permit Value:</strong> $45,000</p>
+                    <p><strong>Issue Date:</strong> November 27, 2025</p>
+                    <p><strong>Description:</strong> Kitchen renovation including cabinets, countertops, and appliances</p>
+                    <p><strong>Contact Info:</strong> (615) 555-0123</p>
+                    <br>
+                    <p><em>This lead is ready to contact. Owner has immediate renovation needs and budget allocated.</em></p>
+                </div>
+            </div>
+            <div class="sample-note">
+                * Address blurred for privacy. Real leads include full contact information.
             </div>
         </div>
     </div>

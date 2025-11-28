@@ -1,156 +1,613 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Contractor Leads – Daily Building Permits in Your Inbox</title>
-  <style>
-    body {margin:0; font-family:system-ui, -apple-system, sans-serif; background:white; color:#1e293b; line-height:1.6;}
-    .hero {text-align:center; padding:4rem 2rem; background:rgba(0,0,0,0.05); border-bottom:1px solid rgba(0,0,0,0.1);}
-    .hero h1 {font-size:3.5rem; margin:0 0 1rem; font-weight:700;}
-    .hero p {font-size:1.5rem; margin:0 0 2rem; opacity:0.9;}
-    .cta-btn {display:inline-block; background:#3b82f6; color:white; font-weight:bold; padding:1.2rem 2.5rem; border-radius:50px; text-decoration:none; font-size:1.4rem; transition:0.3s; box-shadow:0 4px 15px rgba(59,130,246,0.3);}
-    .cta-btn:hover {background:#2563eb; transform:translateY(-2px); box-shadow:0 6px 20px rgba(37,99,235,0.4);}
-    .benefits {padding:4rem 2rem; text-align:center;}
-    .benefits h2 {font-size:2.5rem; margin-bottom:2rem;}
-    .benefits-grid {display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:2rem; max-width:1200px; margin:0 auto;}
-    .benefit {background:rgba(0,0,0,0.1); backdrop-filter:blur(10px); border:1px solid rgba(0,0,0,0.2); border-radius:16px; padding:2rem; transition:0.3s;}
-    .benefit:hover {transform:translateY(-5px); background:rgba(0,0,0,0.15);}
-    .benefit h3 {font-size:1.8rem; margin:0 0 1rem;}
-    .cities {padding:4rem 2rem; text-align:center;}
-    .cities h2 {font-size:2.5rem; margin-bottom:2rem;}
-    .grid {display:grid; grid-template-columns:repeat(3, 1fr); gap:2rem; max-width:1200px; margin:0 auto;}
-    .city-card {background:rgba(0,0,0,0.1); backdrop-filter:blur(10px); border:1px solid rgba(0,0,0,0.2); border-radius:16px; padding:2rem; transition:0.3s;}
-    .city-card:hover {transform:translateY(-10px); background:rgba(0,0,0,0.2);}
-    .city-card h3 {margin:0 0 1rem; font-size:2rem;}
-    .price {font-size:1.5rem; margin:1rem 0; font-weight:600;}
-    .btn {display:block; background:#3b82f6; color:white; font-weight:bold; padding:1rem; border-radius:12px; text-decoration:none; font-size:1.3rem; transition:0.3s;}
-    .btn:hover {background:#2563eb;}
-    .social-proof {padding:4rem 2rem; text-align:center; background:rgba(0,0,0,0.05);}
-    .social-proof h2 {font-size:2.5rem; margin-bottom:2rem;}
-    .testimonials {display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:2rem; max-width:1200px; margin:0 auto;}
-    .testimonial {background:rgba(0,0,0,0.1); border-radius:16px; padding:2rem; font-style:italic;}
-    .testimonial p {margin:0;}
-    .testimonial cite {display:block; margin-top:1rem; font-weight:bold; font-style:normal;}
-    .footer {padding:2rem; text-align:center; opacity:0.8; border-top:1px solid rgba(0,0,0,0.1);}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Contractor Leads - Building Permits Delivered at 8 AM</title>
+    <meta name="description" content="Get fresh building permits delivered daily. No cold calling. $47/month. Cancel anytime.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: #1e293b;
+            background: #ffffff;
+        }
+        
+        /* Hero Section - High Converting */
+        .hero {
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            color: white;
+            padding: 80px 20px 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .hero .subtitle {
+            font-size: 24px;
+            margin-bottom: 15px;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+        
+        .hero .subtext {
+            font-size: 18px;
+            margin-bottom: 40px;
+            opacity: 0.85;
+        }
+        
+        .hero .cta-primary {
+            background: white;
+            color: #2563eb;
+            padding: 20px 50px;
+            font-size: 20px;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            display: inline-block;
+            text-decoration: none;
+        }
+        
+        .hero .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        
+        /* Trust Badge */
+        .trust-badge {
+            margin-top: 30px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        /* Stats Section - Social Proof */
+        .stats {
+            background: #f8fafc;
+            padding: 60px 20px;
+            margin-top: -40px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .stat-number {
+            font-size: 48px;
+            font-weight: 800;
+            color: #2563eb;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 16px;
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        /* Benefits Section - Value Props */
+        .benefits {
+            padding: 80px 20px;
+            background: white;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-header h2 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: #1e293b;
+        }
+        
+        .section-header p {
+            font-size: 20px;
+            color: #64748b;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .benefit {
+            background: rgba(37, 99, 235, 0.05);
+            border: 2px solid rgba(37, 99, 235, 0.1);
+            border-radius: 16px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .benefit:hover {
+            background: rgba(37, 99, 235, 0.08);
+            border-color: rgba(37, 99, 235, 0.2);
+            transform: translateY(-5px);
+        }
+        
+        .benefit-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .benefit h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #1e293b;
+        }
+        
+        .benefit p {
+            color: #64748b;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+        
+        /* Cities Section - Main CTA */
+        .cities {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+        }
+        
+        .state-section {
+            max-width: 1200px;
+            margin: 0 auto 60px;
+        }
+        
+        .state-section h3 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .cities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        
+        .city-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .city-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+        
+        .city-card:hover {
+            border-color: #2563eb;
+            box-shadow: 0 10px 40px rgba(37, 99, 235, 0.15);
+            transform: translateY(-5px);
+        }
+        
+        .city-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .city-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 15px;
+        }
+        
+        .city-price {
+            font-size: 48px;
+            font-weight: 800;
+            color: #2563eb;
+            margin: 20px 0 10px;
+        }
+        
+        .city-price span {
+            font-size: 18px;
+            font-weight: 500;
+            color: #64748b;
+        }
+        
+        .city-subtext {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+        
+        .city-btn {
+            background: #2563eb;
+            color: white;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .city-btn:hover {
+            background: #1d4ed8;
+            transform: scale(1.02);
+        }
+        
+        /* Social Proof - Testimonials */
+        .social-proof {
+            padding: 80px 20px;
+            background: white;
+        }
+        
+        .testimonials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .testimonial {
+            background: #f8fafc;
+            padding: 40px;
+            border-radius: 16px;
+            border-left: 4px solid #2563eb;
+        }
+        
+        .testimonial-text {
+            font-size: 18px;
+            font-style: italic;
+            color: #1e293b;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .testimonial-author {
+            font-weight: 700;
+            color: #2563eb;
+            font-size: 16px;
+        }
+        
+        .testimonial-role {
+            color: #64748b;
+            font-size: 14px;
+        }
+        
+        /* Final CTA Section */
+        .cta-section {
+            padding: 100px 20px;
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .cta-section h2 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+        
+        .cta-section p {
+            font-size: 20px;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #0f172a;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .footer p {
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .hero .subtitle {
+                font-size: 18px;
+            }
+            
+            .hero .cta-primary {
+                padding: 16px 40px;
+                font-size: 18px;
+            }
+            
+            .section-header h2 {
+                font-size: 32px;
+            }
+            
+            .cities-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-  <!-- Hero Section -->
-  <section class="hero">
-    <h1>Fresh Contractor Leads Every Day</h1>
-    <p>Get daily building permit notifications straight to your inbox. No more cold calling – just qualified leads ready to hire.</p>
-    <a href="#cities" class="cta-btn">Start Your Free Trial</a>
-  </section>
-
-  <!-- Benefits Section -->
-  <section class="benefits">
-    <h2>Why Contractors Choose Us</h2>
-    <div class="benefits-grid">
-      <div class="benefit">
-        <h3>📧 Daily Fresh Leads</h3>
-        <p>Receive new permit filings every morning from active construction sites in your area.</p>
-      </div>
-      <div class="benefit">
-        <h3>🎯 Qualified Prospects</h3>
-        <p>Target homeowners and businesses with immediate renovation needs – no wasted time.</p>
-      </div>
-      <div class="benefit">
-        <h3>💰 Cancel Anytime</h3>
-        <p>No long-term contracts. Pause or cancel in Stripe with one click.</p>
-      </div>
-      <div class="benefit">
-        <h3>🚀 Boost Your Business</h3>
-        <p>Increase jobs by 300% with consistent, high-quality leads delivered automatically.</p>
-      </div>
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="container">
+            <h1>Fresh Contractor Leads<br>Every Day at 8 AM</h1>
+            <p class="subtitle">Building permits delivered to your inbox.<br>No cold calling. Just qualified leads ready to hire.</p>
+            <p class="subtext">300% more jobs. Zero contracts. Cancel anytime.</p>
+            <a href="#cities" class="cta-primary">Choose Your City →</a>
+            <p class="trust-badge">✓ Powered by Stripe • Cancel with one click</p>
+        </div>
     </div>
-  </section>
 
-  <!-- Cities Section -->
-  <section id="cities" class="cities">
-    <h2>Choose Your City – $47/month</h2>
-    
-    <section class="state">
-      <h3>Tennessee</h3>
-      <div class="grid">
-        <div class="city-card">
-          <h4>Nashville</h4>
-          <div class="price">$47 / month</div>
-          <a href="https://buy.stripe.com/dRm28t7Lqbyz1HIdPp63K0r" class="btn">Subscribe to Nashville</a>
+    <!-- Stats Section -->
+    <div class="stats">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-number">8 AM</span>
+                <span class="stat-label">Daily Delivery</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">$47</span>
+                <span class="stat-label">Per Month</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">7</span>
+                <span class="stat-label">Cities Available</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">300%</span>
+                <span class="stat-label">More Jobs</span>
+            </div>
         </div>
-        <div class="city-card">
-          <h4>Chattanooga</h4>
-          <div class="price">$47 / month</div>
-          <a href="https://buy.stripe.com/28E6oJ7Lq4678669z963K0s" class="btn">Subscribe to Chattanooga</a>
-        </div>
-      </div>
-    </section>
-    
-    <section class="state">
-      <h3>Texas</h3>
-      <div class="grid">
-        <div class="city-card">
-          <h4>Austin</h4>
-          <div class="price">$47 / month</div>
-          <a href="https://buy.stripe.com/4gMfZjfdSbyzbiih1B63K0t" class="btn">Subscribe to Austin</a>
-        </div>
-        <div class="city-card">
-          <h4>San Antonio</h4>
-          <div class="price">$47 / month</div>
-          <a href="https://buy.stripe.com/3cI9AV8Pubyzeuu5iT63K0u" class="btn">Subscribe to San Antonio</a>
-        </div>
-        <div class="city-card">
-          <h4>Houston</h4>
-          <div class="price">$47 / month</div>
-          <a href="https://buy.stripe.com/[HOUSTON_LINK_HERE]" class="btn">Subscribe to Houston</a>
-        </div>
-      </div>
-    </section>
-    
-    <section class="state">
-      <h3>North Carolina</h3>
-      <div class="grid">
-        <div class="city-card">
-          <h4>Charlotte</h4>
-          <div class="price">$47 / month</div>
-          <a href="https://buy.stripe.com/[CHARLOTTE_LINK_HERE]" class="btn">Subscribe to Charlotte</a>
-        </div>
-      </div>
-    </section>
-    
-    <section class="state">
-      <h3>Arizona</h3>
-      <div class="grid">
-        <div class="city-card">
-          <h4>Phoenix</h4>
-          <div class="price">$47 / month</div>
-          <a href="https://buy.stripe.com/[PHOENIX_LINK_HERE]" class="btn">Subscribe to Phoenix</a>
-        </div>
-      </div>
-    </section>
-  </section>
-  <!-- Social Proof Section -->
-  <section class="social-proof">
-    <h2>What Contractors Say</h2>
-    <div class="testimonials">
-      <div class="testimonial">
-        <p>"This service doubled my leads overnight. I went from 2 jobs a month to 8. Highly recommend!"</p>
-        <cite>- Mike R., Nashville Contractor</cite>
-      </div>
-      <div class="testimonial">
-        <p>"Fresh permits every morning? Game changer. No more hunting for work – it comes to me."</p>
-        <cite>- Sarah L., Austin Remodeling</cite>
-      </div>
-      <div class="testimonial">
-        <p>"Easy to cancel if it doesn't work. But it does. Best $47 I've spent."</p>
-        <cite>- John D., Chattanooga Builder</cite>
-      </div>
     </div>
-  </section>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <p>One click to cancel in Stripe. No spam. No phone calls.</p>
-  </footer>
+    <!-- Benefits Section -->
+    <div class="benefits">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Contractors Love Us</h2>
+                <p>Stop wasting time. Start closing deals.</p>
+            </div>
+            
+            <div class="benefits-grid">
+                <div class="benefit">
+                    <div class="benefit-icon">📧</div>
+                    <h3>Daily Fresh Leads</h3>
+                    <p>New permit filings every morning at 8 AM. Active construction sites. Ready to hire.</p>
+                </div>
+                
+                <div class="benefit">
+                    <div class="benefit-icon">🎯</div>
+                    <h3>100% Qualified</h3>
+                    <p>Real homeowners with immediate needs. Owner names and contact info included.</p>
+                </div>
+                
+                <div class="benefit">
+                    <div class="benefit-icon">💰</div>
+                    <h3>Cancel Anytime</h3>
+                    <p>No contracts. Cancel in Stripe with one click. No phone calls. No hassle.</p>
+                </div>
+                
+                <div class="benefit">
+                    <div class="benefit-icon">🚀</div>
+                    <h3>3X Your Business</h3>
+                    <p>Contractors increase jobs by 300% with consistent, automated lead delivery.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cities Section -->
+    <div class="cities" id="cities">
+        <div class="container">
+            <div class="section-header">
+                <h2>Choose Your City - $47/month</h2>
+                <p>Start receiving fresh leads tomorrow morning</p>
+            </div>
+            
+            <!-- Tennessee -->
+            <div class="state-section">
+                <h3>Tennessee</h3>
+                <div class="cities-grid">
+                    <div class="city-card">
+                        <div class="city-name">Nashville</div>
+                        <div class="city-price">$47<span>/mo</span></div>
+                        <p class="city-subtext">Daily building permits • 8 AM delivery</p>
+                        <a href="https://buy.stripe.com/dRm28t7Lqbyz1HIdPp63K0r" class="city-btn">Subscribe to Nashville</a>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-name">Chattanooga</div>
+                        <div class="city-price">$47<span>/mo</span></div>
+                        <p class="city-subtext">Daily building permits • 8 AM delivery</p>
+                        <a href="https://buy.stripe.com/28E6oJ7Lq4678669z963K0s" class="city-btn">Subscribe to Chattanooga</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Texas -->
+            <div class="state-section">
+                <h3>Texas</h3>
+                <div class="cities-grid">
+                    <div class="city-card">
+                        <div class="city-name">Austin</div>
+                        <div class="city-price">$47<span>/mo</span></div>
+                        <p class="city-subtext">Daily building permits • 8 AM delivery</p>
+                        <a href="https://buy.stripe.com/4gMfZjfdSbyzbiih1B63K0t" class="city-btn">Subscribe to Austin</a>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-name">San Antonio</div>
+                        <div class="city-price">$47<span>/mo</span></div>
+                        <p class="city-subtext">Daily building permits • 8 AM delivery</p>
+                        <a href="https://buy.stripe.com/3cI9AV8Pubyzeuu5iT63K0u" class="city-btn">Subscribe to San Antonio</a>
+                    </div>
+                    
+                    <div class="city-card">
+                        <div class="city-name">Houston</div>
+                        <div class="city-price">$47<span>/mo</span></div>
+                        <p class="city-subtext">Daily building permits • 8 AM delivery</p>
+                        <a href="https://buy.stripe.com/[HOUSTON_LINK_HERE]" class="city-btn">Subscribe to Houston</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- North Carolina -->
+            <div class="state-section">
+                <h3>North Carolina</h3>
+                <div class="cities-grid">
+                    <div class="city-card">
+                        <div class="city-name">Charlotte</div>
+                        <div class="city-price">$47<span>/mo</span></div>
+                        <p class="city-subtext">Daily building permits • 8 AM delivery</p>
+                        <a href="https://buy.stripe.com/[CHARLOTTE_LINK_HERE]" class="city-btn">Subscribe to Charlotte</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Arizona -->
+            <div class="state-section">
+                <h3>Arizona</h3>
+                <div class="cities-grid">
+                    <div class="city-card">
+                        <div class="city-name">Phoenix</div>
+                        <div class="city-price">$47<span>/mo</span></div>
+                        <p class="city-subtext">Daily building permits • 8 AM delivery</p>
+                        <a href="https://buy.stripe.com/[PHOENIX_LINK_HERE]" class="city-btn">Subscribe to Phoenix</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Social Proof -->
+    <div class="social-proof">
+        <div class="container">
+            <div class="section-header">
+                <h2>What Contractors Say</h2>
+            </div>
+            
+            <div class="testimonials">
+                <div class="testimonial">
+                    <p class="testimonial-text">"This service doubled my leads overnight. I went from 2 jobs a month to 8. Highly recommend!"</p>
+                    <p class="testimonial-author">Mike R.</p>
+                    <p class="testimonial-role">Nashville Contractor</p>
+                </div>
+                
+                <div class="testimonial">
+                    <p class="testimonial-text">"Fresh permits every morning? Game changer. No more hunting for work - it comes to me."</p>
+                    <p class="testimonial-author">Sarah L.</p>
+                    <p class="testimonial-role">Austin Remodeling</p>
+                </div>
+                
+                <div class="testimonial">
+                    <p class="testimonial-text">"Easy to cancel if it doesn't work. But it does. Best $47 I've spent."</p>
+                    <p class="testimonial-author">John D.</p>
+                    <p class="testimonial-role">Chattanooga Builder</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Final CTA -->
+    <div class="cta-section">
+        <div class="container">
+            <h2>Ready to 3X Your Jobs?</h2>
+            <p>Join hundreds of contractors getting fresh leads every day</p>
+            <a href="#cities" class="cta-primary">Choose Your City →</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="container">
+            <p>One click to cancel in Stripe. No spam. No phone calls.</p>
+            <p>© 2024 Contractor Leads. All rights reserved.</p>
+        </div>
+    </div>
+
+    <!-- Smooth Scroll -->
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
 </body>
 </html>

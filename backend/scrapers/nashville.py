@@ -12,7 +12,7 @@ from firebase_admin import credentials, firestore
 city = sys.argv[1] if len(sys.argv) > 1 else 'nashville'
 
 # Firebase init
-cred = credentials.Certificate(../serviceAccountKey.json)
+cred = credentials.Certificate('serviceAccountKey.json')
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 

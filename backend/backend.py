@@ -97,12 +97,14 @@ def run_scraper(city):
             subprocess.run(['python3', scraper_path, city], check=True)
         except subprocess.CalledProcessError as e:
             # Email alert on failure
-            resend.send({
-                "from": 'alert@yourdomain.com',
-                "to": OWNER_EMAIL,
-                "subject": f'ALERT: {city} scrape FAILED at {time.ctime()}',
-                "text": f'Site returned error. Fix ASAP. Error: {e}'
-            })
+            message = Mail(
+                from_email=FROM_EMAIL,
+                to_emails=[OWNER_EMAIL],
+                subject=f'ALERT: {city} scrape FAILED at {time.ctime()}',
+                plain_text_content=f'Site returned error. Fix ASAP. Error: {e}'
+            )
+            sg = SendGridAPIClient(SENDGRID_API_KEY)
+            sg.send(message)
     else:
         print(f'No scraper for {city}')
 

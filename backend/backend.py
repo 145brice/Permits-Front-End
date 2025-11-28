@@ -42,7 +42,7 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 # Cities list - add new ones here
-CITIES = ['nashville', 'chattanooga', 'austin', 'sanantonio', 'houston', 'charlotte']  # expand forever
+CITIES = ['nashville', 'chattanooga', 'austin', 'sanantonio', 'houston', 'charlotte', 'phoenix']  # expand forever
 
 # Create folders
 os.makedirs('cities', exist_ok=True)

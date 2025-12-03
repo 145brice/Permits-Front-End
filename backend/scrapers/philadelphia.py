@@ -20,7 +20,12 @@ class PhiladelphiaPermitScraper:
         return response.json()
 
     def scrape_permits(self, max_permits=5000, days_back=90):
-        print("🏗️  Philadelphia PA Construction Permits Scraper")
+        self.logger.info("🏗️  Philadelphia PA Construction Permits Scraper")
+        print(f"🏗️  Philadelphia PA Construction Permits Scraper")
+        print(f"=" * 60)
+        print(f"📅 Date Range: {(datetime.now() - timedelta(days=days_back)).strftime('%Y-%m-%d')} to {datetime.now().strftime('%Y-%m-%d')}")
+        print(f"📡 Using Carto SQL API...")
+
         end_date = datetime.now()
         start_date = end_date - timedelta(days=days_back)
         start_str = start_date.strftime('%Y-%m-%d')
@@ -28,13 +33,27 @@ class PhiladelphiaPermitScraper:
         for endpoint in self.endpoints:
             try:
                 offset = 0
+                batch_size = 1000
+
                 while len(self.permits) < max_permits:
-                    query = f"SELECT * FROM li_permits WHERE permitissuedate >= '{start_str}' ORDER BY permitissuedate DESC LIMIT 1000 OFFSET {offset}"
-                    params = {'q': query}
+                    # Fixed: query from 'permits' table not 'li_permits'
+                    query = f"""
+                        SELECT permitnumber, permitissuedate, permitdescription,
+                               address, typeofwork, opa_account_num
+                        FROM permits
+                        WHERE permitissuedate >= '{start_str}'
+                        ORDER BY permitissuedate DESC
+                        LIMIT {batch_size} OFFSET {offset}
+                    """
+
+                    params = {'q': query, 'format': 'json'}
                     result = self._fetch_batch(endpoint, params)
                     data = result.get('rows', [])
+
                     if not data:
+                        self.logger.info(f"No more data at offset {offset}")
                         break
+
                     for record in data:
                         pid = record.get('permitnumber')
                         if pid and pid not in self.seen_permit_ids:
@@ -42,18 +61,34 @@ class PhiladelphiaPermitScraper:
                             self.permits.append({
                                 'permit_number': pid,
                                 'address': record.get('address') or 'N/A',
-                                'type': record.get('permit_type_name') or record.get('permittype') or 'N/A',
-                                'value': f"${float(record.get('estimatedcost',0)):,.2f}" if record.get('estimatedcost') else "$0.00",
+                                'type': record.get('permitdescription') or record.get('typeofwork') or 'N/A',
+                                'value': '$0.00',  # No cost field in this dataset
                                 'issued_date': record.get('permitissuedate','').split('T')[0] if record.get('permitissuedate') else 'N/A',
-                                'status': record.get('status') or 'N/A'
+                                'status': 'Issued'  # All records are issued permits
                             })
-                    if len(data) < 1000:
+
+                    print(f"✓ Fetched {len(self.permits)} permits so far...")
+
+                    if len(data) < batch_size:
                         break
-                    offset += 1000
+                    offset += batch_size
+                    time.sleep(0.5)  # Rate limiting
+
                 if self.permits:
+                    self.logger.info(f"✅ Success! Got {len(self.permits)} permits from Carto")
+                    self.health_check.record_success(len(self.permits))
+                    print(f"\n✅ Scraping complete! Total permits: {len(self.permits)}")
                     break
+
             except Exception as e:
-                self.logger.error(f"Error: {e}")
+                self.logger.error(f"Endpoint error: {e}")
+                print(f"❌ Endpoint failed: {e}")
+                self.health_check.record_failure(str(e))
+
+        if not self.permits:
+            self.logger.warning("No permits found")
+            print(f"⚠️  No permits found - will retry next run")
+
         return self.permits
 
     def save_to_csv(self, filename=None):

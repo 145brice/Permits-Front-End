@@ -1,0 +1,17 @@
+Building Permits Export Summary
+================================
+
+Export Date: 2025-12-02
+Cities Processed: 20
+Total Permits: 3009
+
+Verified Working Cities (7):
+  - Austin, TX
+  - Chicago, IL
+  - Seattle, WA
+  - Chattanooga, TN
+  - Phoenix, AZ
+  - San Antonio, TX
+  - Boston, MA
+
+Each city's permits are in: leads/2025-12-02/CityName/permits.csv

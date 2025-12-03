@@ -7,23 +7,17 @@ from .utils import retry_with_backoff, setup_logger, ScraperHealthCheck, save_pa
 
 class CharlottePermitScraper:
     def __init__(self):
-        # Charlotte uses Socrata Open Data API
-        self.base_url = "https://data.charlottenc.gov/resource/4bkj-9djb.json"
+        # Charlotte migrated to ArcGIS Hub - use ArcGIS REST API
+        # New portal: https://data.charlottenc.gov/
+        self.arcgis_url = "https://services1.arcgis.com/x4bFVvkPY6h8hYPF/arcgis/rest/services/Building_Permits/FeatureServer/0/query"
         self.permits = []
         self.seen_permit_ids = set()
         self.logger = setup_logger('charlotte')
         self.health_check = ScraperHealthCheck('charlotte')
-        
-    @retry_with_backoff(max_retries=3, initial_delay=2, exceptions=(requests.RequestException,))
-    def _fetch_batch(self, params):
-        """Fetch a single batch with retry logic"""
-        response = requests.get(self.base_url, params=params, timeout=30)
-        response.raise_for_status()
-        return response.json()
 
     def scrape_permits(self, max_permits=5000, days_back=90):
         """
-        Scrape Charlotte building permits
+        Scrape Charlotte building permits using ArcGIS REST API
         
         Args:
             max_permits: Maximum number of permits to retrieve (up to 5000)
@@ -32,15 +26,12 @@ class CharlottePermitScraper:
         print(f"🏗️  Charlotte NC Construction Permits Scraper")
         print(f"=" * 60)
         print(f"Fetching up to {max_permits} permits from last {days_back} days...")
+        print(f"📡 Using ArcGIS Hub REST API...")
         print()
         
         # Calculate date range
         end_date = datetime.now()
         start_date = end_date - timedelta(days=days_back)
-        
-        # Format dates for Socrata API (ISO format)
-        start_date_str = start_date.strftime('%Y-%m-%dT00:00:00.000')
-        end_date_str = end_date.strftime('%Y-%m-%dT23:59:59.999')
         
         print(f"Date Range: {start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')}")
         print()
@@ -55,39 +46,50 @@ class CharlottePermitScraper:
 
         while total_fetched < max_permits:
             try:
+                # ArcGIS date format (Unix timestamp in milliseconds)
+                start_timestamp = int(start_date.timestamp() * 1000)
+                end_timestamp = int(end_date.timestamp() * 1000)
+
                 params = {
-                    '$where': f"issued_date >= '{start_date_str}' AND issued_date <= '{end_date_str}'",
-                    '$order': 'issued_date DESC',
-                    '$limit': min(batch_size, max_permits - total_fetched),
-                    '$offset': offset
+                    'where': f"issued_date >= {start_timestamp} AND issued_date <= {end_timestamp}",
+                    'outFields': 'permit_number,address,permit_type,cost,issued_date,status,objectid',
+                    'returnGeometry': 'false',
+                    'resultRecordCount': min(batch_size, max_permits - total_fetched),
+                    'resultOffset': offset,
+                    'orderByFields': 'issued_date DESC',
+                    'f': 'json'
                 }
 
-                data = self._fetch_batch(params)
+                response = requests.get(self.arcgis_url, params=params, timeout=30)
+                response.raise_for_status()
+                data = response.json()
 
-                if not data:
+                if not data.get('features'):
                     self.logger.info(f"No more data at offset {offset}")
                     break
 
                 # Reset failure counter on success
                 consecutive_failures = 0
 
-                for record in data:
-                    permit_id = record.get('permit_number') or record.get('permit_id') or str(record.get('id', ''))
+                for feature in data['features']:
+                    props = feature.get('properties', {})
+                    permit_id = str(props.get('permit_number') or props.get('objectid', ''))
+                    
                     if permit_id not in self.seen_permit_ids:
                         self.seen_permit_ids.add(permit_id)
                         self.permits.append({
                             'permit_number': permit_id,
-                            'address': record.get('address') or 'N/A',
-                            'type': record.get('permit_type') or 'N/A',
-                            'value': self._parse_cost(record.get('cost') or 0),
-                            'issued_date': self._format_date(record.get('issued_date')),
-                            'status': record.get('status') or 'N/A'
+                            'address': props.get('address') or 'N/A',
+                            'type': props.get('permit_type') or 'N/A',
+                            'value': self._parse_cost(props.get('cost') or 0),
+                            'issued_date': self._format_arcgis_date(props.get('issued_date')),
+                            'status': props.get('status') or 'N/A'
                         })
 
-                total_fetched += len(data)
-                self.logger.debug(f"Fetched batch at offset {offset}: {len(data)} records")
+                total_fetched += len(data['features'])
+                self.logger.debug(f"Fetched batch at offset {offset}: {len(data['features'])} records")
 
-                if len(data) < batch_size:
+                if len(data['features']) < batch_size:
                     break
                 offset += batch_size
                 time.sleep(0.5)
@@ -151,15 +153,13 @@ class CharlottePermitScraper:
         except:
             return 0
     
-    def _format_date(self, date_str):
-        """Convert ISO date string to readable date"""
-        if not date_str:
+    def _format_arcgis_date(self, timestamp_ms):
+        """Convert ArcGIS timestamp (milliseconds) to readable date"""
+        if not timestamp_ms:
             return 'N/A'
         try:
-            if 'T' in str(date_str):
-                dt = datetime.fromisoformat(str(date_str).replace('Z', '+00:00'))
-            else:
-                dt = datetime.strptime(str(date_str), '%Y-%m-%d')
+            # ArcGIS timestamps are in milliseconds, convert to seconds
+            dt = datetime.fromtimestamp(timestamp_ms / 1000)
             return dt.strftime('%Y-%m-%d')
         except:
             return 'N/A'

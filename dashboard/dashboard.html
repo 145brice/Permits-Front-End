@@ -214,6 +214,13 @@
 
             .user-menu {
                 justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
             }
 
             .dashboard-grid {
@@ -230,7 +237,7 @@
             }
 
             .leads-section {
-                margin: 20px -10px;
+                margin: 20px 0;
             }
 
             .leads-header {
@@ -242,55 +249,83 @@
             }
 
             .leads-content {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                margin: 0 -10px;
-                padding: 0 10px;
+                padding: 0;
             }
 
+            /* Mobile table - card layout instead of horizontal scroll */
             .leads-table {
+                display: none; /* Hide table on mobile */
+            }
+
+            /* Mobile card layout */
+            .mobile-leads-container {
+                display: block;
+            }
+
+            .mobile-lead-card {
+                background: white;
+                border: 1px solid #e2e8f0;
+                border-radius: 8px;
+                padding: 15px;
+                margin-bottom: 15px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            }
+
+            .mobile-lead-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-bottom: 10px;
+            }
+
+            .mobile-permit-number {
+                font-weight: 600;
+                color: #1e293b;
+                font-size: 14px;
+            }
+
+            .mobile-city {
+                background: #f0f9ff;
+                color: #0369a1;
+                padding: 2px 8px;
+                border-radius: 12px;
                 font-size: 12px;
-                min-width: 600px; /* Prevent table from getting too narrow */
-                white-space: nowrap;
+                font-weight: 500;
             }
 
-            .leads-table th,
-            .leads-table td {
-                padding: 8px 10px;
-                min-width: 80px;
+            .mobile-address {
+                color: #374151;
+                margin-bottom: 8px;
+                font-size: 14px;
+                line-height: 1.4;
             }
 
-            .leads-table th:nth-child(1), /* Permit # */
-            .leads-table td:nth-child(1) {
-                min-width: 100px;
+            .mobile-details {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 10px;
             }
 
-            .leads-table th:nth-child(2), /* Address */
-            .leads-table td:nth-child(2) {
-                min-width: 150px;
-                white-space: normal;
-                word-wrap: break-word;
+            .mobile-type {
+                background: #f3f4f6;
+                color: #374151;
+                padding: 4px 8px;
+                border-radius: 6px;
+                font-size: 12px;
+                font-weight: 500;
             }
 
-            .leads-table th:nth-child(3), /* City */
-            .leads-table td:nth-child(3) {
-                min-width: 90px;
+            .mobile-value {
+                font-weight: 600;
+                color: #059669;
+                font-size: 14px;
             }
 
-            .leads-table th:nth-child(4), /* Type */
-            .leads-table td:nth-child(4) {
-                min-width: 100px;
-            }
-
-            .leads-table th:nth-child(5), /* Value */
-            .leads-table td:nth-child(5) {
-                min-width: 80px;
-                text-align: right;
-            }
-
-            .leads-table th:nth-child(6), /* Date */
-            .leads-table td:nth-child(6) {
-                min-width: 80px;
+            .mobile-date {
+                color: #6b7280;
+                font-size: 12px;
             }
 
             .welcome-section {
@@ -304,7 +339,9 @@
             }
 
             .container {
-                padding: 10px;
+                padding: 15px;
+                max-width: 100%;
+                margin: 0;
             }
 
             .logout-btn {
@@ -316,6 +353,13 @@
                 padding: 6px 12px;
                 font-size: 14px;
             }
+
+            /* Hide horizontal scroll container on mobile */
+            .leads-content {
+                overflow-x: visible;
+                margin: 0;
+                padding: 15px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -325,16 +369,6 @@
 
             .logo {
                 font-size: 18px;
-            }
-
-            .leads-table {
-                font-size: 11px;
-                min-width: 550px;
-            }
-
-            .leads-table th,
-            .leads-table td {
-                padding: 6px 8px;
             }
 
             .leads-header {
@@ -355,6 +389,19 @@
 
             .dashboard-card {
                 padding: 15px;
+            }
+
+            .mobile-lead-card {
+                padding: 12px;
+                margin-bottom: 12px;
+            }
+
+            .mobile-address {
+                font-size: 13px;
+            }
+
+            .container {
+                padding: 10px;
             }
         }
     </style>
@@ -788,7 +835,8 @@
                         </div>
                     `;
                 } else {
-                    let leadsHtml = `
+                    // Desktop table view
+                    let desktopTableHtml = `
                         <table class="leads-table">
                             <thead>
                                 <tr>
@@ -804,7 +852,7 @@
                     `;
 
                     allLeads.forEach(lead => {
-                        leadsHtml += `
+                        desktopTableHtml += `
                             <tr>
                                 <td><span class="lead-address">${lead.permit_number}</span></td>
                                 <td>${lead.address}</td>
@@ -816,9 +864,35 @@
                         `;
                     });
 
-                    leadsHtml += `
+                    desktopTableHtml += `
                             </tbody>
                         </table>
+                    `;
+
+                    // Mobile card view
+                    let mobileCardsHtml = `<div class="mobile-leads-container">`;
+
+                    allLeads.forEach(lead => {
+                        mobileCardsHtml += `
+                            <div class="mobile-lead-card">
+                                <div class="mobile-lead-header">
+                                    <span class="mobile-permit-number">${lead.permit_number}</span>
+                                    <span class="mobile-city">${lead.city}</span>
+                                </div>
+                                <div class="mobile-address">${lead.address}</div>
+                                <div class="mobile-details">
+                                    <span class="mobile-type">${lead.permit_type}</span>
+                                    <span class="mobile-value">${formatCurrency(lead.permit_value)}</span>
+                                    <span class="mobile-date">${formatDate(lead.issue_date)}</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    mobileCardsHtml += `</div>`;
+
+                    // Combine both views
+                    leadsContent.innerHTML = desktopTableHtml + mobileCardsHtml + `
                         <div style="margin-top: 20px; padding: 15px; background: #f0f9ff; border-radius: 8px; border-left: 4px solid #3b82f6;">
                             <p style="margin: 0; color: #1e40af; font-size: 14px;">
                                 <strong>📧 Email Delivery:</strong> These leads are sent to your email every morning at 8 AM.
@@ -826,8 +900,6 @@
                             </p>
                         </div>
                     `;
-
-                    leadsContent.innerHTML = leadsHtml;
                 }
 
             } catch (error) {

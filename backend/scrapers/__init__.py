@@ -33,6 +33,11 @@ from .omaha import OmahaPermitScraper
 from .knoxville import KnoxvillePermitScraper
 from .birmingham import BirminghamPermitScraper
 
+# New HTML table scrapers
+from .snohomish import SnohomishPermitScraper
+from .maricopa import MaricopaPermitScraper
+from .mecklenburg import MecklenburgPermitScraper
+
 __all__ = [
     'NashvillePermitScraper',
     'AustinPermitScraper',
@@ -54,4 +59,7 @@ __all__ = [
     'OmahaPermitScraper',
     'KnoxvillePermitScraper',
     'BirminghamPermitScraper',
+    'SnohomishPermitScraper',
+    'MaricopaPermitScraper',
+    'MecklenburgPermitScraper',
 ]

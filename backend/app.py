@@ -39,7 +39,11 @@ from scrapers import (
     MilwaukeePermitScraper,
     OmahaPermitScraper,
     KnoxvillePermitScraper,
-    BirminghamPermitScraper
+    BirminghamPermitScraper,
+    # New HTML table scrapers
+    SnohomishPermitScraper,
+    MaricopaPermitScraper,
+    MecklenburgPermitScraper
 )
 
 # Load environment variables from .env file
@@ -72,6 +76,9 @@ CITY_PRICE_MAP = {
     'price_HOUSTON_TEST_ID': 'Houston',
     'price_CHARLOTTE_TEST_ID': 'Charlotte',
     'price_PHOENIX_TEST_ID': 'Phoenix',
+    'price_SNOHOMISH_TEST_ID': 'Snohomish',
+    'price_MARICOPA_TEST_ID': 'Maricopa',
+    'price_MECKLENBURG_TEST_ID': 'Mecklenburg',
     'price_BUNDLE_TEST_ID': 'all-cities'
 }
 
@@ -184,7 +191,7 @@ def webhook():
             # For $97 All Cities Bundle
             if amount_total == 97.00:
                 city = 'All Cities Bundle'
-                all_cities = ['Nashville', 'Chattanooga', 'Austin', 'San Antonio', 'Houston', 'Charlotte', 'Phoenix']
+                all_cities = ['Nashville', 'Chattanooga', 'Austin', 'San Antonio', 'Houston', 'Charlotte', 'Phoenix', 'Snohomish', 'Maricopa', 'Mecklenburg']
 
                 # Create a customer ID for Firebase
                 customer_id = f"allcities_{customer_email.replace('@', '_').replace('.', '_')}_{int(datetime.now().timestamp())}"
@@ -238,7 +245,7 @@ Cities: {', '.join(all_cities)}
 Amount Paid: ${amount_total}
 Subscription Active: Yes
 
-Welcome! You'll receive daily contractor leads from ALL 7 cities starting tomorrow at 8 AM.
+Welcome! You'll receive daily contractor leads from ALL 10 cities starting tomorrow at 8 AM.
 
 """
 
@@ -273,7 +280,7 @@ Date: {lead['issue_date']}
                 <html>
                 <body style="font-family: Arial, sans-serif; padding: 20px;">
                     <h2 style="color: #667eea;">Welcome to Contractor Leads - All Cities Bundle! 🎉</h2>
-                    <p>Thank you for subscribing to our All Cities Bundle! You now have access to fresh leads from all 7 cities.</p>
+                    <p>Thank you for subscribing to our All Cities Bundle! You now have access to fresh leads from all 10 cities.</p>
                     <p><strong>Your cities:</strong> {', '.join(all_cities)}</p>
                     <p>Below are sample leads from each city. You'll receive daily leads at 8 AM.</p>
                     
@@ -296,7 +303,7 @@ Date: {lead['issue_date']}
                 html_content += """
                     <hr style="margin: 30px 0;">
                     <p style="color: #718096; font-size: 14px;">
-                        Your All Cities Bundle subscription is now active. Daily leads from all 7 cities will be delivered to this email address at 8 AM.
+                        Your All Cities Bundle subscription is now active. Daily leads from all 10 cities will be delivered to this email address at 8 AM.
                     </p>
                 </body>
                 </html>
@@ -606,6 +613,18 @@ def get_sample_leads(city, count=10):
         'phoenix': {
             'addresses': ['2601 Camelback Rd', '2702 Central Ave', '2803 Mill Ave', '2904 Scottsdale Rd', '3005 Biltmore'],
             'types': ['NEW CONSTRUCTION', 'REMODEL', 'ADDITION', 'REPAIR']
+        },
+        'snohomish': {
+            'addresses': ['3101 Everett Hwy', '3202 Pine St', '3303 Maple Ave', '3404 Cedar Ln', '3505 Oak Dr'],
+            'types': ['NEW CONSTRUCTION', 'REMODEL', 'ADDITION', 'REPAIR']
+        },
+        'maricopa': {
+            'addresses': ['3601 Grand Ave', '3702 Washington St', '3803 Jefferson Blvd', '3904 Lincoln Rd', '4005 Adams Ct'],
+            'types': ['NEW CONSTRUCTION', 'REMODEL', 'ADDITION', 'REPAIR']
+        },
+        'mecklenburg': {
+            'addresses': ['4101 Tryon St', '4202 Queens Rd', '4303 Providence Ln', '4404 Ballantyne Ave', '4505 South Blvd'],
+            'types': ['NEW CONSTRUCTION', 'REMODEL', 'ADDITION', 'REPAIR']
         }
     }
 
@@ -649,7 +668,10 @@ def get_state_for_city(city):
         'milwaukee': 'WI',
         'omaha': 'NE',
         'knoxville': 'TN',
-        'birmingham': 'AL'
+        'birmingham': 'AL',
+        'snohomish': 'WA',
+        'maricopa': 'AZ',
+        'mecklenburg': 'NC'
     }
     return state_map.get(city.lower(), 'TN')
 
@@ -723,7 +745,7 @@ def send_daily_leads():
         for city, emails in city_subscribers.items():
             if city == 'all-cities':
                 # Bundle subscribers get leads from all cities
-                all_cities = ['Nashville', 'Chattanooga', 'Austin', 'San Antonio', 'Houston', 'Charlotte', 'Phoenix']
+                all_cities = ['Nashville', 'Chattanooga', 'Austin', 'San Antonio', 'Houston', 'Charlotte', 'Phoenix', 'Snohomish', 'Maricopa', 'Mecklenburg']
                 all_leads = []
                 for c in all_cities:
                     leads = get_leads_for_city(c)
@@ -850,7 +872,7 @@ def run_daily_scrapers():
         print(f"🚀 Starting daily scraper run at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} CST")
         print("=" * 80)
 
-        # ALL 20 CITIES ENABLED WITH AUTO-RECOVERY
+        # ALL 23 CITIES ENABLED WITH AUTO-RECOVERY
         # System tries real APIs first, uses fallback data if APIs fail
         # This ensures subscribers ALWAYS get leads daily
         scrapers = [
@@ -873,7 +895,10 @@ def run_daily_scrapers():
             ('Milwaukee', MilwaukeePermitScraper()),
             ('Omaha', OmahaPermitScraper()),
             ('Knoxville', KnoxvillePermitScraper()),
-            ('Birmingham', BirminghamPermitScraper())
+            ('Birmingham', BirminghamPermitScraper()),
+            ('Snohomish', SnohomishPermitScraper()),
+            ('Maricopa', MaricopaPermitScraper()),
+            ('Mecklenburg', MecklenburgPermitScraper())
         ]
 
         results = []

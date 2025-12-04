@@ -2,17 +2,30 @@
 
 Dead simple contractor leads platform. Seven cities, $47/month each or $97 for all cities bundle, daily email delivery.
 
+# Contractor Leads SaaS - Deployment Guide
+
+Dead simple contractor leads platform. Seven cities, $47/month each or $97 for all cities bundle, daily email delivery.
+
 ## Project Structure
 ```
 contractor-leads-saas/
-├── frontend/
-│   ├── index.html          # Landing page with 7 city buttons + bundle
-│   └── success.html        # Post-checkout success page
-├── backend/
-│   ├── app.py             # Flask app with webhook + cron
-│   ├── requirements.txt   # Python dependencies
-│   └── railway.json       # Railway config
-├── .gitignore
+├── index.html                    # Landing page with 7 city buttons + bundle
+├── dashboard/
+│   ├── dashboard.html           # User dashboard with leads table
+│   ├── login.html              # Login page
+│   └── signup.html             # Signup page
+├── success.html                 # Post-checkout success page
+├── config.js                    # Frontend configuration
+├── netlify.toml                 # Netlify deployment config
+└── README.md
+
+contractor-leads-backend/         # Separate repository
+├── app.py                       # Flask app with webhook + cron
+├── backend.py                   # Main backend logic
+├── requirements.txt             # Python dependencies
+├── scrapers/                    # City scraper modules
+├── leads/                       # Scraped data storage
+├── serviceAccountKey.json       # Firebase credentials
 └── README.md
 ```
 
@@ -87,7 +100,7 @@ contractor-leads-saas/
 
 1. Go to https://railway.app/
 2. Create new project → **Deploy from GitHub**
-3. Connect your GitHub repo (push backend folder first)
+3. Connect your **contractor-leads-backend** GitHub repo
 4. Railway will auto-detect Python and deploy
 
 5. Add environment variables in Railway dashboard:
@@ -116,7 +129,7 @@ ADMIN_SECRET=your-secret-for-manual-testing
 PORT=5000
 ```
 
-6. Deploy and copy your Railway URL (e.g., `https://contractor-leads-production.up.railway.app`)
+6. Deploy and copy your Railway URL (e.g., `https://contractor-leads-backend-production.up.railway.app`)
 
 ---
 
@@ -138,18 +151,20 @@ PORT=5000
 ## Step 6: Deploy Frontend to Netlify
 
 1. Go to https://app.netlify.com/
-2. Drag and drop the `frontend` folder
+2. Drag and drop the entire `contractor-leads-saas` folder (or connect to GitHub)
 3. Site will deploy instantly
 
-4. **Update frontend/index.html:**
-   - Replace `STRIPE_PRICE_IDS` with your actual price IDs
+4. **Update config.js:**
    - Replace `BACKEND_URL` with your Railway URL
 
-5. Re-upload to Netlify (or connect to Git for auto-deploy)
+5. **Update index.html:**
+   - Replace `STRIPE_PRICE_IDS` with your actual price IDs
 
-6. Copy your Netlify URL
+6. Re-deploy to Netlify
 
-7. **Update Railway:**
+7. Copy your Netlify URL
+
+8. **Update Railway:**
    - Add `FRONTEND_URL` env var with your Netlify URL
 
 ---

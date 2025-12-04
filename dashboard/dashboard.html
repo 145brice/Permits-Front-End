@@ -18,7 +18,7 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
             color: white;
             padding: 20px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -95,89 +95,177 @@
             color: #92400e;
         }
 
-        .dashboard-grid {
+        .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
             margin-bottom: 30px;
         }
-
-        .dashboard-card {
+        
+        .stat-card {
             background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-number { 
+            font-size: 32px; 
+            font-weight: 800;
+            color: #dc2626; 
+        }
+        
+        .stat-label { 
+            color: #64748b; 
+            margin-top: 5px; 
         }
 
-        .card-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
         }
 
-        .card-icon {
-            font-size: 24px;
-            margin-right: 15px;
-        }
-
-        .card-title {
-            font-size: 20px;
-            font-weight: 700;
+        .stat-value {
+            font-size: 16px;
+            font-weight: 600;
             color: #1e293b;
+            margin-bottom: 8px;
         }
 
-        .leads-section {
+        .manage-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .manage-btn:hover {
+            background: #5a67d8;
+        }
+        
+        .section {
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             overflow: hidden;
         }
-
-        .leads-header {
-            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
-            color: white;
-            padding: 20px 30px;
-        }
-
-        .leads-header h2 {
-            font-size: 24px;
-            font-weight: 700;
-        }
-
-        .leads-content {
-            padding: 0;
-        }
-
-        .leads-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .leads-table th,
-        .leads-table td {
+        
+        .section-header {
+            background: #f1f5f9;
             padding: 15px 20px;
-            text-align: left;
             border-bottom: 1px solid #e2e8f0;
-        }
-
-        .leads-table th {
-            background: #f8fafc;
             font-weight: 600;
             color: #374151;
         }
-
-        .leads-table tr:hover {
+        
+        .city-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .city-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .city-header {
             background: #f8fafc;
-        }
-
-        .lead-address {
+            padding: 12px 15px;
             font-weight: 600;
-            color: #1e293b;
+            color: #374151;
+            border-bottom: 1px solid #e2e8f0;
+            cursor: pointer;
+            user-select: none;
         }
-
-        .lead-value {
+        
+        .city-header:hover {
+            background: #e2e8f0;
+        }
+        
+        .city-stats {
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+        
+        .leads-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        
+        .leads-table th {
+            background: #f8fafc;
+            padding: 10px;
+            text-align: left;
             font-weight: 600;
-            color: #059669;
+            color: #374151;
+            border-bottom: 2px solid #e2e8f0;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+        
+        .leads-table th:hover {
+            background: #e2e8f0;
+        }
+        
+        .leads-table th.sort-asc::after {
+            content: ' ▲';
+            font-size: 12px;
+        }
+        
+        .leads-table th.sort-desc::after {
+            content: ' ▼';
+            font-size: 12px;
+        }
+        
+        .leads-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .leads-table tr:hover { 
+            background: #f8fafc; 
+        }
+        
+        .permit-number { 
+            font-weight: 600; 
+            color: #dc2626; 
+        }
+        
+        .address { 
+            color: #374151; 
+            max-width: 200px; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+        }
+        
+        .permit-type { 
+            background: #fee2e2; 
+            color: #991b1b; 
+            padding: 2px 6px; 
+            border-radius: 3px; 
+            font-size: 11px; 
+            font-weight: 600; 
+        }
+        
+        .value { 
+            font-weight: 700; 
+            color: #059669; 
         }
 
         .no-leads {
@@ -428,42 +516,67 @@
             <span id="subscription-status" class="subscription-status status-inactive">Loading...</span>
         </div>
 
-        <div class="dashboard-grid">
-            <div class="dashboard-card">
-                <div class="card-header">
-                    <span class="card-icon">📊</span>
-                    <h3 class="card-title">Account Overview</h3>
-                </div>
-                <div id="account-info">
-                    <div class="loading">Loading account information...</div>
-                </div>
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="cities-count">0</div>
+                <div class="stat-label">Cities Available</div>
             </div>
+            <div class="stat-card">
+                <div class="stat-number" id="leads-count">0</div>
+                <div class="stat-label">Total Leads</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="next-delivery-time">8 AM</div>
+                <div class="stat-label">Next Delivery</div>
+            </div>
+        </div>
 
-            <div class="dashboard-card">
-                <div class="card-header">
-                    <span class="card-icon">📧</span>
-                    <h3 class="card-title">Email Settings</h3>
+        <div class="section">
+            <div class="section-header">🏙️ Your Cities</div>
+            <div id="cities-overview" class="city-grid">
+                <div class="loading" style="grid-column: 1 / -1; text-align: center; padding: 40px;">Loading cities...</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">👤 Account Information</div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Email</div>
+                    <div class="stat-value" id="account-email">Loading...</div>
                 </div>
-                <p>Your leads are automatically sent to your registered email address every morning at 8 AM.</p>
-                <div style="margin-top: 15px;">
-                    <strong>Next delivery:</strong> <span id="next-delivery">Calculating...</span>
+                <div class="stat-card">
+                    <div class="stat-label">Account Created</div>
+                    <div class="stat-value" id="account-created">Loading...</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">City</div>
+                    <div class="stat-value" id="account-city">Loading...</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Subscription Status</div>
+                    <div class="stat-value" id="account-status">Loading...</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Amount Paid</div>
+                    <div class="stat-value" id="account-amount">Loading...</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Actions</div>
+                    <div class="stat-value">
+                        <button id="manage-subscription-btn" class="manage-btn">Manage Subscription</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="leads-section">
-            <div class="leads-header">
-                <h2>🏠 Your Recent Leads</h2>
-            </div>
-            <div class="leads-content">
-                <div id="leads-content">
-                    <div class="loading">Loading your leads...</div>
-                </div>
-            </div>
+        <div id="leads-sections">
+            <div class="loading" style="text-align: center; padding: 60px;">Loading your leads...</div>
         </div>
     </div>
 
     <!-- Firebase SDK -->
+    <script src="../config.js"></script>
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
         import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
@@ -488,7 +601,6 @@
         // DOM elements
         const userEmail = document.getElementById('user-email');
         const subscriptionStatus = document.getElementById('subscription-status');
-        const accountInfo = document.getElementById('account-info');
         const leadsContent = document.getElementById('leads-content');
         const nextDelivery = document.getElementById('next-delivery');
         const logoutBtn = document.getElementById('logout-btn');
@@ -545,32 +657,24 @@
                 const userDoc = await getDoc(doc(db, 'users', user.uid));
                 const subscriberDoc = await getDoc(doc(db, 'subscribers', user.uid));
 
-                let accountHtml = `
-                    <div style="margin-bottom: 15px;">
-                        <strong>Email:</strong> ${user.email}
-                    </div>
-                    <div style="margin-bottom: 15px;">
-                        <strong>Account Created:</strong> ${formatDate(user.metadata.creationTime)}
-                    </div>
-                `;
+                // Set email
+                document.getElementById('account-email').textContent = user.email;
+                
+                // Set account created date
+                document.getElementById('account-created').textContent = formatDate(user.metadata.creationTime);
 
                 if (subscriberDoc.exists()) {
                     const subscriberData = subscriberDoc.data();
-                    accountHtml += `
-                        <div style="margin-bottom: 15px;">
-                            <strong>City:</strong> ${subscriberData.city || 'Not set'}
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <strong>Subscription:</strong> ${subscriberData.active ? 'Active' : 'Inactive'}
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <strong>Amount Paid:</strong> ${formatCurrency(subscriberData.amount_paid || 0)}
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <button id="manage-subscription-btn" class="manage-btn" style="background: #667eea; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 500;">Manage Subscription</button>
-                        </div>
-                    `;
-
+                    
+                    // Set city
+                    document.getElementById('account-city').textContent = subscriberData.city || 'Not set';
+                    
+                    // Set subscription status
+                    document.getElementById('account-status').textContent = subscriberData.active ? 'Active' : 'Inactive';
+                    
+                    // Set amount paid
+                    document.getElementById('account-amount').textContent = formatCurrency(subscriberData.amount_paid || 0);
+                    
                     // Update subscription status badge
                     subscriptionStatus.textContent = subscriberData.active ? 'Active' : 'Inactive';
                     subscriptionStatus.className = `subscription-status ${subscriberData.active ? 'status-active' : 'status-inactive'}`;
@@ -585,30 +689,84 @@
                         manageLink.textContent = 'Manage Subscription';
                         manageLink.addEventListener('click', (e) => {
                             e.preventDefault();
-                            document.getElementById('manage-subscription-btn').click();
+                            // Handle manage subscription click
+                            handleManageSubscription(user, subscriberData);
                         });
                         nav.insertBefore(manageLink, nav.lastElementChild);
                     }
                 } else {
-                    accountHtml += `
-                        <div style="margin-bottom: 15px; color: #dc2626;">
-                            <strong>Status:</strong> No active subscription found
-                        </div>
-                    `;
+                    document.getElementById('account-city').textContent = 'Not set';
+                    document.getElementById('account-status').textContent = 'Inactive';
+                    document.getElementById('account-amount').textContent = '$0.00';
+                    
                     subscriptionStatus.textContent = 'Inactive';
                     subscriptionStatus.className = 'subscription-status status-inactive';
                 }
 
-                accountInfo.innerHTML = accountHtml;
-
             } catch (error) {
                 console.error('Error loading account info:', error);
-                accountInfo.innerHTML = '<div style="color: #dc2626;">Error loading account information</div>';
                 showError('Failed to load account information');
             }
         }
 
-        // Load user leads
+        // Initialize table sorting
+        function initializeSorting() {
+            const tables = document.querySelectorAll('.leads-table');
+            tables.forEach(table => {
+                const headers = table.querySelectorAll('th');
+                headers.forEach((header, index) => {
+                    header.addEventListener('click', () => {
+                        sortTable(table, index);
+                    });
+                });
+            });
+        }
+
+        // Sort table function
+        function sortTable(table, columnIndex) {
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            const header = table.querySelectorAll('th')[columnIndex];
+            
+            // Remove existing sort classes
+            table.querySelectorAll('th').forEach(th => {
+                th.classList.remove('sort-asc', 'sort-desc');
+            });
+            
+            // Determine sort direction
+            const isAscending = header.classList.contains('sort-asc');
+            const direction = isAscending ? -1 : 1;
+            
+            // Add sort class
+            header.classList.toggle('sort-asc', !isAscending);
+            header.classList.toggle('sort-desc', isAscending);
+            
+            // Sort rows
+            rows.sort((a, b) => {
+                const aValue = a.cells[columnIndex].textContent.trim();
+                const bValue = b.cells[columnIndex].textContent.trim();
+                
+                // Handle currency values
+                if (columnIndex === 3) { // Value column
+                    const aNum = parseFloat(aValue.replace(/[$,]/g, ''));
+                    const bNum = parseFloat(bValue.replace(/[$,]/g, ''));
+                    return (aNum - bNum) * direction;
+                }
+                
+                // Handle dates
+                if (columnIndex === 4) { // Date column
+                    const aDate = new Date(aValue);
+                    const bDate = new Date(bValue);
+                    return (aDate - bDate) * direction;
+                }
+                
+                // String comparison
+                return aValue.localeCompare(bValue) * direction;
+            });
+            
+            // Re-append sorted rows
+            rows.forEach(row => tbody.appendChild(row));
+        }
         async function loadLeads(user) {
             try {
                 // First get user's subscription data to determine which cities they have access to
@@ -628,8 +786,12 @@
                     }
                 }
 
+                // Update stats
+                document.getElementById('cities-count').textContent = userCities.length;
+                
                 // Load leads from all user's cities
                 let allLeads = [];
+                let cityStats = {};
                 
                 // Nashville leads (always available as sample data)
                 if (userCities.includes('Nashville')) {
@@ -716,6 +878,7 @@
                         }
                     ];
                     allLeads.push(...nashvilleLeads);
+                    cityStats['Nashville'] = nashvilleLeads;
                 }
 
                 // Chattanooga leads (sample data)
@@ -739,6 +902,7 @@
                         }
                     ];
                     allLeads.push(...chattanoogaLeads);
+                    cityStats['Chattanooga'] = chattanoogaLeads;
                 }
 
                 // Austin leads (sample data)
@@ -762,6 +926,7 @@
                         }
                     ];
                     allLeads.push(...austinLeads);
+                    cityStats['Austin'] = austinLeads;
                 }
 
                 // San Antonio leads (sample data)
@@ -777,6 +942,7 @@
                         }
                     ];
                     allLeads.push(...sanAntonioLeads);
+                    cityStats['San Antonio'] = sanAntonioLeads;
                 }
 
                 // Houston leads (sample data)
@@ -792,6 +958,7 @@
                         }
                     ];
                     allLeads.push(...houstonLeads);
+                    cityStats['Houston'] = houstonLeads;
                 }
 
                 // Charlotte leads (sample data)
@@ -807,6 +974,7 @@
                         }
                     ];
                     allLeads.push(...charlotteLeads);
+                    cityStats['Charlotte'] = charlotteLeads;
                 }
 
                 // Phoenix leads (sample data)
@@ -822,89 +990,77 @@
                         }
                     ];
                     allLeads.push(...phoenixLeads);
+                    cityStats['Phoenix'] = phoenixLeads;
                 }
 
-                // Sort leads by issue date (newest first)
-                allLeads.sort((a, b) => new Date(b.issue_date) - new Date(a.issue_date));
+                // Update total leads count
+                document.getElementById('leads-count').textContent = allLeads.length;
 
-                if (allLeads.length === 0) {
-                    leadsContent.innerHTML = `
-                        <div class="no-leads">
-                            <h3>No leads yet</h3>
-                            <p>Your first leads will be delivered at 8 AM tomorrow!</p>
+                // Create city overview cards
+                let citiesOverviewHtml = '';
+                userCities.forEach(city => {
+                    const cityLeads = cityStats[city] || [];
+                    citiesOverviewHtml += `
+                        <div class="city-card">
+                            <div class="city-header">${city}</div>
+                            <div class="city-stats">
+                                <span>${cityLeads.length} leads</span>
+                                <span>${formatCurrency(cityLeads.reduce((sum, lead) => sum + lead.permit_value, 0))}</span>
+                            </div>
                         </div>
                     `;
-                } else {
-                    // Desktop table view
-                    let desktopTableHtml = `
-                        <table class="leads-table">
-                            <thead>
-                                <tr>
-                                    <th>Permit #</th>
-                                    <th>Address</th>
-                                    <th>City</th>
-                                    <th>Type</th>
-                                    <th>Value</th>
-                                    <th>Issue Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                    `;
+                });
+                document.getElementById('cities-overview').innerHTML = citiesOverviewHtml;
 
-                    allLeads.forEach(lead => {
-                        desktopTableHtml += `
-                            <tr>
-                                <td><span class="lead-address">${lead.permit_number}</span></td>
-                                <td>${lead.address}</td>
-                                <td>${lead.city}</td>
-                                <td>${lead.permit_type}</td>
-                                <td><span class="lead-value">${formatCurrency(lead.permit_value)}</span></td>
-                                <td>${formatDate(lead.issue_date)}</td>
-                            </tr>
+                // Create individual city sections with tables
+                let leadsSectionsHtml = '';
+                userCities.forEach(city => {
+                    const cityLeads = cityStats[city] || [];
+                    if (cityLeads.length > 0) {
+                        leadsSectionsHtml += `
+                            <div class="section">
+                                <div class="section-header">${city} (${cityLeads.length} leads)</div>
+                                <table class="leads-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Permit #</th>
+                                            <th>Address</th>
+                                            <th>Type</th>
+                                            <th>Value</th>
+                                            <th>Issue Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
                         `;
-                    });
 
-                    desktopTableHtml += `
-                            </tbody>
-                        </table>
-                    `;
+                        cityLeads.forEach(lead => {
+                            leadsSectionsHtml += `
+                                <tr>
+                                    <td><span class="permit-number">${lead.permit_number}</span></td>
+                                    <td><span class="address">${lead.address}</span></td>
+                                    <td><span class="permit-type">${lead.permit_type}</span></td>
+                                    <td><span class="value">${formatCurrency(lead.permit_value)}</span></td>
+                                    <td>${formatDate(lead.issue_date)}</td>
+                                </tr>
+                            `;
+                        });
 
-                    // Mobile card view
-                    let mobileCardsHtml = `<div class="mobile-leads-container">`;
-
-                    allLeads.forEach(lead => {
-                        mobileCardsHtml += `
-                            <div class="mobile-lead-card">
-                                <div class="mobile-lead-header">
-                                    <span class="mobile-permit-number">${lead.permit_number}</span>
-                                    <span class="mobile-city">${lead.city}</span>
-                                </div>
-                                <div class="mobile-address">${lead.address}</div>
-                                <div class="mobile-details">
-                                    <span class="mobile-type">${lead.permit_type}</span>
-                                    <span class="mobile-value">${formatCurrency(lead.permit_value)}</span>
-                                    <span class="mobile-date">${formatDate(lead.issue_date)}</span>
-                                </div>
+                        leadsSectionsHtml += `
+                                    </tbody>
+                                </table>
                             </div>
                         `;
-                    });
+                    }
+                });
 
-                    mobileCardsHtml += `</div>`;
+                document.getElementById('leads-sections').innerHTML = leadsSectionsHtml;
 
-                    // Combine both views
-                    leadsContent.innerHTML = desktopTableHtml + mobileCardsHtml + `
-                        <div style="margin-top: 20px; padding: 15px; background: #f0f9ff; border-radius: 8px; border-left: 4px solid #3b82f6;">
-                            <p style="margin: 0; color: #1e40af; font-size: 14px;">
-                                <strong>📧 Email Delivery:</strong> These leads are sent to your email every morning at 8 AM.
-                                ${userCities.length > 1 ? `You have access to ${userCities.length} cities: ${userCities.join(', ')}.` : `You have access to ${userCities[0]} leads.`}
-                            </p>
-                        </div>
-                    `;
-                }
+                // Initialize table sorting after DOM is updated
+                initializeSorting();
 
             } catch (error) {
                 console.error('Error loading leads:', error);
-                leadsContent.innerHTML = '<div style="color: #dc2626; padding: 20px;">Error loading leads</div>';
+                document.getElementById('leads-sections').innerHTML = '<div style="color: #dc2626; padding: 20px;">Error loading leads</div>';
                 showError('Failed to load leads');
             }
         }        // Handle logout
@@ -944,7 +1100,7 @@
                     }
 
                     // Call backend to create portal session
-                    const response = await fetch('http://localhost:8083/create-portal-session', {
+                    const response = await fetch(`${window.CONFIG.BACKEND_URL}/create-portal-session`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

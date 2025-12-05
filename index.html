@@ -1510,10 +1510,19 @@
             const cities = adminData.cities || [];
             const leads = adminData.leads || [];
 
+            // Get date 7 days ago for filtering
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+            const sevenDaysAgoStr = sevenDaysAgo.toISOString().split('T')[0];
+
+            // Filter leads to only count recent ones
+            const recentLeads = leads.filter(lead => lead.date && lead.date >= sevenDaysAgoStr);
+
             adminData.stats = {
                 totalCities: cities.length,
-                totalLeads: cities.reduce((sum, city) => sum + (city.leads || 0), 0),
-                daysOfData: new Set(leads.map(lead => lead.date)).size,
+                totalLeads: cities.reduce((sum, city) => sum + (city.leads || 0), 0), // Keep total from cities data
+                recentLeads: recentLeads.length, // Add count of recent leads
+                daysOfData: new Set(recentLeads.map(lead => lead.date)).size,
                 activeCities: cities.filter(city => city.leads > 0).length
             };
 
@@ -1523,6 +1532,7 @@
         function updateStatsDisplay() {
             document.getElementById('total-cities').textContent = adminData.stats.totalCities;
             document.getElementById('total-leads').textContent = adminData.stats.totalLeads.toLocaleString();
+            document.getElementById('recent-leads').textContent = adminData.stats.recentLeads.toLocaleString();
             document.getElementById('days-data').textContent = adminData.stats.daysOfData;
             document.getElementById('active-cities').textContent = adminData.stats.activeCities;
         }
@@ -1548,16 +1558,26 @@
             const container = document.getElementById('leads-container');
             container.innerHTML = '';
 
+            // Get date 7 days ago
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+            const sevenDaysAgoStr = sevenDaysAgo.toISOString().split('T')[0]; // YYYY-MM-DD format
+
+            // Filter leads to only show last 7 days
+            const recentLeads = adminData.leads.filter(lead => {
+                return lead.date && lead.date >= sevenDaysAgoStr;
+            });
+
             // Group leads by date
             const leadsByDate = {};
-            adminData.leads.forEach(lead => {
+            recentLeads.forEach(lead => {
                 if (!leadsByDate[lead.date]) {
                     leadsByDate[lead.date] = [];
                 }
                 leadsByDate[lead.date].push(lead);
             });
 
-            // Sort dates descending
+            // Sort dates descending (most recent first)
             const sortedDates = Object.keys(leadsByDate).sort().reverse();
 
             sortedDates.forEach(date => {
@@ -1582,6 +1602,11 @@
                 dateDiv.appendChild(table);
                 container.appendChild(dateDiv);
             });
+
+            // Show message if no recent leads
+            if (sortedDates.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 40px; color: #64748b;">No permits found in the last 7 days</div>';
+            }
         }
 
         function filterByCity(cityName) {
@@ -1621,9 +1646,9 @@
         // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBGpgnX5JFpmu2hnUploVR50t2X7Uqk_-E",
-            authDomain: "permits-19158.firebaseapp.com",
-            projectId: "permits-19158",
-            storageBucket: "permits-19158.firebasestorage.app",
+            authDomain: "edge-permits.firebaseapp.com",
+            projectId: "edge-permits",
+            storageBucket: "edge-permits.firebasestorage.app",
             messagingSenderId: "963119389978",
             appId: "1:963119389978:web:255453c4794988c3f8e0a3",
             measurementId: "G-YX2270HJG7"
@@ -1669,6 +1694,10 @@
                 <div style="color: #64748b;">Total Leads Scraped</div>
             </div>
             <div style="background: white; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; text-align: center;">
+                <div style="font-size: 32px; font-weight: 700; color: #059669; margin-bottom: 10px;" id="recent-leads">0</div>
+                <div style="color: #64748b;">Recent Leads (7 days)</div>
+            </div>
+            <div style="background: white; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; text-align: center;">
                 <div style="font-size: 32px; font-weight: 700; color: #f59e0b; margin-bottom: 10px;" id="days-data">0</div>
                 <div style="color: #64748b;">Days of Data</div>
             </div>
@@ -1689,7 +1718,7 @@
         <!-- Filter and Leads -->
         <div style="background: white; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h3 style="color: #1e293b; margin: 0;">📋 All Leads by Date</h3>
+                <h3 style="color: #1e293b; margin: 0;">📋 Recent Leads (Last 7 Days)</h3>
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <span style="color: #64748b;">Showing: <span id="current-filter">All Cities</span></span>
                     <button onclick="filterByCity('All Cities')" style="background: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Show All Cities</button>

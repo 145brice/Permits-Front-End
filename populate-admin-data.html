@@ -42,7 +42,14 @@
             { name: 'Seattle', leads: 1387, files: 1 },
             { name: 'Chicago', leads: 0, files: 0 },
             { name: 'Raleigh', leads: 2456, files: 2 },
-            { name: 'Dallas', leads: 3890, files: 3 }
+            { name: 'Dallas', leads: 3890, files: 3 },
+            // Easy additions - same states as existing cities
+            { name: 'Fort Worth', leads: 3245, files: 2 },
+            { name: 'Knoxville', leads: 2156, files: 2 },
+            { name: 'Greensboro', leads: 1890, files: 2 },
+            { name: 'Pittsburgh', leads: 2789, files: 1 },
+            { name: 'Tacoma', leads: 1456, files: 1 },
+            { name: 'Tucson', leads: 3123, files: 2 }
         ];
 
         const leadsData = [
@@ -210,7 +217,30 @@
 
             // Dallas leads (recent)
             { date: '2025-12-04', city: 'Dallas', permit_type: 'Commercial', permit_number: 'DAL251204001', address: '1800 Elm St, Dallas', description: 'High-rise construction' },
-            { date: '2025-12-03', city: 'Dallas', permit_type: 'Residential', permit_number: 'DAL251203001', address: '1900 Oak Ln, Dallas', description: 'Luxury home' }
+            { date: '2025-12-03', city: 'Dallas', permit_type: 'Residential', permit_number: 'DAL251203001', address: '1900 Oak Ln, Dallas', description: 'Luxury home' },
+
+            // Fort Worth leads (recent)
+            { date: '2025-12-04', city: 'Fort Worth', permit_type: 'Residential', permit_number: 'FTW251204001', address: '500 Main St, Fort Worth', description: 'Home renovation' },
+            { date: '2025-12-03', city: 'Fort Worth', permit_type: 'Commercial', permit_number: 'FTW251203001', address: '600 Throckmorton St, Fort Worth', description: 'Office buildout' },
+
+            // Knoxville leads (recent)
+            { date: '2025-12-04', city: 'Knoxville', permit_type: 'Residential', permit_number: 'KNO251204001', address: '700 Gay St, Knoxville', description: 'Kitchen remodel' },
+            { date: '2025-12-03', city: 'Knoxville', permit_type: 'Commercial', permit_number: 'KNO251203001', address: '800 Market St, Knoxville', description: 'Retail space' },
+
+            // Greensboro leads (recent)
+            { date: '2025-12-04', city: 'Greensboro', permit_type: 'Residential', permit_number: 'GSO251204001', address: '900 Elm St, Greensboro', description: 'Bathroom addition' },
+            { date: '2025-12-03', city: 'Greensboro', permit_type: 'Commercial', permit_number: 'GSO251203001', address: '1000 Friendly Ave, Greensboro', description: 'Medical office' },
+
+            // Pittsburgh leads (recent)
+            { date: '2025-12-04', city: 'Pittsburgh', permit_type: 'Commercial', permit_number: 'PIT251204001', address: '1100 Fifth Ave, Pittsburgh', description: 'Historic renovation' },
+            { date: '2025-12-03', city: 'Pittsburgh', permit_type: 'Residential', permit_number: 'PIT251203001', address: '1200 Forbes Ave, Pittsburgh', description: 'Condo conversion' },
+
+            // Tacoma leads (recent)
+            { date: '2025-12-04', city: 'Tacoma', permit_type: 'Residential', permit_number: 'TAC251204001', address: '1300 Pacific Ave, Tacoma', description: 'Basement finish' },
+
+            // Tucson leads (recent)
+            { date: '2025-12-04', city: 'Tucson', permit_type: 'Residential', permit_number: 'TUC251204001', address: '1400 Congress St, Tucson', description: 'Solar installation' },
+            { date: '2025-12-03', city: 'Tucson', permit_type: 'Commercial', permit_number: 'TUC251203001', address: '1500 Stone Ave, Tucson', description: 'Office renovation' }
         ];
 
         async function populateFirebase() {

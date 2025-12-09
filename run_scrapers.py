@@ -35,13 +35,7 @@ def main():
     print(f"Starting scraper run at {datetime.now()}")
 
     scrapers = [
-        'nashville.py',
-        'charlotte.py',
-        'austin.py',
-        'chattanooga.py',
-        'houston.py',
-        'phoenix.py',
-        'sanantonio.py'
+        # No scrapers in frontend - all scraping done in backend
     ]
 
     results = {}

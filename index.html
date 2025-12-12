@@ -349,9 +349,9 @@
         }
         
         .cities-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
         
         .city-item {
@@ -413,23 +413,25 @@
         }
         
         .city-btn {
-            background: #ea580c;
-            color: white;
-            padding: 10px 20px;
+            background: transparent;
+            color: #1e40af;
+            padding: 8px 0;
             font-size: 14px;
-            font-weight: 700;
+            font-weight: 600;
             border: none;
-            border-radius: 8px;
+            border-bottom: 2px solid #1e40af;
             cursor: pointer;
-            width: 100%;
+            width: auto;
             transition: all 0.3s;
             text-decoration: none;
             display: inline-block;
+            text-align: left;
         }
 
         .city-btn:hover {
-            background: #c2410c;
-            transform: scale(1.02);
+            color: #ea580c;
+            border-bottom-color: #ea580c;
+            transform: translateX(5px);
         }
 
         /* All Cities Bundle - Special Styling */
@@ -931,105 +933,54 @@
                 <p>🔥 Live now with VERIFIED December 2025 data: Philadelphia, Chicago, Seattle, Charlotte, San Antonio, Houston • $299/mo per city</p>
             </div>
 
-            <div class="cities-table">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>State</th>
-                            <th>Cities Available</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div class="state-name">Pennsylvania</div>
-                            </td>
-                            <td>
-                                <div class="cities-list">
-                                    <div class="city-item">
-                                        <div class="city-name">Philadelphia <span style="color:#10b981; font-size:12px; font-weight:700;">🔥 LIVE</span></div>
-                                        <div class="city-price">$299<span>/mo</span></div>
-                                        <p class="city-subtext">15 qualified leads/month • Average project value: $5,000+ • 24hr guarantee</p>
-                                        <a href="https://buy.stripe.com/3cI7sNghWgST4TU6mX63K0A" class="city-btn">Get My 15 Philadelphia Leads →</a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="state-name">Illinois</div>
-                            </td>
-                            <td>
-                                <div class="cities-list">
-                                    <div class="city-item">
-                                        <div class="city-name">Chicago <span style="color:#10b981; font-size:12px; font-weight:700;">🔥 LIVE</span></div>
-                                        <div class="city-price">$299<span>/mo</span></div>
-                                        <p class="city-subtext">15 qualified leads/month • Average project value: $5,000+ • 24hr guarantee</p>
-                                        <a href="https://buy.stripe.com/5kQ14p3va0TV9aaaDd63K0B" class="city-btn">Get My 15 Chicago Leads →</a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="state-name">Washington</div>
-                            </td>
-                            <td>
-                                <div class="cities-list">
-                                    <div class="city-item">
-                                        <div class="city-name">Seattle <span style="color:#10b981; font-size:12px; font-weight:700;">🔥 LIVE</span></div>
-                                        <div class="city-price">$299<span>/mo</span></div>
-                                        <p class="city-subtext">15 qualified leads/month • Average project value: $5,000+ • 24hr guarantee</p>
-                                        <a href="https://buy.stripe.com/14A14p8Pu8mn1HIaDd63K0C" class="city-btn">Get My 15 Seattle Leads →</a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="state-name">North Carolina</div>
-                            </td>
-                            <td>
-                                <div class="cities-list">
-                                    <div class="city-item">
-                                        <div class="city-name">Charlotte <span style="color:#10b981; font-size:12px; font-weight:700;">🔥 LIVE</span></div>
-                                        <div class="city-price">$299<span>/mo</span></div>
-                                        <p class="city-subtext">15 qualified leads/month • Average project value: $5,000+ • 24hr guarantee</p>
-                                        <a href="https://buy.stripe.com/fZu14pd5K1XZ1HIeTt63K0D" class="city-btn">Get My 15 Charlotte Leads →</a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="state-name">Texas</div>
-                            </td>
-                            <td>
-                                <div class="cities-list">
-                                    <div class="city-item">
-                                        <div class="city-name">San Antonio <span style="color:#10b981; font-size:12px; font-weight:700;">🔥 LIVE</span></div>
-                                        <div class="city-price">$299<span>/mo</span></div>
-                                        <p class="city-subtext">15 qualified leads/month • Average project value: $5,000+ • 24hr guarantee</p>
-                                        <a href="https://buy.stripe.com/14A8wR9Ty1XZ2LMdPp63K0E" class="city-btn">Get My 15 San Antonio Leads →</a>
-                                    </div>
-                                    <div class="city-item">
-                                        <div class="city-name">Houston <span style="color:#10b981; font-size:12px; font-weight:700;">🔥 LIVE</span></div>
-                                        <div class="city-price">$299<span>/mo</span></div>
-                                        <p class="city-subtext">15 qualified leads/month • Average project value: $5,000+ • 24hr guarantee</p>
-                                        <a href="https://buy.stripe.com/YOUR_HOUSTON_LINK_HERE" class="city-btn">Get My 15 Houston Leads →</a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr style="height: 40px;"></tr>
-                        <tr>
-                            <td colspan="2" style="text-align: center; padding: 40px 20px; background: #f8fafc;">
-                                <h3 style="font-size: 24px; font-weight: 700; color: #1e293b; margin-bottom: 15px;">More Cities Coming Soon</h3>
-                                <p style="font-size: 16px; color: #64748b; margin-bottom: 20px;">Nashville, Phoenix, Austin, Dallas, and more launching in 2025</p>
-                                <p style="font-size: 14px; color: #94a3b8;">Get notified when your city goes live</p>
-                            </td>
-                        </tr>
-                    </tbody>
+            <div class="cities-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto;">
+                <div class="city-item">
+                    <div class="city-name">Philadelphia, PA <span style="color:#10b981; font-size:12px; font-weight:700;">🔥 LIVE</span></div>
+                    <div class="city-price">$299<span>/mo</span></div>
+                    <p class="city-subtext">15 qualified leads/month • Average project value: $5,000+ • 24hr guarantee</p>
+                    <a href="https://buy.stripe.com/3cI7sNghWgST4TU6mX63K0A" class="city-btn">Get My 15 Philadelphia Leads →</a>
+                </div>
+
+                <div class="city-item">
+                    <div class="city-name">Chicago, IL <span style="color:#10b981; font-size:12px; font-weight:700;">🔥 LIVE</span></div>
+                    <div class="city-price">$299<span>/mo</span></div>
+                    <p class="city-subtext">15 qualified leads/month • Average project value: $5,000+ • 24hr guarantee</p>
+                    <a href="https://buy.stripe.com/5kQ14p3va0TV9aaaDd63K0B" class="city-btn">Get My 15 Chicago Leads →</a>
+                </div>
+
+                <div class="city-item">
+                    <div class="city-name">Seattle, WA <span style="color:#10b981; font-size:12px; font-weight:700;">🔥 LIVE</span></div>
+                    <div class="city-price">$299<span>/mo</span></div>
+                    <p class="city-subtext">15 qualified leads/month • Average project value: $5,000+ • 24hr guarantee</p>
+                    <a href="https://buy.stripe.com/14A14p8Pu8mn1HIaDd63K0C" class="city-btn">Get My 15 Seattle Leads →</a>
+                </div>
+
+                <div class="city-item">
+                    <div class="city-name">Charlotte, NC <span style="color:#10b981; font-size:12px; font-weight:700;">🔥 LIVE</span></div>
+                    <div class="city-price">$299<span>/mo</span></div>
+                    <p class="city-subtext">15 qualified leads/month • Average project value: $5,000+ • 24hr guarantee</p>
+                    <a href="https://buy.stripe.com/fZu14pd5K1XZ1HIeTt63K0D" class="city-btn">Get My 15 Charlotte Leads →</a>
+                </div>
+
+                <div class="city-item">
+                    <div class="city-name">San Antonio, TX <span style="color:#10b981; font-size:12px; font-weight:700;">🔥 LIVE</span></div>
+                    <div class="city-price">$299<span>/mo</span></div>
+                    <p class="city-subtext">15 qualified leads/month • Average project value: $5,000+ • 24hr guarantee</p>
+                    <a href="https://buy.stripe.com/14A8wR9Ty1XZ2LMdPp63K0E" class="city-btn">Get My 15 San Antonio Leads →</a>
+                </div>
+
+                <div class="city-item">
+                    <div class="city-name">Houston, TX <span style="color:#10b981; font-size:12px; font-weight:700;">🔥 LIVE</span></div>
+                    <div class="city-price">$299<span>/mo</span></div>
+                    <p class="city-subtext">15 qualified leads/month • Average project value: $5,000+ • 24hr guarantee</p>
+                    <a href="https://buy.stripe.com/00g28t8Pu6eh6228ww" class="city-btn">Get My 15 Houston Leads →</a>
+                </div>
+            </div>
+
+            <div style="text-align: center; padding: 40px 20px; margin-top: 40px; background: #f8fafc; border-radius: 16px; max-width: 1200px; margin: 40px auto 0;">
+                <h3 style="font-size: 24px; font-weight: 700; color: #1e293b; margin-bottom: 15px;">More Cities Coming Soon</h3>
+                <p style="font-size: 16px; color: #64748b; margin-bottom: 20px;">Nashville, Phoenix, Austin, Dallas, and more launching in 2025</p>
+                <p style="font-size: 14px; color: #94a3b8;">Get notified when your city goes live</p>
             </div>
         </div>
     </div>

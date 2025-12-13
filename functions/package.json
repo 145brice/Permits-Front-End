@@ -2,6 +2,7 @@
   "name": "contractor-leads-functions",
   "description": "Cloud Functions for Contractor Leads SaaS",
   "scripts": {
+    "lint": "echo 'No linting configured'",
     "serve": "firebase emulators:start --only functions",
     "shell": "firebase functions:shell",
     "start": "npm run shell",

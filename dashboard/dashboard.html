@@ -580,7 +580,8 @@
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
         import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
-        import { getFirestore, doc, getDoc, collection, query, orderBy, limit, getDocs } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+        import { getFirestore, doc, getDoc, collection, query, where, orderBy, limit, getDocs } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+        import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-functions.js';
 
         // Firebase configuration
         const firebaseConfig = {
@@ -597,6 +598,7 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const functions = getFunctions(app);
 
         // DOM elements
         const userEmail = document.getElementById('user-email');
@@ -769,254 +771,83 @@
         }
         async function loadLeads(user) {
             try {
-                // First get user's subscription data to determine which cities they have access to
-                const subscriberDoc = await getDoc(doc(db, 'subscribers', user.uid));
-                let userCities = ['Nashville']; // Default fallback
-                
-                if (subscriberDoc.exists()) {
-                    const subscriberData = subscriberDoc.data();
-                    const city = subscriberData.city;
-                    
-                    if (city === 'all-cities') {
-                        // All Cities Bundle subscriber - show all cities
-                        userCities = ['Nashville', 'Chattanooga', 'Austin', 'San Antonio', 'Houston', 'Charlotte', 'Phoenix', 'Memphis', 'Indianapolis', 'Knoxville', 'St Louis', 'Oklahoma City'];
-                    } else {
-                        // Single city subscriber
-                        userCities = [city];
-                    }
-                }
+                // Get user's subscription info
+                const subsQuery = query(
+                    collection(db, 'subscriptions'),
+                    where('user_id', '==', user.uid),
+                    where('status', '==', 'active')
+                );
+                const subsSnapshot = await getDocs(subsQuery);
+
+                let userCities = new Set();
+                subsSnapshot.forEach(doc => {
+                    const subData = doc.data();
+                    userCities.add(subData.city);
+                });
 
                 // Update stats
-                document.getElementById('cities-count').textContent = userCities.length;
-                
-                // Load leads from all user's cities
+                document.getElementById('cities-count').textContent = userCities.size;
+
+                // Load leads directly from Firestore (assigned to this user)
+                const leadsQuery = query(
+                    collection(db, 'leads'),
+                    where('assigned_to', '==', user.uid),
+                    orderBy('assigned_date', 'desc')
+                );
+                const leadsSnapshot = await getDocs(leadsQuery);
+
                 let allLeads = [];
                 let cityStats = {};
-                
-                // Nashville leads (always available as sample data)
-                if (userCities.includes('Nashville')) {
-                    const nashvilleLeads = [
-                        {
-                            permit_number: 'NSH251110000',
-                            address: '7989 Church St, Nashville, TN',
-                            permit_type: 'NEW CONSTRUCTION',
-                            permit_value: 255402,
-                            issue_date: '2025-09-22',
-                            city: 'Nashville'
-                        },
-                        {
-                            permit_number: 'NSH251110001',
-                            address: '3701 Woodland St, Nashville, TN',
-                            permit_type: 'NEW CONSTRUCTION',
-                            permit_value: 416844,
-                            issue_date: '2025-09-26',
-                            city: 'Nashville'
-                        },
-                        {
-                            permit_number: 'NSH251110002',
-                            address: '4979 West End Ave, Nashville, TN',
-                            permit_type: 'REMODEL',
-                            permit_value: 394838,
-                            issue_date: '2025-10-28',
-                            city: 'Nashville'
-                        },
-                        {
-                            permit_number: 'NSH251110003',
-                            address: '8620 Woodland St, Nashville, TN',
-                            permit_type: 'NEW CONSTRUCTION',
-                            permit_value: 214975,
-                            issue_date: '2025-11-18',
-                            city: 'Nashville'
-                        },
-                        {
-                            permit_number: 'NSH251110004',
-                            address: '5735 West End Ave, Nashville, TN',
-                            permit_type: 'NEW CONSTRUCTION',
-                            permit_value: 112857,
-                            issue_date: '2025-10-04',
-                            city: 'Nashville'
-                        },
-                        {
-                            permit_number: 'NSH251110005',
-                            address: '3135 Broadway, Nashville, TN',
-                            permit_type: 'ADDITION',
-                            permit_value: 453161,
-                            issue_date: '2025-10-08',
-                            city: 'Nashville'
-                        },
-                        {
-                            permit_number: 'NSH251110006',
-                            address: '2846 Charlotte Ave, Nashville, TN',
-                            permit_type: 'ADDITION',
-                            permit_value: 473148,
-                            issue_date: '2025-11-06',
-                            city: 'Nashville'
-                        },
-                        {
-                            permit_number: 'NSH251110007',
-                            address: '2841 Woodland St, Nashville, TN',
-                            permit_type: 'NEW CONSTRUCTION',
-                            permit_value: 341105,
-                            issue_date: '2025-09-01',
-                            city: 'Nashville'
-                        },
-                        {
-                            permit_number: 'NSH251110008',
-                            address: '2945 Church St, Nashville, TN',
-                            permit_type: 'NEW CONSTRUCTION',
-                            permit_value: 414848,
-                            issue_date: '2025-10-18',
-                            city: 'Nashville'
-                        },
-                        {
-                            permit_number: 'NSH251110009',
-                            address: '4047 Woodland St, Nashville, TN',
-                            permit_type: 'ADDITION',
-                            permit_value: 124257,
-                            issue_date: '2025-11-11',
-                            city: 'Nashville'
-                        }
-                    ];
-                    allLeads.push(...nashvilleLeads);
-                    cityStats['Nashville'] = nashvilleLeads;
-                }
 
-                // Chattanooga leads (sample data)
-                if (userCities.includes('Chattanooga')) {
-                    const chattanoogaLeads = [
-                        {
-                            permit_number: 'CHT251110000',
-                            address: '1234 Main St, Chattanooga, TN',
-                            permit_type: 'NEW CONSTRUCTION',
-                            permit_value: 285000,
-                            issue_date: '2025-11-15',
-                            city: 'Chattanooga'
-                        },
-                        {
-                            permit_number: 'CHT251110001',
-                            address: '5678 Oak Ave, Chattanooga, TN',
-                            permit_type: 'REMODEL',
-                            permit_value: 156000,
-                            issue_date: '2025-11-20',
-                            city: 'Chattanooga'
-                        }
-                    ];
-                    allLeads.push(...chattanoogaLeads);
-                    cityStats['Chattanooga'] = chattanoogaLeads;
-                }
+                leadsSnapshot.forEach(doc => {
+                    const lead = doc.data();
+                    allLeads.push(lead);
 
-                // Austin leads (sample data)
-                if (userCities.includes('Austin')) {
-                    const austinLeads = [
-                        {
-                            permit_number: 'AUS251110000',
-                            address: '9101 Congress Ave, Austin, TX',
-                            permit_type: 'NEW CONSTRUCTION',
-                            permit_value: 425000,
-                            issue_date: '2025-11-10',
-                            city: 'Austin'
-                        },
-                        {
-                            permit_number: 'AUS251110001',
-                            address: '2345 6th St, Austin, TX',
-                            permit_type: 'ADDITION',
-                            permit_value: 198000,
-                            issue_date: '2025-11-18',
-                            city: 'Austin'
-                        }
-                    ];
-                    allLeads.push(...austinLeads);
-                    cityStats['Austin'] = austinLeads;
-                }
-
-                // San Antonio leads (sample data)
-                if (userCities.includes('San Antonio')) {
-                    const sanAntonioLeads = [
-                        {
-                            permit_number: 'SAT251110000',
-                            address: '3456 Alamo St, San Antonio, TX',
-                            permit_type: 'NEW CONSTRUCTION',
-                            permit_value: 312000,
-                            issue_date: '2025-11-12',
-                            city: 'San Antonio'
-                        }
-                    ];
-                    allLeads.push(...sanAntonioLeads);
-                    cityStats['San Antonio'] = sanAntonioLeads;
-                }
-
-                // Houston leads (sample data)
-                if (userCities.includes('Houston')) {
-                    const houstonLeads = [
-                        {
-                            permit_number: 'HOU251110000',
-                            address: '7890 Texas St, Houston, TX',
-                            permit_type: 'REMODEL',
-                            permit_value: 267000,
-                            issue_date: '2025-11-08',
-                            city: 'Houston'
-                        }
-                    ];
-                    allLeads.push(...houstonLeads);
-                    cityStats['Houston'] = houstonLeads;
-                }
-
-                // Charlotte leads (sample data)
-                if (userCities.includes('Charlotte')) {
-                    const charlotteLeads = [
-                        {
-                            permit_number: 'CLT251110000',
-                            address: '1111 Trade St, Charlotte, NC',
-                            permit_type: 'ADDITION',
-                            permit_value: 189000,
-                            issue_date: '2025-11-14',
-                            city: 'Charlotte'
-                        }
-                    ];
-                    allLeads.push(...charlotteLeads);
-                    cityStats['Charlotte'] = charlotteLeads;
-                }
-
-                // Phoenix leads (sample data)
-                if (userCities.includes('Phoenix')) {
-                    const phoenixLeads = [
-                        {
-                            permit_number: 'PHX251110000',
-                            address: '2222 Camelback Rd, Phoenix, AZ',
-                            permit_type: 'NEW CONSTRUCTION',
-                            permit_value: 378000,
-                            issue_date: '2025-11-16',
-                            city: 'Phoenix'
-                        }
-                    ];
-                    allLeads.push(...phoenixLeads);
-                    cityStats['Phoenix'] = phoenixLeads;
-                }
+                    const city = lead.city.charAt(0).toUpperCase() + lead.city.slice(1);
+                    if (!cityStats[city]) {
+                        cityStats[city] = [];
+                    }
+                    cityStats[city].push(lead);
+                });
 
                 // Update total leads count
                 document.getElementById('leads-count').textContent = allLeads.length;
 
                 // Create city overview cards
                 let citiesOverviewHtml = '';
-                userCities.forEach(city => {
-                    const cityLeads = cityStats[city] || [];
-                    citiesOverviewHtml += `
-                        <div class="city-card">
-                            <div class="city-header">${city}</div>
-                            <div class="city-stats">
-                                <span>${cityLeads.length} leads</span>
-                                <span>${formatCurrency(cityLeads.reduce((sum, lead) => sum + lead.permit_value, 0))}</span>
+                const cityNames = Object.keys(cityStats);
+
+                if (cityNames.length === 0) {
+                    citiesOverviewHtml = '<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #6b7280;">No cities with leads yet. Leads will be assigned after your first payment.</div>';
+                } else {
+                    cityNames.forEach(city => {
+                        const cityLeads = cityStats[city];
+                        const totalValue = cityLeads.reduce((sum, lead) => {
+                            const value = parseFloat(lead.value?.replace(/[$,]/g, '') || 0);
+                            return sum + value;
+                        }, 0);
+
+                        citiesOverviewHtml += `
+                            <div class="city-card">
+                                <div class="city-header">${city}</div>
+                                <div class="city-stats">
+                                    <span>${cityLeads.length} leads</span>
+                                    <span>${formatCurrency(totalValue)}</span>
+                                </div>
                             </div>
-                        </div>
-                    `;
-                });
+                        `;
+                    });
+                }
                 document.getElementById('cities-overview').innerHTML = citiesOverviewHtml;
 
                 // Create individual city sections with tables
                 let leadsSectionsHtml = '';
-                userCities.forEach(city => {
-                    const cityLeads = cityStats[city] || [];
-                    if (cityLeads.length > 0) {
+
+                if (cityNames.length === 0) {
+                    leadsSectionsHtml = '<div class="no-leads">No leads assigned yet. Your first batch of 15 leads will be delivered after your subscription payment is processed.</div>';
+                } else {
+                    cityNames.forEach(city => {
+                        const cityLeads = cityStats[city];
                         leadsSectionsHtml += `
                             <div class="section">
                                 <div class="section-header">${city} (${cityLeads.length} leads)</div>
@@ -1038,9 +869,9 @@
                                 <tr>
                                     <td><span class="permit-number">${lead.permit_number}</span></td>
                                     <td><span class="address">${lead.address}</span></td>
-                                    <td><span class="permit-type">${lead.permit_type}</span></td>
-                                    <td><span class="value">${formatCurrency(lead.permit_value)}</span></td>
-                                    <td>${formatDate(lead.issue_date)}</td>
+                                    <td><span class="permit-type">${lead.type || 'N/A'}</span></td>
+                                    <td><span class="value">${lead.value || '$0.00'}</span></td>
+                                    <td>${lead.issued_date || 'N/A'}</td>
                                 </tr>
                             `;
                         });
@@ -1050,8 +881,8 @@
                                 </table>
                             </div>
                         `;
-                    }
-                });
+                    });
+                }
 
                 document.getElementById('leads-sections').innerHTML = leadsSectionsHtml;
 

@@ -87,6 +87,20 @@ async function handleCheckoutComplete(session) {
     created_at: admin.firestore.FieldValue.serverTimestamp()
   });
 
+  // Decrement global spots remaining counter
+  const spotsRef = db.collection('config').doc('spots_remaining');
+  await db.runTransaction(async (transaction) => {
+    const spotsDoc = await transaction.get(spotsRef);
+    if (spotsDoc.exists()) {
+      const currentCount = spotsDoc.data().count || 49;
+      const newCount = Math.max(0, currentCount - 1); // Don't go below 0
+      transaction.update(spotsRef, { count: newCount });
+    } else {
+      // Initialize the counter if it doesn't exist
+      transaction.set(spotsRef, { count: 48 }); // 49 - 1 = 48
+    }
+  });
+
   // Assign initial 15 leads
   await assignLeadsToCustomer(customerId, city, subscriptionId);
 

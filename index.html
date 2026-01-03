@@ -1009,7 +1009,7 @@
                 </div>
             </div>
             
-            <p class="trust-badge">✓ Join <span id="live-count">300</span>+ contractors closing more deals • Cancel Anytime in Stripe</p>
+            <p class="trust-badge">✓ Cancel Anytime in Stripe</p>
 
         </div>
     </div>
@@ -1042,7 +1042,7 @@
         <div class="container">
             <!-- Urgency Banner -->
             <div class="urgency-banner">
-                🔥 Only 8 spots left this month - First come, first served to protect lead quality
+                🔥 Only <span id="spots-remaining">49</span> spots left this month - First come, first served to protect lead quality
             </div>
 
             <div class="section-header">
@@ -1227,7 +1227,7 @@
                         <h4 style="font-size: 20px; font-weight: 700; color: #1e293b; margin: 0;">What if other contractors get the same leads?</h4>
                         <span class="faq-toggle" style="font-size: 24px; color: #1e40af; transition: transform 0.3s;">+</span>
                     </div>
-                    <p class="faq-answer" style="color: #64748b; line-height: 1.8; margin-top: 10px; display: none;">We limit subscriptions per city to maintain lead quality. That's why we show "8 spots left" - once we hit capacity, we close new signups. First come, first served.</p>
+                    <p class="faq-answer" style="color: #64748b; line-height: 1.8; margin-top: 10px; display: none;">We limit total subscriptions to maintain lead quality. Once we hit capacity, we close new signups. First come, first served.</p>
                 </div>
 
                 <div class="faq-item" style="background: #f8fafc; border-left: 4px solid #1e40af; padding: 20px 30px; border-radius: 8px; margin-bottom: 15px; cursor: pointer;" onclick="toggleFAQ(this)">
@@ -1261,7 +1261,7 @@
     <div class="cta-section">
         <div class="container">
             <h2>Ready to Stop Chasing Leads and Start Closing Deals?</h2>
-            <p>Join 300+ contractors who've already made the switch to qualified building permit leads</p>
+            <p>Join contractors who've already made the switch to qualified building permit leads</p>
             <a href="#cities" class="cta-primary" style="font-size: 24px; padding: 22px 60px; margin-top: 30px; background: #ea580c;">Choose Your City & Get Started →</a>
             <div style="margin-top: 20px; font-size: 14px; opacity: 0.9;">⚡ Setup takes 2 minutes • First leads delivered within 48 hours • Cancel anytime</div>
         </div>
@@ -1696,7 +1696,7 @@
     <script type="module">
         // Firebase imports for admin dashboard
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
-        import { getFirestore, collection, getDocs, query, orderBy } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+        import { getFirestore, collection, getDocs, query, orderBy, doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
 
         // Firebase configuration
         const firebaseConfig = {
@@ -1716,6 +1716,20 @@
         // Make Firebase available globally for the admin functions
         window.firebaseApp = app;
         window.firebaseDb = db;
+
+        // Real-time listener for spots remaining counter
+        const spotsRef = doc(db, 'config', 'spots_remaining');
+        onSnapshot(spotsRef, (doc) => {
+            if (doc.exists()) {
+                const spots = doc.data().count || 49;
+                const spotsElement = document.getElementById('spots-remaining');
+                if (spotsElement) {
+                    spotsElement.textContent = spots;
+                }
+            }
+        }, (error) => {
+            console.error('Error listening to spots counter:', error);
+        });
     </script>
     <div id="admin-login-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; justify-content: center; align-items: center;">
         <div style="background: white; padding: 30px; border-radius: 10px; max-width: 400px; width: 90%; text-align: center;">

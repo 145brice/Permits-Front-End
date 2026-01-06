@@ -8,15 +8,20 @@ Dead simple contractor leads platform. Seven cities, $47/month each or $97 for a
 
 ## Project Structure
 ```
-contractor-leads-saas/           # Frontend (Netlify)
-├── index.html                    # Landing page with 7 city buttons + bundle
-├── dashboard/
-│   ├── dashboard.html           # User dashboard with leads table
-│   ├── login.html              # Login page
-│   └── signup.html             # Signup page
+contractor-leads-saas/           # Frontend (Vercel)
+├── app/                         # Next.js App Router
+│   ├── page.tsx                 # Stripe paywall page
+│   ├── layout.tsx               # Root layout
+│   ├── api/
+│   │   ├── leads/route.ts       # Leads download API
+│   │   └── webhooks/stripe/route.ts # Stripe webhooks
+│   └── globals.css              # Global styles
+├── lib/
+│   └── stripe.ts                # Stripe client setup
+├── index.html                   # Legacy landing page (header removed)
 ├── success.html                 # Post-checkout success page
 ├── config.js                    # Frontend configuration
-├── netlify.toml                 # Netlify deployment config
+├── package.json                 # Dependencies
 └── README.md
 
 contractor-leads-backend/         # Backend (Railway)

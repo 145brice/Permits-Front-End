@@ -95,15 +95,15 @@ npx firebase-tools functions:log
 ### Test 2: Make a Test Purchase
 1. Go to your Stripe checkout page
 2. Use test card: 4242 4242 4242 4242
-3. Check Firestore Console → `subscriptions` collection
-4. Check Firestore Console → `leads` collection
-5. Should see 15 leads assigned to customer
+3. Check your Stripe dashboard for the payment
+4. Test the paywall: Enter customer email on your deployed site
+5. Should allow CSV download for active subscribers!
 
-### Test 3: Customer Dashboard
-1. Sign up: https://your-domain.com/dashboard/signup.html
-2. Login: https://your-domain.com/dashboard/login.html
-3. View dashboard: https://your-domain.com/dashboard/dashboard.html
-4. Should see assigned leads!
+### Test 3: Customer Access
+1. Deploy to Vercel with environment variables
+2. Visit your site and enter a paying customer's email
+3. Should download leads CSV automatically
+4. No login/signup required - Stripe handles access control!
 
 ---
 

@@ -1,5 +1,6 @@
 'use client';
 
+// Construction Leads Paywall - Updated Jan 2026
 import { useState } from 'react';
 
 export default function Home() {

@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import stripe from '@/lib/stripe';
 
+// Backend URL - update this to your actual backend URL
+const BACKEND_URL = process.env.BACKEND_URL || 'https://permits-back-end.onrender.com';
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const email = searchParams.get('email');
@@ -11,13 +14,20 @@ export async function GET(request: NextRequest) {
 
   // Hardcode test email as already paid
   if (email === 'test@example.com') {
-    const csv = 'name,city\nJohn Doe,Austin\nJane Smith,Houston';
-    return new NextResponse(csv, {
-      headers: {
-        'Content-Type': 'text/csv',
-        'Content-Disposition': 'attachment; filename="leads.csv"',
-      },
-    });
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/leads`);
+      if (response.ok) {
+        const csvData = await response.text();
+        return new NextResponse(csvData, {
+          headers: {
+            'Content-Type': 'text/csv',
+            'Content-Disposition': 'attachment; filename="leads.csv"',
+          },
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching from backend:', error);
+    }
   }
 
   try {
@@ -36,13 +46,21 @@ export async function GET(request: NextRequest) {
     });
 
     if (subscriptions.data.length > 0) {
-      const csv = 'name,city\nJohn Doe,Austin\nJane Smith,Houston';
-      return new NextResponse(csv, {
-        headers: {
-          'Content-Type': 'text/csv',
-          'Content-Disposition': 'attachment; filename="leads.csv"',
-        },
-      });
+      // Fetch actual CSV from backend
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/leads`);
+        if (response.ok) {
+          const csvData = await response.text();
+          return new NextResponse(csvData, {
+            headers: {
+              'Content-Type': 'text/csv',
+              'Content-Disposition': 'attachment; filename="leads.csv"',
+            },
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching from backend:', error);
+      }
     }
 
     // Check for successful payments in the last 30 days
@@ -55,13 +73,21 @@ export async function GET(request: NextRequest) {
     const successfulPayments = paymentIntents.data.filter(pi => pi.status === 'succeeded');
 
     if (successfulPayments.length > 0) {
-      const csv = 'name,city\nJohn Doe,Austin\nJane Smith,Houston';
-      return new NextResponse(csv, {
-        headers: {
-          'Content-Type': 'text/csv',
-          'Content-Disposition': 'attachment; filename="leads.csv"',
-        },
-      });
+      // Fetch actual CSV from backend
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/leads`);
+        if (response.ok) {
+          const csvData = await response.text();
+          return new NextResponse(csvData, {
+            headers: {
+              'Content-Type': 'text/csv',
+              'Content-Disposition': 'attachment; filename="leads.csv"',
+            },
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching from backend:', error);
+      }
     }
 
     return NextResponse.json({ error: 'No active subscription or recent payment' }, { status: 403 });

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import stripe from '@/lib/stripe';
+import { stripe } from '@/lib/stripe';
 
 // Backend URL - update this to your actual backend URL
 const BACKEND_URL = process.env.BACKEND_URL || 'https://permits-back-end.onrender.com';

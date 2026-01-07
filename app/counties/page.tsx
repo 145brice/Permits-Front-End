@@ -155,15 +155,6 @@ export default function Counties() {
           }}>
             What's Included
           </h2>
-          <p style={{
-            color: '#666',
-            fontSize: '0.95em',
-            marginBottom: '20px',
-            textAlign: 'center',
-            fontStyle: 'italic'
-          }}>
-            *Note: Not all data points are available on all permits
-          </p>
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
@@ -177,7 +168,7 @@ export default function Counties() {
                 fontStyle: 'italic',
                 marginBottom: '10px'
               }}>
-                *Note: Not all data points are available on all permits
+                *Note: Not all permit types are available in all cities
               </p>
               <ul style={{ color: '#666', lineHeight: '1.8' }}>
                 <li>Building Permits</li>

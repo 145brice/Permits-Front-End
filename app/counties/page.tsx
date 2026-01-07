@@ -1,5 +1,7 @@
 'use client';
 
+import Nav from '../components/Nav';
+
 export default function Counties() {
   const coverage = [
     {
@@ -58,8 +60,11 @@ export default function Counties() {
       minHeight: '100vh',
       background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
       padding: '40px 20px',
-      fontFamily: 'Arial, sans-serif'
+      fontFamily: 'Arial, sans-serif',
+      position: 'relative',
+      paddingTop: '100px'
     }}>
+      <Nav />
       <div style={{
         maxWidth: '1200px',
         margin: '0 auto'
@@ -170,33 +175,6 @@ export default function Counties() {
               </ul>
             </div>
           </div>
-        </div>
-
-        <div style={{
-          textAlign: 'center',
-          marginTop: '50px'
-        }}>
-          <a
-            href="/"
-            style={{
-              color: 'white',
-              textDecoration: 'underline',
-              fontSize: '1.1em',
-              marginRight: '30px'
-            }}
-          >
-            ← Back to Home
-          </a>
-          <a
-            href="/pricing"
-            style={{
-              color: 'white',
-              textDecoration: 'underline',
-              fontSize: '1.1em'
-            }}
-          >
-            View Pricing →
-          </a>
         </div>
       </div>
     </div>

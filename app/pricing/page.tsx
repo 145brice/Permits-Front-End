@@ -1,5 +1,7 @@
 'use client';
 
+import Nav from '../components/Nav';
+
 export default function Pricing() {
   const handleSubscribe = () => {
     // Replace with your actual Stripe Payment Link or Checkout Session
@@ -11,8 +13,10 @@ export default function Pricing() {
       minHeight: '100vh',
       background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
       padding: '40px 20px',
-      fontFamily: 'Arial, sans-serif'
+      fontFamily: 'Arial, sans-serif',
+      position: 'relative'
     }}>
+      <Nav />
       <div style={{
         maxWidth: '1200px',
         margin: '0 auto'
@@ -170,22 +174,6 @@ export default function Pricing() {
               Subscribe Now
             </button>
           </div>
-        </div>
-
-        <div style={{
-          textAlign: 'center',
-          marginTop: '50px'
-        }}>
-          <a
-            href="/"
-            style={{
-              color: 'white',
-              textDecoration: 'underline',
-              fontSize: '1.1em'
-            }}
-          >
-            ← Back to Home
-          </a>
         </div>
       </div>
     </div>

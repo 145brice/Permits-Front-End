@@ -2,6 +2,7 @@
 
 // Construction Leads Paywall - Updated Jan 2026 v2
 import { useState } from 'react';
+import Nav from './components/Nav';
 
 export default function Home() {
   const [email, setEmail] = useState('');
@@ -47,47 +48,10 @@ export default function Home() {
       alignItems: 'center',
       justifyContent: 'center',
       fontFamily: 'Arial, sans-serif',
-      padding: '40px 20px'
+      padding: '40px 20px',
+      position: 'relative'
     }}>
-      {/* Navigation */}
-      <div style={{
-        position: 'absolute',
-        top: '20px',
-        right: '20px',
-        display: 'flex',
-        gap: '20px'
-      }}>
-        <a
-          href="/pricing"
-          style={{
-            color: 'white',
-            textDecoration: 'none',
-            fontSize: '1.1em',
-            fontWeight: 'bold',
-            padding: '10px 20px',
-            background: 'rgba(255,255,255,0.2)',
-            borderRadius: '5px',
-            transition: 'background 0.3s'
-          }}
-        >
-          Pricing
-        </a>
-        <a
-          href="/counties"
-          style={{
-            color: 'white',
-            textDecoration: 'none',
-            fontSize: '1.1em',
-            fontWeight: 'bold',
-            padding: '10px 20px',
-            background: 'rgba(255,255,255,0.2)',
-            borderRadius: '5px',
-            transition: 'background 0.3s'
-          }}
-        >
-          Coverage
-        </a>
-      </div>
+      <Nav />
 
       <div style={{
         background: 'white',

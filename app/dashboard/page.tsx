@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import Nav from '../components/Nav';
 import FilterBar from '../components/FilterBar';
 import DataCard from '../components/DataCard';
 
@@ -9,7 +10,9 @@ import DataCard from '../components/DataCard';
 const MapView = dynamic(() => import('../components/MapView'), {
   ssr: false,
   loading: () => (
-    <div className="h-screen w-screen bg-gray-900 flex items-center justify-center">
+    <div className="h-screen w-screen flex items-center justify-center" style={{
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+    }}>
       <p className="text-white text-xl">Loading map...</p>
     </div>
   ),
@@ -94,41 +97,99 @@ export default function Dashboard() {
   // Locked page
   if (!isUnlocked) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black flex items-center justify-center p-4">
-        <div className="bg-white bg-opacity-10 backdrop-blur-lg p-8 rounded-2xl max-w-md w-full border border-white border-opacity-20">
-          <h1 className="text-4xl font-bold text-white mb-4">
-            🗺️ Construction Leads Dashboard
+      <div style={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '40px 20px',
+        position: 'relative'
+      }}>
+        <Nav />
+        <div style={{
+          background: 'rgba(255, 255, 255, 0.15)',
+          backdropFilter: 'blur(10px)',
+          padding: '40px',
+          borderRadius: '20px',
+          maxWidth: '500px',
+          width: '100%',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          boxShadow: '0 10px 40px rgba(0, 0, 0, 0.3)'
+        }}>
+          <h1 style={{
+            fontSize: '2.5em',
+            fontWeight: 'bold',
+            color: 'white',
+            marginBottom: '15px'
+          }}>
+            🗺️ Map Dashboard
           </h1>
-          <p className="text-gray-300 mb-6">
+          <p style={{
+            color: 'rgba(255, 255, 255, 0.9)',
+            marginBottom: '30px',
+            fontSize: '1.1em'
+          }}>
             Interactive map showing sold homes and active permits in Austin. Subscribe to unlock.
           </p>
           
           {error && (
-            <div className="bg-red-500 bg-opacity-20 border border-red-500 text-white p-3 rounded mb-4">
+            <div style={{
+              background: 'rgba(239, 68, 68, 0.2)',
+              border: '1px solid rgb(239, 68, 68)',
+              color: 'white',
+              padding: '12px',
+              borderRadius: '8px',
+              marginBottom: '20px'
+            }}>
               {error}
             </div>
           )}
 
-          <form onSubmit={handleUnlock} className="space-y-4">
+          <form onSubmit={handleUnlock} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
-              className="w-full px-4 py-3 bg-white bg-opacity-10 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-400"
+              style={{
+                width: '100%',
+                padding: '15px',
+                background: 'rgba(255, 255, 255, 0.1)',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                borderRadius: '8px',
+                color: 'white',
+                fontSize: '16px',
+                boxSizing: 'border-box'
+              }}
               required
             />
             <button
               type="submit"
               disabled={loading}
-              className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-colors disabled:opacity-50"
+              style={{
+                width: '100%',
+                padding: '15px',
+                background: loading ? '#999' : '#667eea',
+                color: 'white',
+                fontWeight: 'bold',
+                fontSize: '18px',
+                borderRadius: '8px',
+                border: 'none',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                transition: 'background 0.3s'
+              }}
             >
               {loading ? 'Verifying...' : 'Unlock Dashboard'}
             </button>
           </form>
 
-          <div className="mt-6 text-center">
-            <a href="/pricing" className="text-blue-400 hover:text-blue-300 underline">
+          <div style={{ marginTop: '25px', textAlign: 'center' }}>
+            <a href="/pricing" style={{
+              color: 'white',
+              textDecoration: 'underline',
+              fontSize: '1em'
+            }}>
               Don't have access? Subscribe here
             </a>
           </div>
@@ -139,12 +200,27 @@ export default function Dashboard() {
 
   // Unlocked dashboard
   return (
-    <div className="bg-black text-white h-screen w-screen overflow-hidden relative">
+    <div style={{
+      height: '100vh',
+      width: '100vw',
+      overflow: 'hidden',
+      position: 'relative',
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+    }}>
+      <Nav />
       <FilterBar onFilter={handleFilter} onZipChange={handleZipChange} />
       <MapView leads={filteredLeads} />
       
       {/* Data Cards */}
-      <div className="absolute bottom-4 right-4 flex flex-col gap-3 z-[1000]">
+      <div style={{
+        position: 'absolute',
+        bottom: '20px',
+        right: '20px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '12px',
+        zIndex: 1000
+      }}>
         <DataCard label="Sold Homes" count={soldCount} color="text-blue-400" />
         <DataCard label="Active Permits" count={permitCount} color="text-orange-400" />
         <DataCard label="Total Leads" count={filteredLeads.length} color="text-green-400" />
@@ -153,7 +229,24 @@ export default function Dashboard() {
       {/* Refresh button */}
       <button
         onClick={() => fetchLeads(email)}
-        className="absolute top-4 right-4 bg-black bg-opacity-80 text-white px-4 py-2 rounded-lg z-[1000] backdrop-blur-sm hover:bg-opacity-100 transition-all"
+        style={{
+          position: 'absolute',
+          top: '80px',
+          right: '20px',
+          background: 'rgba(0, 0, 0, 0.8)',
+          color: 'white',
+          padding: '10px 20px',
+          borderRadius: '8px',
+          border: 'none',
+          cursor: 'pointer',
+          zIndex: 1000,
+          backdropFilter: 'blur(10px)',
+          fontSize: '14px',
+          fontWeight: '600',
+          transition: 'background 0.2s'
+        }}
+        onMouseOver={(e) => e.currentTarget.style.background = 'rgba(0, 0, 0, 1)'}
+        onMouseOut={(e) => e.currentTarget.style.background = 'rgba(0, 0, 0, 0.8)'}
       >
         🔄 Refresh
       </button>

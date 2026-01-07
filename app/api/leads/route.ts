@@ -12,8 +12,16 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Email required' }, { status: 400 });
   }
 
-  // Hardcode test email as already paid
-  if (email === 'test@example.com') {
+  // Test/Admin emails that bypass Stripe check - add your email here
+  const testEmails = [
+    'test@example.com',
+    'admin@permits.com',
+    '145brice@gmail.com', // Your email
+    // Add more test emails as needed
+  ];
+
+  // Check if this is a test/admin email
+  if (testEmails.includes(email.toLowerCase())) {
     try {
       const response = await fetch(`${BACKEND_URL}/api/leads`);
       if (response.ok) {

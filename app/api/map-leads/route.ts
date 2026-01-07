@@ -10,47 +10,53 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Email required' }, { status: 400 });
   }
 
-  try {
-    // Check if user has active subscription or recent payment
-    const customers = await stripe.customers.list({ email, limit: 1 });
-    
-    if (customers.data.length === 0) {
-      return NextResponse.json({ error: 'No payment found. Please subscribe first.' }, { status: 403 });
-    }
+  // Test/Admin emails that bypass Stripe check
+  const testEmails = [
+    'test@example.com',
+    'admin@permits.com',
+    '145brice@gmail.com', // Your email
+  ];
 
-    const customerId = customers.data[0].id;
+  // Check if this is a test/admin email - skip Stripe verification
+  if (!testEmails.includes(email.toLowerCase())) {
+    try {
+      // Check if user has active subscription or recent payment
+      const customers = await stripe.customers.list({ email, limit: 1 });
+      
+      if (customers.data.length === 0) {
+        return NextResponse.json({ error: 'No payment found. Please subscribe first.' }, { status: 403 });
+      }
 
-    // Check for active subscription
-    const subscriptions = await stripe.subscriptions.list({
-      customer: customerId,
-      status: 'active',
-      limit: 1,
-    });
+      const customerId = customers.data[0].id;
 
-    if (subscriptions.data.length === 0) {
-      // Check for recent payment (within 30 days)
-      const thirtyDaysAgo = Math.floor(Date.now() / 1000) - 30 * 24 * 60 * 60;
-      const payments = await stripe.paymentIntents.list({
+      // Check for active subscription
+      const subscriptions = await stripe.subscriptions.list({
         customer: customerId,
-        created: { gte: thirtyDaysAgo },
+        status: 'active',
         limit: 1,
       });
 
-      if (payments.data.length === 0 || payments.data[0].status !== 'succeeded') {
-        return NextResponse.json({ error: 'No active subscription or recent payment found.' }, { status: 403 });
+      if (subscriptions.data.length === 0) {
+        // Check for recent payment (within 30 days)
+        const thirtyDaysAgo = Math.floor(Date.now() / 1000) - 30 * 24 * 60 * 60;
+        const payments = await stripe.paymentIntents.list({
+          customer: customerId,
+          created: { gte: thirtyDaysAgo },
+          limit: 1,
+        });
+
+        if (payments.data.length === 0 || payments.data[0].status !== 'succeeded') {
+          return NextResponse.json({ error: 'No active subscription or recent payment found.' }, { status: 403 });
+        }
       }
+    } catch (error) {
+      console.error('Error checking Stripe:', error);
+      return NextResponse.json({ error: 'Failed to verify payment status' }, { status: 500 });
     }
+  }
 
-    // Fetch leads from backend
-    const BACKEND_URL = process.env.BACKEND_URL || 'https://permits-back-end.onrender.com';
-    const response = await fetch(`${BACKEND_URL}/api/leads?city=austin&format=json`);
-    
-    if (!response.ok) {
-      return NextResponse.json({ error: 'Failed to fetch leads from backend' }, { status: 500 });
-    }
-
-    const leadsData = await response.json();
-    
+  // User is authorized - return map leads data
+  try {
     // Transform CSV data to map format with geocoding
     // For now, return mock data with Austin coordinates
     const mapLeads = [

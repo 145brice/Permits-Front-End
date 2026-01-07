@@ -103,6 +103,24 @@ export default function Nav() {
         >
           Pricing
         </a>
+        <a
+          href="/purchase"
+          style={{
+            color: 'white',
+            textDecoration: 'none',
+            fontSize: '0.9em',
+            fontWeight: '600',
+            padding: '8px 16px',
+            background: 'rgba(255,255,255,0.15)',
+            borderRadius: '6px',
+            transition: 'all 0.2s',
+            whiteSpace: 'nowrap'
+          }}
+          onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.25)'}
+          onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.15)'}
+        >
+          Purchase
+        </a>
       </div>
     </nav>
   );

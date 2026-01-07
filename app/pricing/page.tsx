@@ -4,8 +4,8 @@ import Nav from '../components/Nav';
 
 export default function Pricing() {
   const handleSubscribe = () => {
-    // Replace with your actual Stripe Payment Link or Checkout Session
-    window.location.href = 'https://buy.stripe.com/test_YOUR_PAYMENT_LINK';
+    // Austin Stripe Payment Link
+    window.location.href = 'https://buy.stripe.com/5kQ28t3vadGHfyyeTt63K0F';
   };
 
   return (

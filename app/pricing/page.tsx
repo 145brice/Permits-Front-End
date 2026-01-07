@@ -75,7 +75,7 @@ export default function Pricing() {
               textAlign: 'left'
             }}>
               <li style={{ padding: '10px 0', borderBottom: '1px solid #eee' }}>✓ Daily updated leads</li>
-              <li style={{ padding: '10px 0', borderBottom: '1px solid #eee' }}>✓ All 7 cities covered</li>
+              <li style={{ padding: '10px 0', borderBottom: '1px solid #eee' }}>✓ Austin coverage (more cities coming)</li>
               <li style={{ padding: '10px 0', borderBottom: '1px solid #eee' }}>✓ Unlimited downloads</li>
               <li style={{ padding: '10px 0', borderBottom: '1px solid #eee' }}>✓ CSV format</li>
               <li style={{ padding: '10px 0', borderBottom: '1px solid #eee' }}>✓ Cancel anytime</li>
@@ -152,7 +152,7 @@ export default function Pricing() {
               textAlign: 'left'
             }}>
               <li style={{ padding: '10px 0', borderBottom: '1px solid #eee' }}>✓ Daily updated leads</li>
-              <li style={{ padding: '10px 0', borderBottom: '1px solid #eee' }}>✓ All 7 cities covered</li>
+              <li style={{ padding: '10px 0', borderBottom: '1px solid #eee' }}>✓ Austin coverage (more cities coming)</li>
               <li style={{ padding: '10px 0', borderBottom: '1px solid #eee' }}>✓ Unlimited downloads</li>
               <li style={{ padding: '10px 0', borderBottom: '1px solid #eee' }}>✓ CSV format</li>
               <li style={{ padding: '10px 0', borderBottom: '1px solid #eee' }}>✓ Priority support</li>
@@ -173,6 +173,62 @@ export default function Pricing() {
             >
               Subscribe Now
             </button>
+          </div>
+        </div>
+
+        {/* What's Included Section */}
+        <div style={{
+          background: 'white',
+          padding: '40px',
+          borderRadius: '10px',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+          marginTop: '40px',
+          maxWidth: '900px',
+          margin: '40px auto 0'
+        }}>
+          <h2 style={{
+            color: '#333',
+            fontSize: '2em',
+            marginBottom: '20px',
+            textAlign: 'center'
+          }}>
+            What's Included
+          </h2>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: '20px'
+          }}>
+            <div style={{ padding: '20px' }}>
+              <h3 style={{ color: '#667eea', marginBottom: '10px' }}>📋 Permit Types</h3>
+              <ul style={{ color: '#666', lineHeight: '1.8' }}>
+                <li>New Construction</li>
+                <li>Residential Permits</li>
+                <li>Commercial Permits</li>
+                <li>Renovation & Remodeling</li>
+                <li>Electrical, Plumbing, HVAC</li>
+              </ul>
+            </div>
+            <div style={{ padding: '20px' }}>
+              <h3 style={{ color: '#667eea', marginBottom: '10px' }}>📊 Data Points</h3>
+              <ul style={{ color: '#666', lineHeight: '1.8' }}>
+                <li>Permit Date</li>
+                <li>Property Address</li>
+                <li>Permit Number</li>
+                <li>Project Description</li>
+                <li>Permit Type</li>
+              </ul>
+            </div>
+            <div style={{ padding: '20px' }}>
+              <h3 style={{ color: '#667eea', marginBottom: '10px' }}>🔄 Updates</h3>
+              <ul style={{ color: '#666', lineHeight: '1.8' }}>
+                <li>Daily refresh</li>
+                <li>CSV format</li>
+                <li>Instant download</li>
+                <li>Historical data available</li>
+                <li>Clean, organized data</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>

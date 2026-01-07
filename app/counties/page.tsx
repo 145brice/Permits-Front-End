@@ -5,53 +5,60 @@ import Nav from '../components/Nav';
 export default function Counties() {
   const coverage = [
     {
-      city: 'Nashville',
-      county: 'Davidson County',
-      state: 'Tennessee',
-      population: '715,000+',
-      avgLeads: '150-200/day'
-    },
-    {
       city: 'Austin',
       county: 'Travis County',
       state: 'Texas',
       population: '1M+',
-      avgLeads: '300-400/day'
+      avgLeads: '300-400/day',
+      status: 'Active'
+    },
+    {
+      city: 'Nashville',
+      county: 'Davidson County',
+      state: 'Tennessee',
+      population: '715,000+',
+      avgLeads: '150-200/day',
+      status: 'Coming Soon'
     },
     {
       city: 'Houston',
       county: 'Harris County',
       state: 'Texas',
       population: '2.3M+',
-      avgLeads: '500-700/day'
+      avgLeads: '500-700/day',
+      status: 'Coming Soon'
     },
     {
       city: 'Phoenix',
       county: 'Maricopa County',
       state: 'Arizona',
       population: '1.7M+',
-      avgLeads: '400-500/day'
+      avgLeads: '400-500/day',
+      status: 'Coming Soon'
     },
     {
       city: 'San Antonio',
       county: 'Bexar County',
       state: 'Texas',
       population: '1.5M+',
-      avgLeads: '250-350/day'
+      avgLeads: '250-350/day',
+      status: 'Coming Soon'
     },
     {
       city: 'Charlotte',
       county: 'Mecklenburg County',
       state: 'North Carolina',
       population: '900,000+',
-      avgLeads: '200-300/day'
+      avgLeads: '200-300/day',
+      status: 'Coming Soon'
     },
     {
       city: 'Chattanooga',
       county: 'Hamilton County',
       state: 'Tennessee',
       population: '185,000+',
-      avgLeads: '80-120/day'
+      avgLeads: '80-120/day',
+      status: 'Coming Soon'
     }
   ];
 
@@ -81,7 +88,7 @@ export default function Counties() {
             color: 'rgba(255,255,255,0.9)',
             fontSize: '1.2em'
           }}>
-            We cover 7 major cities across the United States
+            Currently serving Austin, with more cities launching soon
           </p>
         </div>
 
@@ -106,6 +113,7 @@ export default function Counties() {
                 <th style={{ padding: '15px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>State</th>
                 <th style={{ padding: '15px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>Population</th>
                 <th style={{ padding: '15px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>Avg. Leads/Day</th>
+                <th style={{ padding: '15px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>Status</th>
               </tr>
             </thead>
             <tbody>
@@ -118,6 +126,14 @@ export default function Counties() {
                   <td style={{ padding: '15px', borderBottom: '1px solid #eee' }}>{location.state}</td>
                   <td style={{ padding: '15px', borderBottom: '1px solid #eee' }}>{location.population}</td>
                   <td style={{ padding: '15px', borderBottom: '1px solid #eee', color: '#667eea', fontWeight: 'bold' }}>{location.avgLeads}</td>
+                  <td style={{ 
+                    padding: '15px', 
+                    borderBottom: '1px solid #eee',
+                    color: location.status === 'Active' ? '#28a745' : '#999',
+                    fontWeight: location.status === 'Active' ? 'bold' : 'normal'
+                  }}>
+                    {location.status}
+                  </td>
                 </tr>
               ))}
             </tbody>

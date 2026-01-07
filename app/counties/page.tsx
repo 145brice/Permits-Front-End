@@ -79,17 +79,46 @@ export default function Counties() {
         <div style={{ textAlign: 'center', marginBottom: '50px' }}>
           <h1 style={{
             color: 'white',
-            fontSize: '3em',
-            marginBottom: '10px'
+            fontSize: 'clamp(2em, 5vw, 3.5em)',
+            marginBottom: '15px',
+            fontWeight: 'bold'
           }}>
-            Coverage Areas
+            Expanding Nationwide
           </h1>
           <p style={{
-            color: 'rgba(255,255,255,0.9)',
-            fontSize: '1.2em'
+            color: 'rgba(255,255,255,0.95)',
+            fontSize: 'clamp(1.1em, 3vw, 1.4em)',
+            marginBottom: '30px',
+            lineHeight: '1.5'
           }}>
-            Currently serving Austin, with more cities launching soon
+            Currently serving <strong>Austin</strong> with 300-400 fresh leads daily.<br/>
+            More cities launching soon—lock in your price now.
           </p>
+          <button
+            onClick={() => window.location.href = '/purchase'}
+            style={{
+              padding: '18px 50px',
+              background: 'white',
+              color: '#667eea',
+              border: 'none',
+              borderRadius: '50px',
+              fontSize: '1.2em',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+              transition: 'all 0.3s'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 12px 35px rgba(0,0,0,0.4)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
+            }}
+          >
+            Get Started Now
+          </button>
         </div>
 
         <div style={{

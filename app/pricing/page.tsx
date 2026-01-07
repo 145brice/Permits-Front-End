@@ -1,31 +1,10 @@
 'use client';
 
-import { useState } from 'react';
 import Nav from '../components/Nav';
 
 export default function Pricing() {
-  const [showCityModal, setShowCityModal] = useState(false);
-
-  const cities = [
-    { name: 'Austin', stripeLink: 'https://buy.stripe.com/5kQ28t3vadGHfyyeTt63K0F', active: true },
-    { name: 'Nashville', stripeLink: '#', active: false },
-    { name: 'Houston', stripeLink: '#', active: false },
-    { name: 'Phoenix', stripeLink: '#', active: false },
-    { name: 'San Antonio', stripeLink: '#', active: false },
-    { name: 'Charlotte', stripeLink: '#', active: false },
-    { name: 'Chattanooga', stripeLink: '#', active: false }
-  ];
-
   const handleSubscribe = () => {
     window.location.href = '/purchase';
-  };
-
-  const handleCitySelect = (city: any) => {
-    if (!city.active) {
-      alert(`${city.name} is coming soon! Currently only Austin is available.`);
-      return;
-    }
-    window.location.href = city.stripeLink;
   };
 
   return (
@@ -269,9 +248,9 @@ export default function Pricing() {
           </div>
         </div>
       </div>
-
-      {/* City Selection Modal */}
-      {showCityModal && (
+    </div>
+  );
+}
         <div style={{
           position: 'fixed',
           top: 0,

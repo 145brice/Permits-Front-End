@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
-import * as fs from 'fs';
-import * as path from 'path';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -65,39 +63,32 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'No active subscription or recent payment' }, { status: 403 });
   }
 
-  // Fetch the latest CSV file for the specified city
+  // Proxy request to backend API
   try {
-    const leadsDir = path.join(process.cwd(), 'leads', city.toLowerCase());
+    const backendUrl = process.env.BACKEND_URL || 'http://localhost:5002';
+    const response = await fetch(`${backendUrl}/api/leads?city=${city}&customer_id=${email}`);
     
-    if (!fs.existsSync(leadsDir)) {
-      return NextResponse.json({ error: `No data available for ${city}` }, { status: 404 });
+    if (!response.ok) {
+      const errorData = await response.json();
+      return NextResponse.json(errorData, { status: response.status });
     }
 
-    // Get all date folders and sort to get the latest
-    const dateFolders = fs.readdirSync(leadsDir)
-      .filter(folder => {
-        const folderPath = path.join(leadsDir, folder);
-        return fs.statSync(folderPath).isDirectory();
-      })
-      .sort()
-      .reverse();
+    // Get the CSV file from backend
+    const csvData = await response.text();
+    const filename = `${city}_leads.csv`;
 
-    if (dateFolders.length === 0) {
-      return NextResponse.json({ error: `No data available for ${city}` }, { status: 404 });
-    }
-
-    const latestDateFolder = dateFolders[0];
-    const latestFolderPath = path.join(leadsDir, latestDateFolder);
-    
-    // Get CSV file from the latest date folder
-    const csvFiles = fs.readdirSync(latestFolderPath).filter(file => file.endsWith('.csv'));
-    
-    if (csvFiles.length === 0) {
-      return NextResponse.json({ error: `No CSV file found for ${city}` }, { status: 404 });
-    }
-
-    const csvFilePath = path.join(latestFolderPath, csvFiles[0]);
-    const csvData = fs.readFileSync(csvFilePath, 'utf-8');
+    return new NextResponse(csvData, {
+      status: 200,
+      headers: {
+        'Content-Type': 'text/csv',
+        'Content-Disposition': `attachment; filename="${filename}"`,
+      },
+    });
+  } catch (error) {
+    console.error('Backend fetch error:', error);
+    return NextResponse.json({ error: 'Failed to fetch data from backend' }, { status: 500 });
+  }
+}
 
     return new NextResponse(csvData, {
       headers: {

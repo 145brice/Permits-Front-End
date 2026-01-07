@@ -46,8 +46,10 @@ export default function MapView({ leads }: MapViewProps) {
       className="z-0"
     >
       <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        url="https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=jEn4MW4VhPVe82B3bazQ"
+        attribution='&copy; <a href="https://www.maptiler.com/">MapTiler</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        tileSize={512}
+        zoomOffset={-1}
       />
       {leads.map((lead, i) => (
         <Marker key={i} position={[lead.lat, lead.lng]} icon={icon}>

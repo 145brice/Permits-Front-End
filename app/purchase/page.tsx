@@ -200,6 +200,14 @@ export default function Purchase() {
           }}>
             What's Included
           </h3>
+          <p style={{
+            color: 'rgba(255,255,255,0.85)',
+            fontSize: '0.95em',
+            marginBottom: '10px',
+            fontStyle: 'italic'
+          }}>
+            *Note: Not all data points are available on all permits
+          </p>
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',

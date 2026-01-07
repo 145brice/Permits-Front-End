@@ -17,7 +17,7 @@ export default function Pricing() {
   ];
 
   const handleSubscribe = () => {
-    setShowCityModal(true);
+    window.location.href = '/purchase';
   };
 
   const handleCitySelect = (city: any) => {

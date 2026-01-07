@@ -31,10 +31,11 @@ export default function Home() {
   };
 
   const sampleLeads = [
-    { city: 'Nashville', address: '123 Broadway Ave', type: 'Commercial Renovation', value: '$250,000', contractor: 'ABC Construction' },
-    { city: 'Austin', address: '456 Congress St', type: 'New Residential', value: '$450,000', contractor: 'XYZ Builders' },
-    { city: 'Houston', address: '789 Main St', type: 'Multi-Family', value: '$2,500,000', contractor: 'Elite Development' },
-    { city: 'Phoenix', address: '321 Central Ave', type: 'Commercial Build', value: '$1,200,000', contractor: 'Desert Contractors' },
+    { date: '2025-12-09', city: 'Austin', type: 'Building Permit', number: '2025-153294', address: '38XX XXXXXX ST', description: 'AT&T Tower Modification - Install mount modification & Air Antennas' },
+    { date: '2025-12-08', city: 'Austin', type: 'Electrical Permit', number: '2025-153409', address: '15XX XXXXXXX AVE', description: 'Whole home generator installation' },
+    { date: '2015-02-08', city: 'Houston', type: 'New Single Family Dwelling', number: '1', address: '11XX W 26TH ST', description: 'New S.F. Residence w/ Attached Garage (06 IRC)' },
+    { date: '2025-12-08', city: 'Austin', type: 'Plumbing Permit', number: '2025-153136', address: '80XX RUNNING XXXXX DR', description: 'Excavate tunnel to repair drain line under house' },
+    { date: '2015-09-24', city: 'Houston', type: 'New Single Family Dwelling', number: '7', address: '42XX XXXX ST', description: 'New Det. Res Garage w/ Quarters Above (06 IRC)' },
   ];
 
   return (
@@ -143,11 +144,12 @@ export default function Home() {
               background: '#667eea',
               color: 'white'
             }}>
+              <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>Date</th>
               <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>City</th>
-              <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>Address</th>
               <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>Type</th>
-              <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>Value</th>
-              <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>Contractor</th>
+              <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>Permit #</th>
+              <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>Address</th>
+              <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>Description</th>
             </tr>
           </thead>
           <tbody>
@@ -155,11 +157,12 @@ export default function Home() {
               <tr key={idx} style={{
                 background: idx % 2 === 0 ? '#f9f9f9' : 'white'
               }}>
+                <td style={{ padding: '12px', borderBottom: '1px solid #eee', whiteSpace: 'nowrap' }}>{lead.date}</td>
                 <td style={{ padding: '12px', borderBottom: '1px solid #eee' }}>{lead.city}</td>
-                <td style={{ padding: '12px', borderBottom: '1px solid #eee' }}>{lead.address}</td>
                 <td style={{ padding: '12px', borderBottom: '1px solid #eee' }}>{lead.type}</td>
-                <td style={{ padding: '12px', borderBottom: '1px solid #eee' }}>{lead.value}</td>
-                <td style={{ padding: '12px', borderBottom: '1px solid #eee' }}>{lead.contractor}</td>
+                <td style={{ padding: '12px', borderBottom: '1px solid #eee' }}>{lead.number}</td>
+                <td style={{ padding: '12px', borderBottom: '1px solid #eee', fontStyle: 'italic', color: '#999' }}>{lead.address}</td>
+                <td style={{ padding: '12px', borderBottom: '1px solid #eee', fontSize: '0.9em' }}>{lead.description}</td>
               </tr>
             ))}
           </tbody>

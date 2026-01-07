@@ -1,7 +1,6 @@
 'use client';
 
 import Nav from '../components/Nav';
-import Hero from '../components/Hero';
 
 export default function Pricing() {
   const handleSubscribe = () => {
@@ -14,15 +13,14 @@ export default function Pricing() {
       minHeight: '100vh',
       background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
       padding: '40px 20px',
+      paddingTop: '220px',
       fontFamily: 'Arial, sans-serif',
       position: 'relative'
     }}>
-      <Hero subheading="Simple, Transparent Pricing" />
       <Nav />
       <div style={{
         maxWidth: '1200px',
-        margin: '0 auto',
-        paddingTop: '220px'
+        margin: '0 auto'
       }}>
         <div style={{
           display: 'grid',

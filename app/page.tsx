@@ -2,7 +2,6 @@
 
 // Construction Leads Paywall - Updated Jan 2026 v2
 import Nav from './components/Nav';
-import Hero from './components/Hero';
 
 export default function Home() {
   const sampleLeads = [
@@ -22,10 +21,9 @@ export default function Home() {
       alignItems: 'center',
       fontFamily: 'Arial, sans-serif',
       padding: '40px 20px',
-      paddingTop: '40px',
+      paddingTop: '220px',
       position: 'relative'
     }}>
-      <Hero subheading="Get Fresh Construction Permit Leads Daily" />
       <Nav />
 
       {/* Sample Leads Table */}

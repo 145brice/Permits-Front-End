@@ -2,30 +2,18 @@ export default function Nav() {
   return (
     <nav style={{
       position: 'fixed',
-      top: 0,
+      top: '120px',
       left: 0,
       right: 0,
       padding: '15px 30px',
       display: 'flex',
-      justifyContent: 'space-between',
+      justifyContent: 'center',
       alignItems: 'center',
       zIndex: 1000,
-      background: 'rgba(0, 0, 0, 0.3)',
+      background: 'rgba(0, 0, 0, 0.2)',
       backdropFilter: 'blur(10px)',
       borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
     }}>
-      <a
-        href="/"
-        style={{
-          color: 'white',
-          textDecoration: 'none',
-          fontSize: '1.2em',
-          fontWeight: 'bold',
-          whiteSpace: 'nowrap'
-        }}
-      >
-        Construction Leads
-      </a>
       <div style={{
         display: 'flex',
         gap: '12px',

@@ -1,36 +1,10 @@
 'use client';
 
 // Construction Leads Paywall - Updated Jan 2026 v2
-import { useState } from 'react';
 import Nav from './components/Nav';
+import Hero from './components/Hero';
 
 export default function Home() {
-  const [email, setEmail] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  const handleDownload = async () => {
-    if (!email) return;
-    setLoading(true);
-    try {
-      const response = await fetch(`/api/leads?email=${encodeURIComponent(email)}`);
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'leads.csv';
-        a.click();
-        alert('Download started!');
-      } else {
-        const error = await response.json();
-        alert(error.error || 'Access denied');
-      }
-    } catch (err) {
-      alert('Error downloading leads');
-    }
-    setLoading(false);
-  };
-
   const sampleLeads = [
     { date: '2025-12-09', city: 'Austin', type: 'Building Permit', number: '2025-153294', address: '38XX XXXXXX ST', description: 'AT&T Tower Modification - Install mount modification & Air Antennas' },
     { date: '2025-12-08', city: 'Austin', type: 'Electrical Permit', number: '2025-153409', address: '15XX XXXXXXX AVE', description: 'Whole home generator installation' },
@@ -46,80 +20,13 @@ export default function Home() {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      justifyContent: 'center',
       fontFamily: 'Arial, sans-serif',
       padding: '40px 20px',
+      paddingTop: '40px',
       position: 'relative'
     }}>
+      <Hero subheading="Get Fresh Construction Permit Leads Daily" />
       <Nav />
-
-      <div style={{
-        background: 'white',
-        padding: '40px',
-        borderRadius: '10px',
-        boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-        textAlign: 'center',
-        maxWidth: '500px',
-        width: '90%',
-        marginBottom: '30px'
-      }}>
-        <h1 style={{
-          color: '#333',
-          marginBottom: '10px',
-          fontSize: '2.5em'
-        }}>
-          Construction Leads
-        </h1>
-        <p style={{
-          color: '#666',
-          marginBottom: '30px',
-          fontSize: '1.1em'
-        }}>
-          Get access to fresh construction permit leads across major cities.
-          Download today's leads with just your email.
-        </p>
-        <div style={{ marginBottom: '20px' }}>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email address"
-            style={{
-              width: '100%',
-              padding: '15px',
-              border: '2px solid #ddd',
-              borderRadius: '5px',
-              fontSize: '16px',
-              marginBottom: '15px',
-              boxSizing: 'border-box'
-            }}
-          />
-          <button
-            onClick={handleDownload}
-            disabled={loading || !email}
-            style={{
-              width: '100%',
-              padding: '15px',
-              background: loading ? '#ccc' : '#667eea',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              fontSize: '18px',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              transition: 'background 0.3s'
-            }}
-          >
-            {loading ? 'Downloading...' : 'Download Today\'s Leads'}
-          </button>
-        </div>
-        <p style={{
-          color: '#999',
-          fontSize: '0.9em',
-          marginTop: '20px'
-        }}>
-          Access granted for active subscribers and recent payers.
-        </p>
-      </div>
 
       {/* Sample Leads Table */}
       <div style={{

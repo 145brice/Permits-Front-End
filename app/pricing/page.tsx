@@ -1,6 +1,7 @@
 'use client';
 
 import Nav from '../components/Nav';
+import Hero from '../components/Hero';
 
 export default function Pricing() {
   const handleSubscribe = () => {
@@ -16,27 +17,13 @@ export default function Pricing() {
       fontFamily: 'Arial, sans-serif',
       position: 'relative'
     }}>
+      <Hero subheading="Simple, Transparent Pricing" />
       <Nav />
       <div style={{
         maxWidth: '1200px',
-        margin: '0 auto'
+        margin: '0 auto',
+        paddingTop: '220px'
       }}>
-        <div style={{ textAlign: 'center', marginBottom: '50px' }}>
-          <h1 style={{
-            color: 'white',
-            fontSize: '3em',
-            marginBottom: '10px'
-          }}>
-            Simple, Transparent Pricing
-          </h1>
-          <p style={{
-            color: 'rgba(255,255,255,0.9)',
-            fontSize: '1.2em'
-          }}>
-            Get unlimited access to fresh construction leads across all cities
-          </p>
-        </div>
-
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',

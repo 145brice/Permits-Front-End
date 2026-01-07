@@ -1,6 +1,7 @@
 'use client';
 
 import Nav from '../components/Nav';
+import Hero from '../components/Hero';
 
 export default function Counties() {
   const coverage = [
@@ -68,30 +69,15 @@ export default function Counties() {
       background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
       padding: '40px 20px',
       fontFamily: 'Arial, sans-serif',
-      position: 'relative',
-      paddingTop: '100px'
+      position: 'relative'
     }}>
+      <Hero subheading="Coverage Areas" />
       <Nav />
       <div style={{
         maxWidth: '1200px',
-        margin: '0 auto'
+        margin: '0 auto',
+        paddingTop: '220px'
       }}>
-        <div style={{ textAlign: 'center', marginBottom: '50px' }}>
-          <h1 style={{
-            color: 'white',
-            fontSize: '3em',
-            marginBottom: '10px'
-          }}>
-            Coverage Areas
-          </h1>
-          <p style={{
-            color: 'rgba(255,255,255,0.9)',
-            fontSize: '1.2em'
-          }}>
-            Currently serving Austin, with more cities launching soon
-          </p>
-        </div>
-
         <div style={{
           background: 'white',
           padding: '40px',

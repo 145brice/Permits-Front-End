@@ -1,25 +1,25 @@
 export default function Nav() {
   return (
     <nav style={{
-      position: 'absolute',
+      position: 'fixed',
       top: 0,
       left: 0,
       right: 0,
-      padding: '20px 40px',
+      padding: '15px 30px',
       display: 'flex',
-      flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
       zIndex: 1000,
-      flexWrap: 'wrap',
-      gap: '15px'
+      background: 'rgba(0, 0, 0, 0.3)',
+      backdropFilter: 'blur(10px)',
+      borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
     }}>
       <a
         href="/"
         style={{
           color: 'white',
           textDecoration: 'none',
-          fontSize: '1.3em',
+          fontSize: '1.2em',
           fontWeight: 'bold',
           whiteSpace: 'nowrap'
         }}
@@ -28,22 +28,24 @@ export default function Nav() {
       </a>
       <div style={{
         display: 'flex',
-        gap: '15px',
-        flexWrap: 'wrap'
+        gap: '12px',
+        alignItems: 'center'
       }}>
         <a
           href="/"
           style={{
             color: 'white',
             textDecoration: 'none',
-            fontSize: '0.95em',
-            fontWeight: 'bold',
-            padding: '8px 15px',
-            background: 'rgba(255,255,255,0.2)',
-            borderRadius: '5px',
-            transition: 'background 0.3s',
+            fontSize: '0.9em',
+            fontWeight: '600',
+            padding: '8px 16px',
+            background: 'rgba(255,255,255,0.15)',
+            borderRadius: '6px',
+            transition: 'all 0.2s',
             whiteSpace: 'nowrap'
           }}
+          onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.25)'}
+          onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.15)'}
         >
           Home
         </a>
@@ -52,14 +54,16 @@ export default function Nav() {
           style={{
             color: 'white',
             textDecoration: 'none',
-            fontSize: '0.95em',
-            fontWeight: 'bold',
-            padding: '8px 15px',
-            background: 'rgba(255,255,255,0.2)',
-            borderRadius: '5px',
-            transition: 'background 0.3s',
+            fontSize: '0.9em',
+            fontWeight: '600',
+            padding: '8px 16px',
+            background: 'rgba(255,255,255,0.15)',
+            borderRadius: '6px',
+            transition: 'all 0.2s',
             whiteSpace: 'nowrap'
           }}
+          onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.25)'}
+          onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.15)'}
         >
           Map 🗺️
         </a>
@@ -68,14 +72,16 @@ export default function Nav() {
           style={{
             color: 'white',
             textDecoration: 'none',
-            fontSize: '0.95em',
-            fontWeight: 'bold',
-            padding: '8px 15px',
-            background: 'rgba(255,255,255,0.2)',
-            borderRadius: '5px',
-            transition: 'background 0.3s',
+            fontSize: '0.9em',
+            fontWeight: '600',
+            padding: '8px 16px',
+            background: 'rgba(255,255,255,0.15)',
+            borderRadius: '6px',
+            transition: 'all 0.2s',
             whiteSpace: 'nowrap'
           }}
+          onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.25)'}
+          onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.15)'}
         >
           Coverage
         </a>
@@ -84,14 +90,16 @@ export default function Nav() {
           style={{
             color: 'white',
             textDecoration: 'none',
-            fontSize: '0.95em',
-            fontWeight: 'bold',
-            padding: '8px 15px',
-            background: 'rgba(255,255,255,0.2)',
-            borderRadius: '5px',
-            transition: 'background 0.3s',
+            fontSize: '0.9em',
+            fontWeight: '600',
+            padding: '8px 16px',
+            background: 'rgba(255,255,255,0.15)',
+            borderRadius: '6px',
+            transition: 'all 0.2s',
             whiteSpace: 'nowrap'
           }}
+          onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.25)'}
+          onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.15)'}
         >
           Pricing
         </a>

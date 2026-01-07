@@ -1,103 +1,68 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import dynamic from 'next/dynamic';
 import Nav from '../components/Nav';
-import FilterBar from '../components/FilterBar';
-import DataCard from '../components/DataCard';
-
-// Import MapView dynamically to avoid SSR issues with Leaflet
-const MapView = dynamic(() => import('../components/MapView'), {
-  ssr: false,
-  loading: () => (
-    <div className="h-screen w-screen flex items-center justify-center" style={{
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-    }}>
-      <p className="text-white text-xl">Loading map...</p>
-    </div>
-  ),
-});
-
-interface Lead {
-  address: string;
-  lat: number;
-  lng: number;
-  price?: string;
-  type: 'sold' | 'permit';
-  description?: string;
-}
 
 export default function Dashboard() {
-  const [leads, setLeads] = useState<Lead[]>([]);
-  const [filteredLeads, setFilteredLeads] = useState<Lead[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
   const [email, setEmail] = useState('');
-  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [selectedCity, setSelectedCity] = useState('austin');
+  const [error, setError] = useState('');
 
-  const fetchLeads = async (userEmail: string) => {
+  const cities = [
+    { name: 'Austin', value: 'austin', available: true },
+    { name: 'Nashville', value: 'nashville', available: false },
+    { name: 'Houston', value: 'houston', available: false },
+    { name: 'Charlotte', value: 'charlotte', available: false },
+    { name: 'Phoenix', value: 'phoenix', available: false },
+    { name: 'San Antonio', value: 'sanantonio', available: false },
+    { name: 'Chattanooga', value: 'chattanooga', available: false },
+  ];
+
+  useEffect(() => {
+    const storedEmail = localStorage.getItem('userEmail');
+    if (storedEmail) {
+      setEmail(storedEmail);
+    }
+  }, []);
+
+  const handleDownload = async () => {
+    if (!email) {
+      setError('Please enter your email');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
     try {
-      setLoading(true);
-      const response = await fetch(`/api/map-leads?email=${encodeURIComponent(userEmail)}`);
-      const data = await response.json();
-
+      const response = await fetch(`/api/leads?email=${encodeURIComponent(email)}&city=${selectedCity}`);
+      
       if (!response.ok) {
-        setError(data.error || 'Access denied');
-        setIsUnlocked(false);
+        const errorData = await response.json();
+        setError(errorData.error || 'Access denied');
+        setLoading(false);
         return;
       }
 
-      setLeads(data.leads);
-      setFilteredLeads(data.leads);
-      setIsUnlocked(true);
-      setError('');
-      // Store email in localStorage for persistence
-      localStorage.setItem('dashboardEmail', userEmail);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${selectedCity}_leads_${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+
+      localStorage.setItem('userEmail', email);
+      alert('Download started!');
     } catch (err) {
-      setError('Failed to load leads');
-      setIsUnlocked(false);
+      setError('Error downloading leads');
     } finally {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    // Check if email is stored
-    const storedEmail = localStorage.getItem('dashboardEmail');
-    if (storedEmail) {
-      setEmail(storedEmail);
-      fetchLeads(storedEmail);
-    } else {
-      setLoading(false);
-    }
-  }, []);
-
-  const handleUnlock = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    await fetchLeads(email);
-  };
-
-  const handleFilter = (type: string) => {
-    if (type === 'all') {
-      setFilteredLeads(leads);
-    } else {
-      setFilteredLeads(leads.filter((lead) => lead.type === type));
-    }
-  };
-
-  const handleZipChange = (zip: string) => {
-    // Implement zip filtering logic if needed
-    console.log('Filter by zip:', zip);
-  };
-
-  const soldCount = filteredLeads.filter((l) => l.type === 'sold').length;
-  const permitCount = filteredLeads.filter((l) => l.type === 'permit').length;
-
-  // Locked page
-  if (!isUnlocked) {
-    return (
-      <div style={{
         minHeight: '100vh',
         background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         display: 'flex',

@@ -171,22 +171,39 @@ export default function Counties() {
           }}>
             <div style={{ padding: '20px' }}>
               <h3 style={{ color: '#667eea', marginBottom: '10px' }}>📋 Permit Types</h3>
+              <p style={{
+                color: '#666',
+                fontSize: '0.85em',
+                fontStyle: 'italic',
+                marginBottom: '10px'
+              }}>
+                *Note: Not all data points are available on all permits
+              </p>
               <ul style={{ color: '#666', lineHeight: '1.8' }}>
-                <li>New Construction</li>
-                <li>Residential Permits</li>
-                <li>Commercial Permits</li>
-                <li>Renovation & Remodeling</li>
-                <li>Electrical, Plumbing, HVAC</li>
+                <li>Building Permits</li>
+                <li>Electrical Permits</li>
+                <li>Plumbing Permits</li>
+                <li>Mechanical Permits</li>
+                <li>Driveway / Sidewalks</li>
               </ul>
             </div>
             <div style={{ padding: '20px' }}>
               <h3 style={{ color: '#667eea', marginBottom: '10px' }}>📊 Data Points</h3>
+              <p style={{
+                color: '#666',
+                fontSize: '0.85em',
+                fontStyle: 'italic',
+                marginBottom: '10px'
+              }}>
+                *Note: Not all data points are available on all permits
+              </p>
               <ul style={{ color: '#666', lineHeight: '1.8' }}>
-                <li>Permit Date</li>
-                <li>Property Address</li>
-                <li>Permit Number</li>
-                <li>Project Description</li>
+                <li>Date</li>
+                <li>City</li>
                 <li>Permit Type</li>
+                <li>Permit Number</li>
+                <li>Address</li>
+                <li>Description</li>
               </ul>
             </div>
             <div style={{ padding: '20px' }}>

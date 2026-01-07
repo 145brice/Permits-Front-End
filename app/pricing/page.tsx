@@ -1,11 +1,31 @@
 'use client';
 
+import { useState } from 'react';
 import Nav from '../components/Nav';
 
 export default function Pricing() {
+  const [showCityModal, setShowCityModal] = useState(false);
+
+  const cities = [
+    { name: 'Austin', stripeLink: 'https://buy.stripe.com/5kQ28t3vadGHfyyeTt63K0F', active: true },
+    { name: 'Nashville', stripeLink: '#', active: false },
+    { name: 'Houston', stripeLink: '#', active: false },
+    { name: 'Phoenix', stripeLink: '#', active: false },
+    { name: 'San Antonio', stripeLink: '#', active: false },
+    { name: 'Charlotte', stripeLink: '#', active: false },
+    { name: 'Chattanooga', stripeLink: '#', active: false }
+  ];
+
   const handleSubscribe = () => {
-    // Austin Stripe Payment Link
-    window.location.href = 'https://buy.stripe.com/5kQ28t3vadGHfyyeTt63K0F';
+    setShowCityModal(true);
+  };
+
+  const handleCitySelect = (city: any) => {
+    if (!city.active) {
+      alert(`${city.name} is coming soon! Currently only Austin is available.`);
+      return;
+    }
+    window.location.href = city.stripeLink;
   };
 
   return (
@@ -249,6 +269,109 @@ export default function Pricing() {
           </div>
         </div>
       </div>
-    </div>
-  );
-}
+
+      {/* City Selection Modal */}
+      {showCityModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0,0,0,0.7)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 2000,
+          padding: '20px'
+        }}
+        onClick={() => setShowCityModal(false)}
+        >
+          <div style={{
+            background: 'white',
+            padding: '40px',
+            borderRadius: '15px',
+            boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+            maxWidth: '600px',
+            width: '100%'
+          }}
+          onClick={(e) => e.stopPropagation()}
+          >
+            <h2 style={{
+              color: '#333',
+              marginBottom: '10px',
+              fontSize: '2em',
+              textAlign: 'center'
+            }}>
+              Select Your City
+            </h2>
+            <p style={{
+              color: '#666',
+              marginBottom: '30px',
+              fontSize: '1em',
+              textAlign: 'center'
+            }}>
+              Choose which city you want construction leads for
+            </p>
+            
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+              gap: '15px',
+              marginBottom: '20px'
+            }}>
+              {cities.map((city) => (
+                <button
+                  key={city.name}
+                  onClick={() => handleCitySelect(city)}
+                  style={{
+                    padding: '15px 20px',
+                    background: city.active ? '#667eea' : '#e0e0e0',
+                    color: city.active ? 'white' : '#999',
+                    border: 'none',
+                    borderRadius: '8px',
+                    fontSize: '1.1em',
+                    fontWeight: 'bold',
+                    cursor: city.active ? 'pointer' : 'not-allowed',
+                    transition: 'all 0.3s'
+                  }}
+                  onMouseOver={(e) => {
+                    if (city.active) {
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
+                      e.currentTarget.style.background = '#5568d3';
+                    }
+                  }}
+                  onMouseOut={(e) => {
+                    if (city.active) {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = 'none';
+                      e.currentTarget.style.background = '#667eea';
+                    }
+                  }}
+                >
+                  {city.name}
+                  {!city.active && <div style={{ fontSize: '0.8em', marginTop: '5px' }}>(Coming Soon)</div>}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={() => setShowCityModal(false)}
+              style={{
+                width: '100%',
+                padding: '12px',
+                background: '#999',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                fontSize: '1em',
+                cursor: 'pointer',
+                marginTop: '10px'
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}

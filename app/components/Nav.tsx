@@ -42,6 +42,21 @@ export default function Nav() {
           Home
         </a>
         <a
+          href="/dashboard"
+          style={{
+            color: 'white',
+            textDecoration: 'none',
+            fontSize: '1.1em',
+            fontWeight: 'bold',
+            padding: '10px 20px',
+            background: 'rgba(255,255,255,0.2)',
+            borderRadius: '5px',
+            transition: 'background 0.3s'
+          }}
+        >
+          Map 🗺️
+        </a>
+        <a
           href="/counties"
           style={{
             color: 'white',

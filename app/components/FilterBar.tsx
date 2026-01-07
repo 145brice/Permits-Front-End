@@ -61,24 +61,6 @@ export default function FilterBar({ onFilter, onZipChange }: FilterBarProps) {
             style={{
               fontSize: '13px',
               padding: '8px 14px',
-              background: '#3b82f6',
-              color: 'white',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              fontWeight: '600',
-              transition: 'background 0.2s'
-            }}
-            onClick={() => onFilter('sold')}
-            onMouseOver={(e) => e.currentTarget.style.background = '#2563eb'}
-            onMouseOut={(e) => e.currentTarget.style.background = '#3b82f6'}
-          >
-            🏡 Sales
-          </button>
-          <button
-            style={{
-              fontSize: '13px',
-              padding: '8px 14px',
               background: '#6b7280',
               color: 'white',
               border: 'none',

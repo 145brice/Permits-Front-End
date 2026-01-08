@@ -15,7 +15,7 @@ export default function Dashboard() {
     { name: 'Houston', value: 'houston', available: false },
     { name: 'Charlotte', value: 'charlotte', available: false },
     { name: 'Phoenix', value: 'phoenix', available: false },
-    { name: 'San Antonio', value: 'sanantonio', available: false },
+    { name: 'San Antonio', value: 'sanantonio', available: true },
     { name: 'Chattanooga', value: 'chattanooga', available: false },
   ];
 

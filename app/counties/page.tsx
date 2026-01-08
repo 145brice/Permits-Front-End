@@ -42,7 +42,7 @@ export default function Counties() {
       state: 'Texas',
       population: '1.5M+',
       avgLeads: '250-350/day',
-      status: 'Coming Soon'
+      status: 'Active'
     },
     {
       city: 'Charlotte',

@@ -18,7 +18,7 @@ export default function Counties() {
       state: 'Tennessee',
       population: '715,000+',
       avgLeads: '150-200/day',
-      status: 'Coming Soon'
+      status: 'Active'
     },
     {
       city: 'Houston',

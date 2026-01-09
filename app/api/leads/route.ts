@@ -89,15 +89,3 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Failed to fetch data from backend' }, { status: 500 });
   }
 }
-
-    return new NextResponse(csvData, {
-      headers: {
-        'Content-Type': 'text/csv',
-        'Content-Disposition': `attachment; filename="${latestDateFolder}_${city}_leads.csv"`,
-      },
-    });
-  } catch (error) {
-    console.error('Error reading CSV file:', error);
-    return NextResponse.json({ error: 'Error fetching leads data' }, { status: 500 });
-  }
-}

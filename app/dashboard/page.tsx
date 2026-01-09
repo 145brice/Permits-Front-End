@@ -1,13 +1,27 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import Nav from '../components/Nav';
+import FilterBar from '../components/FilterBar';
+import DataCard from '../components/DataCard';
+
+// Dynamically import MapView to avoid SSR issues
+const MapView = dynamic(() => import('../components/MapView'), {
+  ssr: false,
+  loading: () => <div>Loading map...</div>
+});
 
 export default function Dashboard() {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [selectedCity, setSelectedCity] = useState('austin');
   const [error, setError] = useState('');
+  const [hasAccess, setHasAccess] = useState(false);
+  const [leads, setLeads] = useState([]);
+  const [filteredLeads, setFilteredLeads] = useState([]);
+  const [soldCount, setSoldCount] = useState(0);
+  const [permitCount, setPermitCount] = useState(0);
 
   const cities = [
     { name: 'Austin', value: 'austin', available: true },
@@ -26,7 +40,8 @@ export default function Dashboard() {
     }
   }, []);
 
-  const handleDownload = async () => {
+  const handleUnlock = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (!email) {
       setError('Please enter your email');
       return;
@@ -36,33 +51,51 @@ export default function Dashboard() {
     setError('');
 
     try {
-      const response = await fetch(`/api/leads?email=${encodeURIComponent(email)}&city=${selectedCity}`);
+      // Test access by trying to fetch leads
+      const response = await fetch(`/api/leads?email=${encodeURIComponent(email)}&city=austin`);
       
-      if (!response.ok) {
+      if (response.ok) {
+        setHasAccess(true);
+        localStorage.setItem('userEmail', email);
+      } else {
         const errorData = await response.json();
         setError(errorData.error || 'Access denied');
-        setLoading(false);
-        return;
       }
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${selectedCity}_leads_${new Date().toISOString().split('T')[0]}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-
-      localStorage.setItem('userEmail', email);
-      alert('Download started!');
     } catch (err) {
-      setError('Error downloading leads');
+      setError('Error verifying access');
     } finally {
       setLoading(false);
     }
   };
+
+  const fetchLeads = async (userEmail: string) => {
+    try {
+      const response = await fetch(`/api/leads?email=${encodeURIComponent(userEmail)}&city=austin`);
+      if (response.ok) {
+        const data = await response.json();
+        setLeads(data.leads || []);
+        setFilteredLeads(data.leads || []);
+        setSoldCount(data.soldCount || 0);
+        setPermitCount(data.permitCount || 0);
+      }
+    } catch (err) {
+      console.error('Error fetching leads:', err);
+    }
+  };
+
+  const handleFilter = (filters: any) => {
+    // Implement filtering logic
+    setFilteredLeads(leads);
+  };
+
+  const handleZipChange = (zipCode: string) => {
+    // Implement zip code filtering
+    setFilteredLeads(leads);
+  };
+
+  if (!hasAccess) {
+    return (
+      <div style={{
         minHeight: '100vh',
         background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         display: 'flex',

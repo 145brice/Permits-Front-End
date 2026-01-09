@@ -18,8 +18,8 @@ export default function Dashboard() {
   const [selectedCity, setSelectedCity] = useState('austin');
   const [error, setError] = useState('');
   const [hasAccess, setHasAccess] = useState(false);
-  const [leads, setLeads] = useState([]);
-  const [filteredLeads, setFilteredLeads] = useState([]);
+  const [leads, setLeads] = useState<any[]>([]);
+  const [filteredLeads, setFilteredLeads] = useState<any[]>([]);
   const [soldCount, setSoldCount] = useState(0);
   const [permitCount, setPermitCount] = useState(0);
   const [lastWeekData, setLastWeekData] = useState(null);
@@ -100,12 +100,13 @@ export default function Dashboard() {
         const allPermits = [];
         let totalCount = 0;
         for (const [city, cityData] of Object.entries(data)) {
-          if (cityData.permits) {
-            allPermits.push(...cityData.permits.map((permit: any) => ({
+          const cityInfo = cityData as any; // Type assertion for the API response
+          if (cityInfo.permits) {
+            allPermits.push(...cityInfo.permits.map((permit: any) => ({
               ...permit,
               city: city
             })));
-            totalCount += cityData.count;
+            totalCount += cityInfo.count;
           }
         }
         setFilteredLeads(allPermits);

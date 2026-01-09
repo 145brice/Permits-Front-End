@@ -22,6 +22,8 @@ export default function Dashboard() {
   const [filteredLeads, setFilteredLeads] = useState([]);
   const [soldCount, setSoldCount] = useState(0);
   const [permitCount, setPermitCount] = useState(0);
+  const [lastWeekData, setLastWeekData] = useState(null);
+  const [showLastWeek, setShowLastWeek] = useState(false);
 
   const cities = [
     { name: 'Austin', value: 'austin', available: true },
@@ -80,6 +82,39 @@ export default function Dashboard() {
       }
     } catch (err) {
       console.error('Error fetching leads:', err);
+    }
+  };
+
+  const fetchLastWeek = async () => {
+    try {
+      // Call the back end directly (assuming BACKEND_URL is set)
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5002';
+      const response = await fetch(`${backendUrl}/last-week?cities=nashville,austin,sanantonio`);
+
+      if (response.ok) {
+        const data = await response.json();
+        setLastWeekData(data);
+        setShowLastWeek(true);
+
+        // Transform the data for display
+        const allPermits = [];
+        let totalCount = 0;
+        for (const [city, cityData] of Object.entries(data)) {
+          if (cityData.permits) {
+            allPermits.push(...cityData.permits.map((permit: any) => ({
+              ...permit,
+              city: city
+            })));
+            totalCount += cityData.count;
+          }
+        }
+        setFilteredLeads(allPermits);
+        setPermitCount(totalCount);
+      } else {
+        console.error('Error fetching last week data');
+      }
+    } catch (err) {
+      console.error('Error fetching last week:', err);
     }
   };
 
@@ -224,30 +259,56 @@ export default function Dashboard() {
         <DataCard label="Total Leads" count={filteredLeads.length} color="text-green-400" />
       </div>
 
-      {/* Refresh button */}
-      <button
-        onClick={() => fetchLeads(email)}
-        style={{
-          position: 'absolute',
-          top: '80px',
-          right: '20px',
-          background: 'rgba(0, 0, 0, 0.8)',
-          color: 'white',
-          padding: '10px 20px',
-          borderRadius: '8px',
-          border: 'none',
-          cursor: 'pointer',
-          zIndex: 1000,
-          backdropFilter: 'blur(10px)',
-          fontSize: '14px',
-          fontWeight: '600',
-          transition: 'background 0.2s'
-        }}
-        onMouseOver={(e) => e.currentTarget.style.background = 'rgba(0, 0, 0, 1)'}
-        onMouseOut={(e) => e.currentTarget.style.background = 'rgba(0, 0, 0, 0.8)'}
-      >
-        🔄 Refresh
-      </button>
+      {/* Control buttons */}
+      <div style={{
+        position: 'absolute',
+        top: '80px',
+        right: '20px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '10px',
+        zIndex: 1000
+      }}>
+        <button
+          onClick={() => fetchLeads(email)}
+          style={{
+            background: 'rgba(0, 0, 0, 0.8)',
+            color: 'white',
+            padding: '10px 20px',
+            borderRadius: '8px',
+            border: 'none',
+            cursor: 'pointer',
+            backdropFilter: 'blur(10px)',
+            fontSize: '14px',
+            fontWeight: '600',
+            transition: 'background 0.2s'
+          }}
+          onMouseOver={(e) => e.currentTarget.style.background = 'rgba(0, 0, 0, 1)'}
+          onMouseOut={(e) => e.currentTarget.style.background = 'rgba(0, 0, 0, 0.8)'}
+        >
+          🔄 Refresh Austin
+        </button>
+
+        <button
+          onClick={fetchLastWeek}
+          style={{
+            background: showLastWeek ? 'rgba(52, 152, 219, 0.8)' : 'rgba(0, 0, 0, 0.8)',
+            color: 'white',
+            padding: '10px 20px',
+            borderRadius: '8px',
+            border: 'none',
+            cursor: 'pointer',
+            backdropFilter: 'blur(10px)',
+            fontSize: '14px',
+            fontWeight: '600',
+            transition: 'background 0.2s'
+          }}
+          onMouseOver={(e) => e.currentTarget.style.background = showLastWeek ? 'rgba(52, 152, 219, 1)' : 'rgba(0, 0, 0, 1)'}
+          onMouseOut={(e) => e.currentTarget.style.background = showLastWeek ? 'rgba(52, 152, 219, 0.8)' : 'rgba(0, 0, 0, 0.8)'}
+        >
+          📅 Last 7 Days
+        </button>
+      </div>
     </div>
   );
 }

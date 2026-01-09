@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
   // Proxy request to backend API
   try {
     const backendUrl = process.env.BACKEND_URL || 'http://localhost:5002';
-    const response = await fetch(`${backendUrl}/api/leads?city=${city}&customer_id=${email}`);
+    const response = await fetch(`${backendUrl}/api/get-leads?city=${city}&customer_id=${email}`);
     
     if (!response.ok) {
       const errorData = await response.json();

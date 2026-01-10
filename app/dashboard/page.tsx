@@ -20,7 +20,6 @@ export default function Dashboard() {
   const [hasAccess, setHasAccess] = useState(false);
   const [leads, setLeads] = useState<any[]>([]);
   const [filteredLeads, setFilteredLeads] = useState<any[]>([]);
-  const [soldCount, setSoldCount] = useState(0);
   const [permitCount, setPermitCount] = useState(0);
   const [lastWeekData, setLastWeekData] = useState(null);
   const [showLastWeek, setShowLastWeek] = useState(false);
@@ -39,6 +38,9 @@ export default function Dashboard() {
     const storedEmail = localStorage.getItem('userEmail');
     if (storedEmail) {
       setEmail(storedEmail);
+      setHasAccess(true);
+      // Automatically fetch map data for returning users
+      fetchMapLeads(storedEmail);
     }
   }, []);
 
@@ -59,6 +61,8 @@ export default function Dashboard() {
       if (response.ok) {
         setHasAccess(true);
         localStorage.setItem('userEmail', email);
+        // Fetch map data for the dashboard
+        await fetchMapLeads(email);
       } else {
         const errorData = await response.json();
         setError(errorData.error || 'Access denied');
@@ -77,11 +81,24 @@ export default function Dashboard() {
         const data = await response.json();
         setLeads(data.leads || []);
         setFilteredLeads(data.leads || []);
-        setSoldCount(data.soldCount || 0);
         setPermitCount(data.permitCount || 0);
       }
     } catch (err) {
       console.error('Error fetching leads:', err);
+    }
+  };
+
+  const fetchMapLeads = async (userEmail: string) => {
+    try {
+      const response = await fetch(`/api/map-leads?email=${encodeURIComponent(userEmail)}`);
+      if (response.ok) {
+        const data = await response.json();
+        setFilteredLeads(data.leads || []);
+      } else {
+        console.error('Error fetching map leads:', response.statusText);
+      }
+    } catch (err) {
+      console.error('Error fetching map leads:', err);
     }
   };
 
@@ -164,7 +181,7 @@ export default function Dashboard() {
             marginBottom: '30px',
             fontSize: '1.1em'
           }}>
-            Interactive map showing sold homes and active permits in Austin. Subscribe to unlock.
+            Interactive map showing active permits in Austin. Subscribe to unlock.
           </p>
           
           {error && (
@@ -243,7 +260,7 @@ export default function Dashboard() {
     }}>
       <Nav />
       <FilterBar onFilter={handleFilter} onZipChange={handleZipChange} />
-      <MapView leads={filteredLeads} />
+      <MapView leads={filteredLeads} email={email} />
       
       {/* Data Cards */}
       <div style={{
@@ -255,9 +272,8 @@ export default function Dashboard() {
         gap: '12px',
         zIndex: 1000
       }}>
-        <DataCard label="Sold Homes" count={soldCount} color="text-blue-400" />
         <DataCard label="Active Permits" count={permitCount} color="text-orange-400" />
-        <DataCard label="Total Leads" count={filteredLeads.length} color="text-green-400" />
+        <DataCard label="Total Permits" count={filteredLeads.length} color="text-green-400" />
       </div>
 
       {/* Control buttons */}
@@ -271,7 +287,7 @@ export default function Dashboard() {
         zIndex: 1000
       }}>
         <button
-          onClick={() => fetchLeads(email)}
+          onClick={() => fetchMapLeads(email)}
           style={{
             background: 'rgba(0, 0, 0, 0.8)',
             color: 'white',

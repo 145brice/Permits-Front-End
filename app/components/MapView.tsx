@@ -18,16 +18,18 @@ interface Lead {
   address: string;
   lat: number;
   lng: number;
-  price?: string;
-  type: 'sold' | 'permit';
+  type: 'permit';
   description?: string;
 }
 
 interface MapViewProps {
   leads: Lead[];
+  email?: string;
 }
 
-export default function MapView({ leads }: MapViewProps) {
+export default function MapView({ leads, email }: MapViewProps) {
+  const isAdmin = email && ['test@example.com', 'admin@permits.com', '145brice@gmail.com'].includes(email.toLowerCase());
+
   useEffect(() => {
     // Ensure Leaflet is only loaded on client
     delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -39,12 +41,48 @@ export default function MapView({ leads }: MapViewProps) {
   }, []);
 
   return (
-    <MapContainer
-      center={[30.2672, -97.7431]} // Austin, TX
-      zoom={11}
-      style={{ height: '100vh', width: '100vw' }}
-      className="z-0"
-    >
+    <div style={{ height: '100vh', width: '100vw', position: 'relative' }}>
+      {isAdmin && (
+        <div style={{
+          position: 'absolute',
+          top: '10px',
+          right: '10px',
+          background: 'rgba(0, 0, 0, 0.8)',
+          color: 'white',
+          padding: '5px 10px',
+          borderRadius: '5px',
+          fontSize: '12px',
+          fontWeight: 'bold',
+          zIndex: 1000,
+          backdropFilter: 'blur(10px)'
+        }}>
+          ADMIN ACCESS
+        </div>
+      )}
+      {leads.length === 0 && (
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          background: 'rgba(255, 255, 255, 0.9)',
+          color: 'black',
+          padding: '20px',
+          borderRadius: '10px',
+          fontSize: '16px',
+          fontWeight: 'bold',
+          zIndex: 1000,
+          textAlign: 'center'
+        }}>
+          Loading permits data...
+        </div>
+      )}
+      <MapContainer
+        center={[30.2672, -97.7431]} // Austin, TX
+        zoom={11}
+        style={{ height: '100vh', width: '100vw' }}
+        className="z-0"
+      >
       <TileLayer
         url="https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=jEn4MW4VhPVe82B3bazQ"
         attribution='&copy; <a href="https://www.maptiler.com/">MapTiler</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -56,10 +94,7 @@ export default function MapView({ leads }: MapViewProps) {
           <Popup>
             <div className="p-2 text-sm">
               <p className="font-bold text-gray-900">{lead.address}</p>
-              {lead.price && <p className="text-green-600">${lead.price}</p>}
-              <p className="text-xs">
-                {lead.type === 'sold' ? '🏡 Sold Home' : '🔨 Permit'}
-              </p>
+              <p className="text-xs text-orange-600">🔨 Permit</p>
               {lead.description && (
                 <p className="text-xs text-gray-600 mt-1">{lead.description}</p>
               )}
@@ -68,5 +103,6 @@ export default function MapView({ leads }: MapViewProps) {
         </Marker>
       ))}
     </MapContainer>
+    </div>
   );
 }

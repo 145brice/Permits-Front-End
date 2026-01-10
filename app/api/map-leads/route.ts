@@ -86,9 +86,8 @@ export async function GET(request: NextRequest) {
         address: `${1000 + i * 100} Sample St`,
         lat: 30.2672 + (Math.random() - 0.5) * 0.2,
         lng: -97.7431 + (Math.random() - 0.5) * 0.2,
-        type: Math.random() > 0.5 ? 'permit' : 'sold',
-        description: Math.random() > 0.5 ? 'New construction permit' : 'Recently sold',
-        price: Math.random() > 0.5 ? `${Math.floor(Math.random() * 500 + 200)}k` : undefined,
+        type: 'permit',
+        description: 'New construction permit',
       })),
     ];
 

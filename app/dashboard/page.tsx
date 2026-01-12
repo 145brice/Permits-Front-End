@@ -24,6 +24,7 @@ export default function Dashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [lastWeekData, setLastWeekData] = useState(null);
   const [showLastWeek, setShowLastWeek] = useState(false);
+  const [showSignInModal, setShowSignInModal] = useState(false);
 
   const cities = [
     { name: 'Austin', value: 'austin', available: true },
@@ -161,66 +162,99 @@ export default function Dashboard() {
     }}>
       <Nav />
       <FilterBar onFilter={handleFilter} onZipChange={handleZipChange} />
-      <MapView leads={filteredLeads} email={email} isAuthenticated={isAuthenticated} />
+      <MapView 
+        leads={filteredLeads} 
+        email={email} 
+        isAuthenticated={isAuthenticated}
+        onSignInRequest={() => setShowSignInModal(true)}
+      />
       
-      {/* Sign-in prompt for non-authenticated users */}
-      {!isAuthenticated && (
-        <div style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          background: 'rgba(255, 255, 255, 0.95)',
-          padding: '30px',
-          borderRadius: '15px',
-          boxShadow: '0 10px 40px rgba(0,0,0,0.3)',
-          textAlign: 'center',
-          maxWidth: '400px',
-          zIndex: 2000
-        }}>
-          <h3 style={{ color: '#333', marginBottom: '15px', fontSize: '24px' }}>
-            🔒 Unlock Full Access
-          </h3>
-          <p style={{ color: '#666', marginBottom: '20px', fontSize: '16px' }}>
-            Sign in to view complete address details and access all permit data
-          </p>
-          <form onSubmit={handleUnlock} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              style={{
-                padding: '12px',
-                borderRadius: '8px',
-                border: '2px solid #ddd',
-                fontSize: '16px'
-              }}
-              required
-            />
+      {/* Sign-in modal - appears when clicking a pin */}
+      {showSignInModal && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 3000
+          }}
+          onClick={() => setShowSignInModal(false)}
+        >
+          <div 
+            style={{
+              background: 'white',
+              padding: '30px',
+              borderRadius: '15px',
+              boxShadow: '0 10px 40px rgba(0,0,0,0.3)',
+              textAlign: 'center',
+              maxWidth: '400px',
+              width: '90%'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 style={{ color: '#333', marginBottom: '15px', fontSize: '24px' }}>
+              🔒 Unlock Full Access
+            </h3>
+            <p style={{ color: '#666', marginBottom: '20px', fontSize: '16px' }}>
+              Sign in to view complete address details
+            </p>
+            <form onSubmit={handleUnlock} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                style={{
+                  padding: '12px',
+                  borderRadius: '8px',
+                  border: '2px solid #ddd',
+                  fontSize: '16px'
+                }}
+                required
+              />
+              <button
+                type="submit"
+                disabled={loading}
+                style={{
+                  padding: '12px',
+                  background: '#667eea',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                  opacity: loading ? 0.7 : 1
+                }}
+              >
+                {loading ? 'Verifying...' : 'Sign In'}
+              </button>
+            </form>
+            {error && (
+              <p style={{ color: 'red', marginTop: '10px', fontSize: '14px' }}>
+                {error}
+              </p>
+            )}
             <button
-              type="submit"
-              disabled={loading}
+              onClick={() => setShowSignInModal(false)}
               style={{
-                padding: '12px',
-                background: '#667eea',
-                color: 'white',
+                marginTop: '15px',
+                background: 'none',
                 border: 'none',
-                borderRadius: '8px',
-                fontSize: '16px',
-                fontWeight: 'bold',
-                cursor: loading ? 'not-allowed' : 'pointer',
-                opacity: loading ? 0.7 : 1
+                color: '#666',
+                cursor: 'pointer',
+                fontSize: '14px'
               }}
             >
-              {loading ? 'Verifying...' : 'Sign In'}
+              Continue browsing
             </button>
-          </form>
-          {error && (
-            <p style={{ color: 'red', marginTop: '10px', fontSize: '14px' }}>
-              {error}
-            </p>
-          )}
+          </div>
         </div>
       )}
       

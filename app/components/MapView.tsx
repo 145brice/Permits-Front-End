@@ -26,9 +26,10 @@ interface MapViewProps {
   leads: Lead[];
   email?: string;
   isAuthenticated?: boolean;
+  onSignInRequest?: () => void;
 }
 
-export default function MapView({ leads, email, isAuthenticated }: MapViewProps) {
+export default function MapView({ leads, email, isAuthenticated, onSignInRequest }: MapViewProps) {
   const isAdmin = email && ['test@example.com', 'admin@permits.com', '145brice@gmail.com'].includes(email.toLowerCase());
 
   useEffect(() => {
@@ -99,7 +100,15 @@ export default function MapView({ leads, email, isAuthenticated }: MapViewProps)
               ) : (
                 <div>
                   <p className="font-bold text-gray-500">🔒 Address Hidden</p>
-                  <p className="text-xs text-blue-600 mt-1">Sign in to view full address details</p>
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onSignInRequest?.();
+                    }}
+                    className="text-xs text-blue-600 mt-1 underline cursor-pointer bg-transparent border-none p-0"
+                  >
+                    Sign in to view address
+                  </button>
                 </div>
               )}
               <p className="text-xs text-orange-600">🔨 Permit</p>

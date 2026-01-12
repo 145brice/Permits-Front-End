@@ -14,44 +14,13 @@ export async function GET(request: NextRequest) {
     const response = await fetch(`${backendUrl}/last-week?cities=austin`);
     
     if (!response.ok) {
-      // Fallback to mock data if backend fails
-      console.error('Backend call failed, using mock data');
-      const mapLeads = [
-        {
-          address: '4007 EDGEROCK DR',
-          lat: 30.2672 + (Math.random() - 0.5) * 0.1,
-          lng: -97.7431 + (Math.random() - 0.5) * 0.1,
-          type: 'permit',
-          description: 'Residential Expedited Review - New construction',
-        },
-        {
-          address: '5106 CLOVERDALE LN',
-          lat: 30.2672 + (Math.random() - 0.5) * 0.1,
-          lng: -97.7431 + (Math.random() - 0.5) * 0.1,
-          type: 'permit',
-          description: 'Water heater replacement',
-        },
-        {
-          address: '1501 HARDOUIN AVE',
-          lat: 30.2672 + (Math.random() - 0.5) * 0.1,
-          lng: -97.7431 + (Math.random() - 0.5) * 0.1,
-          type: 'permit',
-          description: 'Whole home generator installation',
-        },
-        // Add more sample data
-        ...Array.from({ length: 20 }, (_, i) => ({
-          address: `${1000 + i * 100} Sample St`,
-          lat: 30.2672 + (Math.random() - 0.5) * 0.2,
-          lng: -97.7431 + (Math.random() - 0.5) * 0.2,
-          type: 'permit',
-          description: 'New construction permit',
-        })),
-      ];
-
-    return NextResponse.json({ 
-      leads: mapLeads,
-      isAuthenticated: !!email // Simplified - any email provided means authenticated
-    });
+      // Backend call failed - return empty leads
+      console.error('Backend call failed:', response.status);
+      return NextResponse.json({ 
+        leads: [],
+        isAuthenticated: !!email,
+        error: 'No permit data available. Scrapers may not have run yet.'
+      });
     }
 
     const backendData = await response.json();
@@ -62,15 +31,18 @@ export async function GET(request: NextRequest) {
       const cityInfo = cityData as any;
       if (cityInfo.permits) {
         cityInfo.permits.forEach((permit: any) => {
-          // Add some randomization to coordinates for mapping
-          mapLeads.push({
-            address: permit.address || permit.description || 'Unknown Address',
-            lat: 30.2672 + (Math.random() - 0.5) * 0.2, // Austin coordinates with randomization
-            lng: -97.7431 + (Math.random() - 0.5) * 0.2,
-            type: 'permit',
-            description: permit.description || 'Permit activity',
-            price: undefined,
-          });
+          // Use real coordinates from backend geocoding, skip if no coords
+          if (permit.lat && permit.lng) {
+            mapLeads.push({
+              address: permit.address || 'Unknown Address',
+              lat: permit.lat,
+              lng: permit.lng,
+              type: 'permit',
+              description: permit.description || 'Permit activity',
+              date: permit.date,
+              permit_number: permit.permit_number,
+            });
+          }
         });
       }
     }

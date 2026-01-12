@@ -10,8 +10,8 @@ export async function GET(request: NextRequest) {
   try {
     const backendUrl = process.env.BACKEND_URL || 'http://localhost:5002';
     
-    // Call backend to get permit data for mapping
-    const response = await fetch(`${backendUrl}/last-week?cities=austin`);
+    // Call backend to get permit data for mapping - get all available cities
+    const response = await fetch(`${backendUrl}/last-week?cities=austin,nashville,sanantonio,houston,charlotte,chattanooga,phoenix`);
     
     if (!response.ok) {
       // Backend call failed - return empty leads

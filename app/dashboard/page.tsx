@@ -29,7 +29,7 @@ export default function Dashboard() {
   const cities = [
     { name: 'Austin', value: 'austin', available: true },
     { name: 'Nashville', value: 'nashville', available: true },
-    { name: 'Houston', value: 'houston', available: false },
+    { name: 'Houston', value: 'houston', available: true },
     { name: 'Charlotte', value: 'charlotte', available: false },
     { name: 'Phoenix', value: 'phoenix', available: false },
     { name: 'San Antonio', value: 'sanantonio', available: true },

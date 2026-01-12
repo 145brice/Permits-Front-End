@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { stripe } from '@/lib/stripe';
 
 // API route to get map leads data (Austin permits)
 export async function GET(request: NextRequest) {

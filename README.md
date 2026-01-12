@@ -48,6 +48,35 @@ contractor-leads-backend/         # Backend (Railway)
 2. **Firebase Project** (free tier)
 3. **SendGrid Account** (free tier)
 4. **Railway Account** (or Render)
+5. **MapTiler Account** (for map tiles)
+
+## API Keys & Configuration
+
+### MapTiler (Map Tiles)
+- **Key**: `jEn4MW4VhPVe82B3bazQ`
+- **Created**: 2026-01-07
+- **Used in**: `app/components/MapView.tsx`
+- **Dashboard**: https://cloud.maptiler.com/account/keys/
+
+### Environment Variables (.env.local)
+```bash
+# Backend URL (Render)
+BACKEND_URL=https://permits-back-end.onrender.com
+
+# Stripe (get from https://dashboard.stripe.com/apikeys)
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_PUBLISHABLE_KEY=pk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+
+# Firebase (optional)
+FIREBASE_PROJECT_ID=your-project-id
+```
+
+### Paid/Admin Emails (bypass Stripe)
+Configured in `app/api/leads/route.ts`:
+- test@example.com
+- admin@permits.com  
+- 145brice@gmail.com
 5. **Netlify Account** (for frontend)
 
 ---

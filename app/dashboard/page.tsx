@@ -21,8 +21,7 @@ export default function Dashboard() {
   const [leads, setLeads] = useState<any[]>([]);
   const [filteredLeads, setFilteredLeads] = useState<any[]>([]);
   const [permitCount, setPermitCount] = useState(0);
-  const [lastWeekData, setLastWeekData] = useState(null);
-  const [showLastWeek, setShowLastWeek] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const cities = [
     { name: 'Austin', value: 'austin', available: true },
@@ -38,10 +37,10 @@ export default function Dashboard() {
     const storedEmail = localStorage.getItem('userEmail');
     if (storedEmail) {
       setEmail(storedEmail);
-      setHasAccess(true);
-      // Automatically fetch map data for returning users
-      fetchMapLeads(storedEmail);
+      setIsAuthenticated(true);
     }
+    // Load map leads for everyone (public access)
+    fetchMapLeads(storedEmail);
   }, []);
 
   const handleUnlock = async (e: React.FormEvent) => {
@@ -60,6 +59,7 @@ export default function Dashboard() {
       
       if (response.ok) {
         setHasAccess(true);
+        setIsAuthenticated(true);
         localStorage.setItem('userEmail', email);
         // Fetch map data for the dashboard
         await fetchMapLeads(email);
@@ -88,12 +88,14 @@ export default function Dashboard() {
     }
   };
 
-  const fetchMapLeads = async (userEmail: string) => {
+  const fetchMapLeads = async (userEmail?: string | null) => {
     try {
-      const response = await fetch(`/api/map-leads?email=${encodeURIComponent(userEmail)}`);
+      const emailParam = userEmail ? `?email=${encodeURIComponent(userEmail)}` : '';
+      const response = await fetch(`/api/map-leads${emailParam}`);
       if (response.ok) {
         const data = await response.json();
         setFilteredLeads(data.leads || []);
+        setIsAuthenticated(data.isAuthenticated || false);
       } else {
         console.error('Error fetching map leads:', response.statusText);
       }
@@ -146,110 +148,7 @@ export default function Dashboard() {
     setFilteredLeads(leads);
   };
 
-  if (!hasAccess) {
-    return (
-      <div style={{
-        minHeight: '100vh',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '40px 20px',
-        position: 'relative'
-      }}>
-        <Nav />
-        <div style={{
-          background: 'rgba(255, 255, 255, 0.15)',
-          backdropFilter: 'blur(10px)',
-          padding: '40px',
-          borderRadius: '20px',
-          maxWidth: '500px',
-          width: '100%',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
-          boxShadow: '0 10px 40px rgba(0, 0, 0, 0.3)'
-        }}>
-          <h1 style={{
-            fontSize: '2.5em',
-            fontWeight: 'bold',
-            color: 'white',
-            marginBottom: '15px'
-          }}>
-            🗺️ Map Dashboard
-          </h1>
-          <p style={{
-            color: 'rgba(255, 255, 255, 0.9)',
-            marginBottom: '30px',
-            fontSize: '1.1em'
-          }}>
-            Interactive map showing active permits in Austin. Subscribe to unlock.
-          </p>
-          
-          {error && (
-            <div style={{
-              background: 'rgba(239, 68, 68, 0.2)',
-              border: '1px solid rgb(239, 68, 68)',
-              color: 'white',
-              padding: '12px',
-              borderRadius: '8px',
-              marginBottom: '20px'
-            }}>
-              {error}
-            </div>
-          )}
-
-          <form onSubmit={handleUnlock} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              style={{
-                width: '100%',
-                padding: '15px',
-                background: 'rgba(255, 255, 255, 0.1)',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                borderRadius: '8px',
-                color: 'white',
-                fontSize: '16px',
-                boxSizing: 'border-box'
-              }}
-              required
-            />
-            <button
-              type="submit"
-              disabled={loading}
-              style={{
-                width: '100%',
-                padding: '15px',
-                background: loading ? '#999' : '#667eea',
-                color: 'white',
-                fontWeight: 'bold',
-                fontSize: '18px',
-                borderRadius: '8px',
-                border: 'none',
-                cursor: loading ? 'not-allowed' : 'pointer',
-                transition: 'background 0.3s'
-              }}
-            >
-              {loading ? 'Verifying...' : 'Unlock Dashboard'}
-            </button>
-          </form>
-
-          <div style={{ marginTop: '25px', textAlign: 'center' }}>
-            <a href="/pricing" style={{
-              color: 'white',
-              textDecoration: 'underline',
-              fontSize: '1em'
-            }}>
-              Don't have access? Subscribe here
-            </a>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Unlocked dashboard
+  // Show dashboard for everyone - public map access
   return (
     <div style={{
       height: '100vh',
@@ -260,7 +159,70 @@ export default function Dashboard() {
     }}>
       <Nav />
       <FilterBar onFilter={handleFilter} onZipChange={handleZipChange} />
-      <MapView leads={filteredLeads} email={email} />
+      <MapView leads={filteredLeads} email={email} isAuthenticated={isAuthenticated} />
+      
+      {/* Sign-in prompt for non-authenticated users */}
+      {!isAuthenticated && (
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          background: 'rgba(255, 255, 255, 0.95)',
+          padding: '30px',
+          borderRadius: '15px',
+          boxShadow: '0 10px 40px rgba(0,0,0,0.3)',
+          textAlign: 'center',
+          maxWidth: '400px',
+          zIndex: 2000
+        }}>
+          <h3 style={{ color: '#333', marginBottom: '15px', fontSize: '24px' }}>
+            🔒 Unlock Full Access
+          </h3>
+          <p style={{ color: '#666', marginBottom: '20px', fontSize: '16px' }}>
+            Sign in to view complete address details and access all permit data
+          </p>
+          <form onSubmit={handleUnlock} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              style={{
+                padding: '12px',
+                borderRadius: '8px',
+                border: '2px solid #ddd',
+                fontSize: '16px'
+              }}
+              required
+            />
+            <button
+              type="submit"
+              disabled={loading}
+              style={{
+                padding: '12px',
+                background: '#667eea',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                opacity: loading ? 0.7 : 1
+              }}
+            >
+              {loading ? 'Verifying...' : 'Sign In'}
+            </button>
+          </form>
+          {error && (
+            <p style={{ color: 'red', marginTop: '10px', fontSize: '14px' }}>
+              {error}
+            </p>
+          )}
+        </div>
+      )}
+      
+      {/* Data Cards */}
       
       {/* Data Cards */}
       <div style={{

@@ -25,9 +25,10 @@ interface Lead {
 interface MapViewProps {
   leads: Lead[];
   email?: string;
+  isAuthenticated?: boolean;
 }
 
-export default function MapView({ leads, email }: MapViewProps) {
+export default function MapView({ leads, email, isAuthenticated }: MapViewProps) {
   const isAdmin = email && ['test@example.com', 'admin@permits.com', '145brice@gmail.com'].includes(email.toLowerCase());
 
   useEffect(() => {
@@ -93,7 +94,14 @@ export default function MapView({ leads, email }: MapViewProps) {
         <Marker key={i} position={[lead.lat, lead.lng]} icon={icon}>
           <Popup>
             <div className="p-2 text-sm">
-              <p className="font-bold text-gray-900">{lead.address}</p>
+              {isAuthenticated ? (
+                <p className="font-bold text-gray-900">{lead.address}</p>
+              ) : (
+                <div>
+                  <p className="font-bold text-gray-500">🔒 Address Hidden</p>
+                  <p className="text-xs text-blue-600 mt-1">Sign in to view full address details</p>
+                </div>
+              )}
               <p className="text-xs text-orange-600">🔨 Permit</p>
               {lead.description && (
                 <p className="text-xs text-gray-600 mt-1">{lead.description}</p>

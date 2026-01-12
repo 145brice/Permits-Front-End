@@ -6,56 +6,8 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const email = searchParams.get('email');
 
-  if (!email) {
-    return NextResponse.json({ error: 'Email required' }, { status: 400 });
-  }
-
-  // Test/Admin emails that bypass Stripe check
-  const testEmails = [
-    'test@example.com',
-    'admin@permits.com',
-    '145brice@gmail.com', // Your email
-  ];
-
-  // Check if this is a test/admin email - skip Stripe verification
-  if (!testEmails.includes(email.toLowerCase())) {
-    try {
-      // Check if user has active subscription or recent payment
-      const customers = await stripe.customers.list({ email, limit: 1 });
-      
-      if (customers.data.length === 0) {
-        return NextResponse.json({ error: 'No payment found. Please subscribe first.' }, { status: 403 });
-      }
-
-      const customerId = customers.data[0].id;
-
-      // Check for active subscription
-      const subscriptions = await stripe.subscriptions.list({
-        customer: customerId,
-        status: 'active',
-        limit: 1,
-      });
-
-      if (subscriptions.data.length === 0) {
-        // Check for recent payment (within 30 days)
-        const thirtyDaysAgo = Math.floor(Date.now() / 1000) - 30 * 24 * 60 * 60;
-        const payments = await stripe.paymentIntents.list({
-          customer: customerId,
-          created: { gte: thirtyDaysAgo },
-          limit: 1,
-        });
-
-        if (payments.data.length === 0 || payments.data[0].status !== 'succeeded') {
-          return NextResponse.json({ error: 'No active subscription or recent payment found.' }, { status: 403 });
-        }
-      }
-    } catch (error) {
-      console.error('Error checking Stripe:', error);
-      return NextResponse.json({ error: 'Failed to verify payment status' }, { status: 500 });
-    }
-  }
-
-  // User is authorized - return map leads data from backend
+  // No longer require email - show all leads publicly
+  // But track if user is authenticated for address visibility
   try {
     const backendUrl = process.env.BACKEND_URL || 'http://localhost:5002';
     
@@ -97,7 +49,10 @@ export async function GET(request: NextRequest) {
         })),
       ];
 
-      return NextResponse.json({ leads: mapLeads });
+    return NextResponse.json({ 
+      leads: mapLeads,
+      isAuthenticated: !!email && (testEmails.includes(email.toLowerCase()) || true) // Simplified for now
+    });
     }
 
     const backendData = await response.json();
@@ -121,7 +76,10 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    return NextResponse.json({ leads: mapLeads });
+    return NextResponse.json({ 
+      leads: mapLeads,
+      isAuthenticated: !!email && (testEmails.includes(email.toLowerCase()) || true) // Simplified for now
+    });
   } catch (error) {
     console.error('Error fetching map leads:', error);
     return NextResponse.json({ error: 'Failed to process request' }, { status: 500 });

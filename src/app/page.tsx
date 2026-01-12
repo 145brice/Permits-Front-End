@@ -42,7 +42,7 @@ export default function AdminDashboard() {
       }
     } catch (error) {
       console.error('Network error:', error);
-      alert(`Network error: ${error.message}`);
+      alert(`Network error: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setScrapersRunning(false);
     }

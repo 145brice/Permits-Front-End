@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ 
       leads: mapLeads,
-      isAuthenticated: !!email && (testEmails.includes(email.toLowerCase()) || true) // Simplified for now
+      isAuthenticated: !!email // Simplified - any email provided means authenticated
     });
     }
 
@@ -78,7 +78,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ 
       leads: mapLeads,
-      isAuthenticated: !!email && (testEmails.includes(email.toLowerCase()) || true) // Simplified for now
+      isAuthenticated: !!email // Simplified - any email provided means authenticated
     });
   } catch (error) {
     console.error('Error fetching map leads:', error);

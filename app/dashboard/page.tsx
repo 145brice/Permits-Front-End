@@ -22,6 +22,8 @@ export default function Dashboard() {
   const [filteredLeads, setFilteredLeads] = useState<any[]>([]);
   const [permitCount, setPermitCount] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [lastWeekData, setLastWeekData] = useState(null);
+  const [showLastWeek, setShowLastWeek] = useState(false);
 
   const cities = [
     { name: 'Austin', value: 'austin', available: true },

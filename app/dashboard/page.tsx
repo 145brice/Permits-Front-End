@@ -141,14 +141,28 @@ export default function Dashboard() {
     }
   };
 
-  const handleFilter = (filters: any) => {
-    // Implement filtering logic
-    setFilteredLeads(leads);
+  const handleFilter = (filterType: string) => {
+    if (filterType === 'all') {
+      setFilteredLeads(leads);
+    } else {
+      // Filter by type if needed
+      const filtered = leads.filter(lead => lead.type === filterType);
+      setFilteredLeads(filtered.length > 0 ? filtered : leads);
+    }
   };
 
   const handleZipChange = (zipCode: string) => {
-    // Implement zip code filtering
-    setFilteredLeads(leads);
+    if (!zipCode || zipCode.trim() === '') {
+      // No zip entered, show all leads
+      setFilteredLeads(leads);
+      return;
+    }
+    
+    // Filter leads by zip code in address
+    const filtered = leads.filter(lead => 
+      lead.address && lead.address.includes(zipCode.trim())
+    );
+    setFilteredLeads(filtered);
   };
 
   // Show dashboard for everyone - public map access

@@ -8,15 +8,20 @@ Dead simple contractor leads platform. Seven cities, $47/month each or $97 for a
 
 ## Project Structure
 ```
-contractor-leads-saas/           # Frontend (Netlify)
-├── index.html                    # Landing page with 7 city buttons + bundle
-├── dashboard/
-│   ├── dashboard.html           # User dashboard with leads table
-│   ├── login.html              # Login page
-│   └── signup.html             # Signup page
+contractor-leads-saas/           # Frontend (Vercel)
+├── app/                         # Next.js App Router
+│   ├── page.tsx                 # Stripe paywall page
+│   ├── layout.tsx               # Root layout
+│   ├── api/
+│   │   ├── leads/route.ts       # Leads download API
+│   │   └── webhooks/stripe/route.ts # Stripe webhooks
+│   └── globals.css              # Global styles
+├── lib/
+│   └── stripe.ts                # Stripe client setup
+├── index.html                   # Legacy landing page (header removed)
 ├── success.html                 # Post-checkout success page
 ├── config.js                    # Frontend configuration
-├── netlify.toml                 # Netlify deployment config
+├── package.json                 # Dependencies
 └── README.md
 
 contractor-leads-backend/         # Backend (Railway)
@@ -43,6 +48,39 @@ contractor-leads-backend/         # Backend (Railway)
 2. **Firebase Project** (free tier)
 3. **SendGrid Account** (free tier)
 4. **Railway Account** (or Render)
+5. **MapTiler Account** (for map tiles)
+
+## API Keys & Configuration
+
+### MapTiler (Map Tiles)
+- **Key**: `jEn4MW4VhPVe82B3bazQ`
+- **Created**: 2026-01-07
+- **Used in**: `app/components/MapView.tsx`
+- **Dashboard**: https://cloud.maptiler.com/account/keys/
+
+### Environment Variables (.env.local)
+```bash
+# Backend URL (Render)
+BACKEND_URL=https://permits-back-end.onrender.com
+
+# Stripe (get from https://dashboard.stripe.com/apikeys)
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_PUBLISHABLE_KEY=pk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+
+# Supabase
+SUPABASE_URL=https://zppsfwxycmujqetsnbtj.supabase.co
+SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpwcHNmd3h5Y211anFldHNuYnRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgxNzMzNzAsImV4cCI6MjA4Mzc0OTM3MH0.WMHBIe9vACzzBx4Y2t4sNonEWgm0IvYPMyy3tV-eujo
+
+# Firebase (optional)
+FIREBASE_PROJECT_ID=your-project-id
+```
+
+### Paid/Admin Emails (bypass Stripe)
+Configured in `app/api/leads/route.ts`:
+- test@example.com
+- admin@permits.com  
+- 145brice@gmail.com
 5. **Netlify Account** (for frontend)
 
 ---

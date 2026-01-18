@@ -8,6 +8,11 @@ env/
 venv/
 ENV/
 build/
+
+# Node.js
+node_modules/
+.next/
+.env.local
 develop-eggs/
 dist/
 downloads/

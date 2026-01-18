@@ -1,0 +1,23 @@
+{
+  "austin": {
+    "valid_states": ["TX"]
+  },
+  "houston": {
+    "valid_states": ["TX"]
+  },
+  "sanantonio": {
+    "valid_states": ["TX"]
+  },
+  "nashville": {
+    "valid_states": ["TN"]
+  },
+  "chattanooga": {
+    "valid_states": ["TN"]
+  },
+  "charlotte": {
+    "valid_states": ["NC"]
+  },
+  "phoenix": {
+    "valid_states": ["AZ"]
+  }
+}
